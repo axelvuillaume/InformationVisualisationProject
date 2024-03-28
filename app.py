@@ -8,7 +8,11 @@ from layouts.home_layout import generate_home_layout
 from utils.data_processing import load_data
 
 # Load the Steam games dataset
-data = load_data('data/games_exploded.csv')
+cleaned_games = load_data('data/cleaned_games.csv')
+categories = load_data('data/categories.csv')
+genres = load_data('data/genres.csv')
+supported_languages = load_data('data/supported_languages.csv')
+full_audio_languages = load_data('data/full_audio_languages.csv')
 
 # Initialize the Dash app
 app = dash.Dash(__name__)
@@ -26,7 +30,7 @@ app.layout = html.Div([
 )
 def display_page(pathname):
     if pathname == '/home':
-        return generate_home_layout(data)
+        return generate_home_layout(cleaned_games)
     # Add more pages as needed
     else:
         return '404 - Page not found'

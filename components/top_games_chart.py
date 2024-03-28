@@ -4,12 +4,12 @@ import plotly.graph_objs as go
 
 def generate_top_games_chart(data, n=10):
     # Assuming 'data' is a DataFrame containing the Steam games dataset
-    top_n_games = data.sort_values(by='Average playtime forever', ascending=False).head(n)
+    top_n_games = data.sort_values(by='average_playtime_forever', ascending=False).head(n)
     
     # Create a bar chart
     trace = go.Bar(
-        x=top_n_games['Name'],
-        y=top_n_games['Average playtime forever'],
+        x=top_n_games['name'],
+        y=top_n_games['average_playtime_forever'],
         marker=dict(color='rgb(0, 128, 128)')
     )
 

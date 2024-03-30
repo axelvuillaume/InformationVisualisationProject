@@ -17,11 +17,16 @@ full_audio_languages = load_data('data/full_audio_languages.csv')
 # Initialize the Dash app
 app = dash.Dash(__name__)
 
+# External CSS stylesheets
+global_style = ['assets/styles.css']
+
 # Define the app layout
-app.layout = html.Div([
-    dcc.Location(id='url', refresh=False),
-    html.Div(id='page-content')
-])
+app.layout = html.Div(
+    id='layout',
+    children=[
+        dcc.Location(id='url', refresh=False),
+        html.Div(id='page-content')]  
+)
 
 # Define callback to update page content based on URL
 @app.callback(

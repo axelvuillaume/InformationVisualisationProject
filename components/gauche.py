@@ -3,6 +3,12 @@ import plotly.graph_objects as go
 value = 75
 remaingin = 100
 
+
+# decide_colour(value)
+#   decide_colour will change the colour of the gauche depending on the actual value.
+#
+#   params: value:  The value tobe displayed
+#   return: String.
 def decide_colour(value):
     if value < 50:
         return "Red"

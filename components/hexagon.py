@@ -5,28 +5,31 @@ from utils.data_processing import get_n_best_gen_or_cat
 from utils.data_processing import get_n_best_gen_or_cat_by_hours
 import plotly.graph_objs as go
 import numpy as np
-import matplotlib.tri as tri
-import matplotlib.colors as mcolors
+import random
 
-def hexagone(categories, genres, n):
+def hexagon(categories, genres, n):
 
     games = get_game_list_from_api(76561198150561997)
-    select = 'categories' 
+    select = 'genres' 
 
     if(select == 'genres'):
         ranking = get_n_best_gen_or_cat_by_hours(games, genres, n)
     if(select == 'categories'):
         ranking = get_n_best_gen_or_cat_by_hours(games, categories, n)
 
-
     print(ranking)
-    max_value = max(ranking.values())
 
-    # Divide each value by the maximum value
+    ranking_pairs = list(ranking.items())
+    random.shuffle(ranking_pairs)
+    ranking = dict(ranking_pairs)
+
+    max_value = max(ranking.values())
     normalized_values = [value / max_value for value in ranking.values()]
-    polygon_back = get_polygon(n, [1] * n, 'red', 0.1)
+
+    polygon_back = get_polygon(n, [1] * n, 'blue', 0.1)
     text_trace = add_text_labels(list(ranking.keys()))
     polygon_top = get_polygon(n, normalized_values, 'blue', 1)
+    lines = get_middle_lines(n, [1] * n)
 
     # Create the layout for the graph
     layout = go.Layout(
@@ -40,7 +43,7 @@ def hexagone(categories, genres, n):
     )
 
     # Create the figure containing the trace and layout
-    fig = go.Figure(data=[polygon_back, polygon_top, text_trace], layout=layout)
+    fig = go.Figure(data=[polygon_back, polygon_top, text_trace] + lines , layout=layout)
 
     # Return the Dash component with the graph
     return dcc.Graph(id='hexagone-component',figure=fig)
@@ -64,6 +67,24 @@ def get_polygon(n, center_distances, color, opacity):
     )
     return polygon_trace
 
+def get_middle_lines(n, center_distances,  color='white'):
+    x, y = get_polygon_coords(n, center_distances)
+    center_x = 0
+    center_y = 0
+    
+    # Create line traces from center to each vertex
+    line_traces = []
+    for i in range(n):
+        line_trace = go.Scatter(
+            x=[center_x, x[i]],
+            y=[center_y, y[i]],
+            mode='lines',
+            line=dict(color=color, width=1)
+        )
+        line_traces.append(line_trace)
+    
+    return line_traces
+
 def add_text_labels(labels):
     x, y = get_polygon_coords(len(labels), [1] * len(labels))
     #multiply all x and y by 1.1 to make the text appear outside the polygon
@@ -78,7 +99,7 @@ def add_text_labels(labels):
         mode='text',  # Display text
         text=labels,  # Set text to display
         textposition='middle center',  # Position text in the middle of the polygon
-        textfont=dict(size=9, color='black')  # Set text font size and color  
+        textfont=dict(size=10, color='black')  # Set text font size and color  
     )
     return text_trace
     

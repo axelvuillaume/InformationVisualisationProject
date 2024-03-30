@@ -2,7 +2,7 @@ from dash import dcc
 from dash import html
 
 from components.top_games_chart import generate_top_games_chart
-from components.hexagon import hexagone
+from components.hexagon import hexagon
 
 def generate_home_layout(cleaned_games, categories, genres, supported_languages, full_audio_languages):
     return html.Div(
@@ -18,7 +18,7 @@ def generate_home_layout(cleaned_games, categories, genres, supported_languages,
             html.Div(
                 className="component-container",
                 children=[
-                    hexagone(categories, genres, n=9)
+                    hexagon(categories, genres, n=8)
                 ]
             )
         ]

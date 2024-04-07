@@ -67,7 +67,7 @@ def get_data_apart():
 def get_data_together_sub(datasets):
     tobe_merged = get_data_apart_sub(datasets)
      
-    output = pd.concat(tobe_merged, axis=0)
+    output = pd.concat(tobe_merged, axis=1)
 
     return output
 # get_data_together()

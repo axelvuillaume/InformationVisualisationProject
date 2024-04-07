@@ -34,9 +34,9 @@ def foo(column, per_thing):
     else:
         datasets = ["cleaned", column_1]
 
-        data  = da.get_data_together_sub(datasets).sum()
+        data  = da.get_data_together_sub(datasets)
 
-    output = data.groupby(column_1).sum
+    output = data.groupby(per_thing).sum()
 
     return output
 
@@ -83,4 +83,4 @@ def gauche(value):
 
     fig.show()
 
-print(foo("price", "categories")['price'].unique())
+print(foo("price", "full_audio_languages")['price'])

@@ -1,8 +1,4 @@
-import sys
-
-sys.path.append('/utils/')
-
-import data_access
+import data_access as da
 import plotly.graph_objects as go
 import pandas as pd
 
@@ -49,4 +45,4 @@ def gauche(value):
 
     fig.show()
 
-get_data_apart()
+print(da.get_data_apart())

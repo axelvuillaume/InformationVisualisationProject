@@ -2,15 +2,41 @@ import data_access as da
 import plotly.graph_objects as go
 import pandas as pd
 
+# translate_column_dataset(column):
+#   This dataset translate the name of a column into the name of the correct dataset where it can be found.
+#
+#   params:     column: Name of the column.
+#   returns:    output: Name of dataset where column is to be found.
+def translate_column_dataset(column):
+    if column == "categories":
+        output = "categories"
+    elif column == "full_audio_languages" :
+        output = "full_audio"
+    elif column == "genres":
+        output = "genres"
+    elif column == "supported_languages":
+        output = "supported_audio"
+    else:
+        output = "cleaned"
+
+    return output
+
 # foo(column):
 # foo will get the needed data out of the cleanded_games CSV and analyse this for percentages.
 #
 #   params:     columns:    The numeric column to be analysed.
 #   returns:    /
-def foo(column):
-    data = da.get_data_specific("cleaned")
-    
-    output = data.groupby(column).sum()
+def foo(column, per_thing):
+    column_1 = translate_column_dataset(per_thing)
+
+    if column_1 == "cleaned":
+        data = da.get_data_specific(column_1)
+    else:
+        datasets = ["cleaned", column_1]
+
+        data  = da.get_data_together_sub(datasets).sum()
+
+    output = data.groupby(column_1).sum
 
     return output
 
@@ -57,4 +83,4 @@ def gauche(value):
 
     fig.show()
 
-print(foo("price"))
+print(foo("price", "categories")['price'].unique())

@@ -82,5 +82,3 @@ def get_data_together():
     output = pd.concat(tobe_merged, axis=0)
 
     return output
-
-print(get_data_together().head())

@@ -36,14 +36,19 @@ def foo(column, per_thing):
 
         data  = da.get_data_together_sub(datasets)
 
-    grouped_by = data.groupby(per_thing).sum()
+    grouped = data.groupby(per_thing).sum()
     total = data[column].sum()
 
-    for i in range(0, len(grouped_by[column])):
-        c = grouped_by.loc[column, i]
-        r = grouped_by.loc[i, per_thing]
+    grouped_by_1 =  grouped[column]
+    grouped_by_2 = data[per_thing].unique()
 
-        print(f"{c}\t{r}")
+    for thing in grouped_by_2:
+        skip = thing == "nan"
+
+        if not skip:
+            val = grouped_by_1[thing]
+
+            print(f"{thing}:\t{val}")
 
     return total
 
@@ -90,4 +95,4 @@ def gauche(value):
 
     fig.show()
 
-print(foo("price", "full_audio_languages"))
+print(foo("price", "genres"))

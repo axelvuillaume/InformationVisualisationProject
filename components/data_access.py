@@ -66,7 +66,8 @@ def get_data_apart():
 #   params:     datasets:   Array of datasets.
 #   returns:    output:     DataFrame
 def get_data_together_sub(datasets):
-    first 
+    tobe_merged = get_data_apart_sub(datasets)
+     
     output = pd.concat(tobe_merged, axis=0)
 
     return output

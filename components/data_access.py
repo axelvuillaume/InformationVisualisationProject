@@ -26,12 +26,8 @@ def get_data_specific(specific):
 # get_data_apart_sub(datasets)
 #   get_data will read the needed data out of the CSV-files and put these in a pandas dataframe.
 #
-#   params:     datasets:               Array of dataset names.
-#   returns:    categories_data:        DataFrame
-#               cleaned_data:           DataFrame
-#               full_audio_data:        DataFrame
-#               genres_data:            DataFrame
-#               supported_audio_data:   DataFrame
+#   params:     datasets:   Array of dataset names.
+#   returns:    output:     Array of dataframes.            
 def get_data_apart_sub(datasets):
     output =  []
 
@@ -53,13 +49,16 @@ def get_data_apart_sub(datasets):
 def get_data_apart():
     all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audio"]
 
-    categories_data = get_data_specific(all_datasets[0])
-    cleaned_data = get_data_specific(all_datasets[1])
-    full_audio_data = get_data_specific(all_datasets[2])
-    genres_data = get_data_specific(all_datasets[3])
-    supported_audio_data  = get_data_specific(all_datasets[4])
+    dataframes = get_data_apart_sub(all_datasets)
+
+    categories_data = dataframes[0]
+    cleaned_data = dataframes[1]
+    full_audio_data = dataframes[2]
+    genres_data = dataframes[3]
+    supported_audio_data = dataframes[4]
 
     return categories_data, cleaned_data, full_audio_data, genres_data, supported_audio_data
+
 # get_data_together_sub(datasets)
 #   get_data_sub will read given data.
 #
@@ -84,4 +83,4 @@ def get_data_together():
 
     return output
 
-get_data_apart_sub()
+print(get_data_together().head())

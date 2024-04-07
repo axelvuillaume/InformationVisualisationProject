@@ -2,6 +2,18 @@ import data_access as da
 import plotly.graph_objects as go
 import pandas as pd
 
+# foo(column):
+# foo will get the needed data out of the cleanded_games CSV and analyse this for percentages.
+#
+#   params:     columns:    The numeric column to be analysed.
+#   returns:    /
+def foo(column):
+    data = da.get_data_specific("cleaned")
+    
+    output = data.groupby(column).sum()
+
+    return output
+
 # decide_colour(value)
 #   decide_colour will change the colour of the gauche depending on the actual value.
 #
@@ -45,4 +57,4 @@ def gauche(value):
 
     fig.show()
 
-print(da.get_data_apart())
+print(foo("price"))

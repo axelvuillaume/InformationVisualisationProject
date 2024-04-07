@@ -36,9 +36,16 @@ def foo(column, per_thing):
 
         data  = da.get_data_together_sub(datasets)
 
-    output = data.groupby(per_thing).sum()
+    grouped_by = data.groupby(per_thing).sum()
+    total = data[column].sum()
 
-    return output
+    for i in range(0, len(grouped_by[column])):
+        c = grouped_by.loc[column, i]
+        r = grouped_by.loc[i, per_thing]
+
+        print(f"{c}\t{r}")
+
+    return total
 
 # decide_colour(value)
 #   decide_colour will change the colour of the gauche depending on the actual value.
@@ -83,4 +90,4 @@ def gauche(value):
 
     fig.show()
 
-print(foo("price", "full_audio_languages")['price'])
+print(foo("price", "full_audio_languages"))

@@ -35,7 +35,7 @@ app.layout = html.Div(
 )
 def display_page(pathname):
     if pathname == '/home':
-        return generate_home_layout(cleaned_games)
+        return generate_home_layout(cleaned_games, categories, genres, supported_languages, full_audio_languages)
     # Add more pages as needed
     else:
         return '404 - Page not found'

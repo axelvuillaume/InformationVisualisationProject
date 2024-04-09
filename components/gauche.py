@@ -8,6 +8,8 @@ import pandas as pd
 #   params:     column: Name of the column.
 #   returns:    output: Name of dataset where column is to be found.
 def translate_column_dataset(column):
+    print(f"\tStart translating to dataset\t{column}")
+    
     if column == "categories":
         output = "categories"
     elif column == "full_audio_languages" :
@@ -19,6 +21,8 @@ def translate_column_dataset(column):
     else:
         output = "cleaned"
 
+    print(f"\tDone with translation\t{column}")
+
     return output
 
 # foo(column):
@@ -27,29 +31,42 @@ def translate_column_dataset(column):
 #   params:     columns:    The numeric column to be analysed.
 #   returns:    /
 def foo(column, per_thing):
-    column_1 = translate_column_dataset(per_thing)
+    print(">>>Starting foo<<<")
+    print("Translating column to a datastring")
 
+    column_1 = translate_column_dataset(per_thing)
+    print(f"Done translating: {column_1}")
+    print("Getting datasets")
     if column_1 == "cleaned":
+        print("dataset is in cleaned")
         data = da.get_data_specific(column_1)
     else:
+        print("dataset something else")
         datasets = ["cleaned", column_1]
 
         data  = da.get_data_together_sub(datasets)
-
+    print("Done getting datasets")
+    print(f"Grouping on {per_thing}")
     grouped = data.groupby(per_thing).sum()
     total = data[column].sum()
+    print(f"Done with Grouping on {per_thing}")
 
     grouped_by_1 =  grouped[column]
     grouped_by_2 = data[per_thing].unique()
-
+    t = 0
+    print("Printing loop")
     for thing in grouped_by_2:
-        skip = thing == "nan"
+        go = isinstance(thing, str)
 
-        if not skip:
+        if go:
             val = grouped_by_1[thing]
+            per = (val / total) * 100
+            t += per
 
-            print(f"{thing}:\t{val}")
+            print(f"\t{thing}:\t{val}\t<=>\t{per}")
+    print(f"Done printing loop\t{t}")
 
+    print(">>>Done foo<<<")
     return total
 
 # decide_colour(value)

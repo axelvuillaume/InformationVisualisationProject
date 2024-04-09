@@ -6,6 +6,7 @@ import pandas as pd
 #   params:     specific:   Name of the specific dataset tob red out.      
 #   returns:    output:     DataFrame
 def get_data_specific(specific):
+    print(f"\tStarting get_data_specific\t{specific}")
     data_path = "./Data/"
 
     if specific == "categories":
@@ -21,6 +22,7 @@ def get_data_specific(specific):
 
     output = pd.read_csv(path)
 
+    print(f"\tDone get_data_specific\t{specific}")
     return output
 
 # get_data_apart_sub(datasets)
@@ -65,10 +67,12 @@ def get_data_apart():
 #   params:     datasets:   Array of datasets.
 #   returns:    output:     DataFrame
 def get_data_together_sub(datasets):
+    print("\tStarting get_data_together_sub")
     tobe_merged = get_data_apart_sub(datasets)
      
     output = pd.concat(tobe_merged, axis=1)
 
+    print("\tDone get_data_together_sub")
     return output
 # get_data_together()
 #   get_data will read the needed data out of the CSV-files and put these in a pandas dataframe.

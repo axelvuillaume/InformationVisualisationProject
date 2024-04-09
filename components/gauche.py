@@ -64,6 +64,7 @@ def foo(column, per_thing):
             t += per
 
             print(f"\t{thing}:\t{val}\t<=>\t{per}")
+            gauche(per)
     print(f"Done printing loop\t{t}")
 
     print(">>>Done foo<<<")

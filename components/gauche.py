@@ -1,4 +1,4 @@
-import data_access as da
+import utils.data_access as da
 import plotly.graph_objects as go
 import pandas as pd
 
@@ -112,5 +112,3 @@ def gauche(value):
     fig.update_layout(height=400)
 
     fig.show()
-
-print(foo("price", "genres"))

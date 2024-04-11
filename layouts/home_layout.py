@@ -24,7 +24,7 @@ def generate_home_layout(data):
             html.Div(
                 className="component-container",
                 children=[
-                    foo("price", "categories")
+                    foo("price", "categories", True)
                 ]
             )
         ]

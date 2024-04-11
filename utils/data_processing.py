@@ -11,7 +11,6 @@ def load_data(file_path):
 #   params:     specific:   Name of the specific dataset tob red out.      
 #   returns:    output:     DataFrame
 def get_data_specific(specific):
-    print(f"\tStarting get_data_specific\t{specific}")
     data_path = "./Data/"
 
     if specific == "categories":
@@ -27,7 +26,6 @@ def get_data_specific(specific):
 
     output = load_data(path)
 
-    print(f"\tDone get_data_specific\t{specific}")
     return output
 
 # get_data_apart_sub(datasets)
@@ -70,12 +68,10 @@ def get_data_apart():
 #   params:     datasets:   Array of datasets.
 #   returns:    output:     DataFrame
 def get_data_together_sub(datasets):
-    print("\tStarting get_data_together_sub")
     tobe_merged = get_data_apart_sub(datasets)
      
     output = pd.concat(tobe_merged, axis=1)
 
-    print("\tDone get_data_together_sub")
     return output
 # get_data_together()
 #   get_data will read the needed data out of the CSV-files and put these in a pandas dataframe.
@@ -89,3 +85,46 @@ def get_data_together():
     output = pd.concat(tobe_merged, axis=0)
 
     return output
+
+# group_by_column(column, per_thing)
+#   group_by_column will give the percentages of the "column" value per "per_thing" values.
+#
+#   params:     columns:    The numeric column to be analysed.
+#               per_thing:  per whichch column there have to be grouped.
+#   returns:    /
+def group_by_column(column, per_thing):
+    percentages = []
+    new_name = f"{column}_{per_thing}"
+
+    if per_thing == "cleaned":
+        data = get_data_specific(per_thing)
+    else:
+        datasets = ["cleaned", per_thing]
+
+        data  = get_data_together_sub(datasets)
+    
+    grouped = data.groupby(per_thing).sum()
+    total = data[column].sum()
+    
+    grouped_by_1 =  grouped[column]
+    grouped_by_2 = data[per_thing].unique()
+    t = 0
+    
+    for thing in grouped_by_2:
+        go = isinstance(thing, str)
+
+        if go:
+            val = grouped_by_1[thing]
+            per = (val / total) * 100
+            t += per
+
+            print(f"\t{thing}:\t{val}\t<=>\t{per}")
+
+            percentages.append(per)
+    
+    df = get_data_specific(per_thing)
+    df[new_name] = percentages
+
+    print(df.head(5))
+
+group_by_column("price", "categories")

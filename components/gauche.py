@@ -10,8 +10,6 @@ import utils.data_processing as dp
 #   params:     column: Name of the column.
 #   returns:    output: Name of dataset where column is to be found.
 def translate_column_dataset(column):
-    print(f"\tStart translating to dataset\t{column}")
-    
     if column == "categories":
         output = "categories"
     elif column == "full_audio_languages" :
@@ -23,8 +21,6 @@ def translate_column_dataset(column):
     else:
         output = "cleaned"
 
-    print(f"\tDone with translation\t{column}")
-
     return output
 
 # foo(column):
@@ -33,33 +29,25 @@ def translate_column_dataset(column):
 #
 #   params:     columns:    The numeric column to be analysed.
 #   returns:    /
-def foo(column, per_thing):
+def foo(column, per_thing, plot):
     output = []
-    print(">>>Starting foo<<<")
-    print("Translating column to a datastring")
-
     column_1 = translate_column_dataset(per_thing)
-    print(f"Done translating: {column_1}")
-    print("Getting datasets")
+    
     if column_1 == "cleaned":
-        print("dataset is in cleaned")
         data = dp.get_data_specific(column_1)
     else:
-        print("dataset something else")
         datasets = ["cleaned", column_1]
 
         data  = dp.get_data_together_sub(datasets)
-    print("Done getting datasets")
-    print(f"Grouping on {per_thing}")
+    
     grouped = data.groupby(per_thing).sum()
     grouped = grouped.sort.head(10)
     total = data[column].sum()
-    print(f"Done with Grouping on {per_thing}")
-
+    
     grouped_by_1 =  grouped[column]
     grouped_by_2 = data[per_thing].unique()
     t = 0
-    print("Printing loop")
+    
     for thing in grouped_by_2:
         go = isinstance(thing, str)
 
@@ -69,10 +57,11 @@ def foo(column, per_thing):
             t += per
 
             print(f"\t{thing}:\t{val}\t<=>\t{per}")
-            output.append(gauche(per))
-    print(f"Done printing loop\t{t}")
+            if plot:
+                output.append(gauche(per))
+            else:
+                print("foo")
 
-    print(">>>Done foo<<<")
     return output
 
 # decide_colour(value)
@@ -119,3 +108,5 @@ def gauche(value):
     fig.show()
 
     return dcc.Graph(id='top-games-chart', figure=fig)
+
+# foo("price", "categories", False)

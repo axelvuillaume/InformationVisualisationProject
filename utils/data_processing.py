@@ -86,15 +86,16 @@ def get_data_together():
 
     return output
 
-# group_by_column(column, per_thing)
+# group_by_column(column, per_thing, new_name)
 #   group_by_column will give the percentages of the "column" value per "per_thing" values.
 #
 #   params:     columns:    The numeric column to be analysed.
 #               per_thing:  per whichch column there have to be grouped.
+#               new_name:   The new name of the to be added column.
 #   returns:    /
-def group_by_column(column, per_thing):
+def group_by_column(column, per_thing, new_name):
     percentages = []
-    new_name = f"{column}_{per_thing}"
+    path = f"./Data/{new_name}.csv"
 
     if per_thing == "cleaned":
         data = get_data_specific(per_thing)
@@ -122,10 +123,13 @@ def group_by_column(column, per_thing):
 
             percentages.append(per)
 
-    c = data[column]
+    d = {per_thing: grouped_by_2, new_name: percentages}
 
-    print(c)
-    print(percentages)
-    
+    df = pd.DataFrame(d).to_csv
 
-group_by_column("price", "categories")
+    return df
+
+column = "price",
+per_thing = "categories"
+new_name = f"{column}%"
+group_by_column(column, per_thing, new_name).to_csv(new_name)

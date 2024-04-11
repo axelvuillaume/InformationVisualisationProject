@@ -92,7 +92,7 @@ def get_data_together():
 #   params:     columns:    The numeric column to be analysed.
 #               per_thing:  per whichch column there have to be grouped.
 #               new_name:   The new name of the to be added column.
-#   returns:    /
+#   returns:    DataFrame
 def group_by_column(column, per_thing, new_name):
     percentages = []
     path = f"./Data/{new_name}.csv"
@@ -125,11 +125,37 @@ def group_by_column(column, per_thing, new_name):
 
     d = {per_thing: grouped_by_2, new_name: percentages}
 
-    df = pd.DataFrame(d).to_csv
+    return d
+# group_by_column_all_numerics(columns, per_thing)
+#   group_by_column will give the percentages of the "columns" values per "per_thing" values.
+#
+#   params:     columns:    An array of column numeric columns.
+#               per_thing:  per whichch column there have to be grouped.
+#   returns:    /
+def group_by_column_all_numerics(columns, per_thing):
+    path = f"./Data/{per_thing}_grouped_by.csv"
+
+    if per_thing == "cleaned":
+        data = get_data_specific(per_thing)
+    else:
+        datasets = ["cleaned", per_thing]
+
+        data  = get_data_together_sub(datasets)
+    
+    grouped = data.groupby(per_thing).sum()
+
+    d = {}
+
+    for column in columns:
+        new_name = f"{column}%"
+        print(f"Busy with:\t{new_name}")
+
+        d.update(group_by_column(column, grouped, new_name))  
+
+    df = pd.DataFrame(d)
 
     return df
-
-column = "price",
+columns = ["price"]
 per_thing = "categories"
 new_name = f"{column}%"
-group_by_column(column, per_thing, new_name).to_csv(new_name)
+group_by_column_all_numerics(columns, per_thing, new_name)

@@ -86,30 +86,22 @@ def get_data_together():
 
     return output
 
-# group_by_column(column, per_thing, new_name)
-#   group_by_column will give the percentages of the "column" value per "per_thing" values.
+# group_by_column(data, grouped_by, column, per_thing, new_name)
+#   group_by_column will give the percentages of the "column" following the given groupe dataframe.
 #
-#   params:     columns:    The numeric column to be analysed.
-#               per_thing:  per whichch column there have to be grouped.
-#               new_name:   The new name of the to be added column.
+#   params:     data:       Dataframe with original data.
+#               grouped_by: Dataframe grouped by certain column.
+#               column:     Name of the numeric column.
+#               per_thing:  Name of the column on which is grouped.
+#               new_name:   The name of the new column.
 #   returns:    DataFrame
-def group_by_column(column, per_thing, new_name):
+def group_by_column(data, grouped_by, column, per_thing, new_name):
     percentages = []
-    path = f"./Data/{new_name}.csv"
 
-    if per_thing == "cleaned":
-        data = get_data_specific(per_thing)
-    else:
-        datasets = ["cleaned", per_thing]
-
-        data  = get_data_together_sub(datasets)
-    
-    grouped = data.groupby(per_thing).sum()
     total = data[column].sum()
     
-    grouped_by_1 =  grouped[column]
+    grouped_by_1 =  grouped_by[column]
     grouped_by_2 = data[per_thing].unique()
-    t = 0
     
     for thing in grouped_by_2:
         go = isinstance(thing, str)
@@ -117,8 +109,7 @@ def group_by_column(column, per_thing, new_name):
         if go:
             val = grouped_by_1[thing]
             per = (val / total) * 100
-            t += per
-
+            
             print(f"\t{thing}:\t{val}\t<=>\t{per}")
 
             percentages.append(per)
@@ -150,12 +141,12 @@ def group_by_column_all_numerics(columns, per_thing):
         new_name = f"{column}%"
         print(f"Busy with:\t{new_name}")
 
-        d.update(group_by_column(column, grouped, new_name))  
+        d.update(group_by_column(data, grouped, column, per_thing, new_name))
 
     df = pd.DataFrame(d)
 
     return df
-columns = ["price"]
+columns = ["price", "dlc_count", "positive", "negative", "average_playtime_forever", "median_playtime_forever", "peak_ccu", "min_owners", "max_owners"]
 per_thing = "categories"
-new_name = f"{column}%"
-group_by_column_all_numerics(columns, per_thing, new_name)
+
+print(group_by_column_all_numerics(columns, per_thing))

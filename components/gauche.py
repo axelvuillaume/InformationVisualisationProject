@@ -1,6 +1,8 @@
-import utils.data_access as da
+from dash import dcc
 import plotly.graph_objects as go
 import pandas as pd
+
+import utils.data_processing as dp
 
 # translate_column_dataset(column):
 #   This dataset translate the name of a column into the name of the correct dataset where it can be found.
@@ -27,10 +29,12 @@ def translate_column_dataset(column):
 
 # foo(column):
 # foo will get the needed data out of the cleanded_games CSV and analyse this for percentages.
+# TODO: rename to more descriptive name
 #
 #   params:     columns:    The numeric column to be analysed.
 #   returns:    /
 def foo(column, per_thing):
+    output = []
     print(">>>Starting foo<<<")
     print("Translating column to a datastring")
 
@@ -39,15 +43,16 @@ def foo(column, per_thing):
     print("Getting datasets")
     if column_1 == "cleaned":
         print("dataset is in cleaned")
-        data = da.get_data_specific(column_1)
+        data = dp.get_data_specific(column_1)
     else:
         print("dataset something else")
         datasets = ["cleaned", column_1]
 
-        data  = da.get_data_together_sub(datasets)
+        data  = dp.get_data_together_sub(datasets)
     print("Done getting datasets")
     print(f"Grouping on {per_thing}")
     grouped = data.groupby(per_thing).sum()
+    grouped = grouped.sort.head(10)
     total = data[column].sum()
     print(f"Done with Grouping on {per_thing}")
 
@@ -64,11 +69,11 @@ def foo(column, per_thing):
             t += per
 
             print(f"\t{thing}:\t{val}\t<=>\t{per}")
-            gauche(per)
+            output.append(gauche(per))
     print(f"Done printing loop\t{t}")
 
     print(">>>Done foo<<<")
-    return total
+    return output
 
 # decide_colour(value)
 #   decide_colour will change the colour of the gauche depending on the actual value.
@@ -112,3 +117,5 @@ def gauche(value):
     fig.update_layout(height=400)
 
     fig.show()
+
+    return dcc.Graph(id='top-games-chart', figure=fig)

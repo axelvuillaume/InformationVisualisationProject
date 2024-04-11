@@ -110,8 +110,6 @@ def group_by_column(data, grouped_by, column, per_thing, new_name):
             val = grouped_by_1[thing]
             per = (val / total) * 100
             
-            print(f"\t{thing}:\t{val}\t<=>\t{per}")
-
             percentages.append(per)
 
     d = {per_thing: grouped_by_2, new_name: percentages}

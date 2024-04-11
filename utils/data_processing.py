@@ -121,10 +121,11 @@ def group_by_column(column, per_thing):
             print(f"\t{thing}:\t{val}\t<=>\t{per}")
 
             percentages.append(per)
-    
-    df = get_data_specific(per_thing)
-    df[new_name] = percentages
 
-    print(df.head(5))
+    c = data[column]
+
+    print(c)
+    print(percentages)
+    
 
 group_by_column("price", "categories")

@@ -7,9 +7,9 @@ import plotly.graph_objs as go
 import numpy as np
 import random
 
-def hexagon(categories, genres, n):
+def hexagon(categories, genres, steam_id, n):
 
-    games = get_game_list_from_api(76561198150561997)
+    games = get_game_list_from_api(steam_id)
     select = 'genres' 
 
     if(select == 'genres'):

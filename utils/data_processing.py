@@ -8,7 +8,10 @@ all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audi
 #   params:     file_path:  The path to the tobe red CSV-file.
 #   returns:    DataFrame.
 def load_data(file_path):
-    return pd.read_csv(file_path)
+    try:
+        return pd.read_csv(file_path)
+    except Exception as e:
+        print(f"An exception ocurred -- load_data:\n{e}")
 
 # write_data(dataframe, file_path)
 #   write_data will write the given dataframe to a CSV-file stored on the given path.
@@ -17,7 +20,10 @@ def load_data(file_path):
 #               file_path:  The path where the dataframe has to be written.
 #   returns:    /
 def write_data(dataframe, file_path):
-    dataframe.to_csv(file_path)
+    try:
+        dataframe.to_csv(file_path)
+    except Exception as e:
+        print(f"An exception ocurred -- write_data:\n{e}")
 
 # translate_column_dataset(column):
 #   This dataset translate the name of a column into the name of the correct dataset where it can be found.
@@ -25,18 +31,21 @@ def write_data(dataframe, file_path):
 #   params:     column: Name of the column.
 #   returns:    output: Name of dataset where column is to be found.
 def translate_column_dataset(column):
-    if column == "categories":
-        output = "categories"
-    elif column == "full_audio_languages" :
-        output = "full_audio"
-    elif column == "genres":
-        output = "genres"
-    elif column == "supported_languages":
-        output = "supported_audio"
-    else:
-        output = "cleaned"
+    try:
+        if column == "categories":
+            output = "categories"
+        elif column == "full_audio_languages" :
+            output = "full_audio"
+        elif column == "genres":
+            output = "genres"
+        elif column == "supported_languages":
+            output = "supported_audio"
+        else:
+            output = "cleaned"
 
-    return output
+        return output
+    except Exception as e:
+        print(f"An exception ocurred -- translate_column_dataset\n{e}")
 
 # get_data_specific(specific)
 #   get_data_specific will read the data for one specific dataset.
@@ -44,23 +53,26 @@ def translate_column_dataset(column):
 #   params:     specific:   Name of the specific dataset tob red out.      
 #   returns:    output:     DataFrame
 def get_data_specific(specific):
-    specific =  translate_column_dataset(specific)
-    data_path = "./Data/"
+    try:
+        specific =  translate_column_dataset(specific)
+        data_path = "./Data/"
 
-    if specific == "categories":
-        path = f"{data_path}categories.csv"
-    elif specific == "cleaned":
-        path = f"{data_path}cleaned_games.csv"
-    elif specific == "full_audio":
-        path = f"{data_path}full_audio_languages.csv"
-    elif specific == "genres":
-        path = f"{data_path}genres.csv"
-    elif specific == "supported_audio":
-        path = f"{data_path}supported_languages.csv"
+        if specific == "categories":
+            path = f"{data_path}categories.csv"
+        elif specific == "cleaned":
+            path = f"{data_path}cleaned_games.csv"
+        elif specific == "full_audio":
+            path = f"{data_path}full_audio_languages.csv"
+        elif specific == "genres":
+            path = f"{data_path}genres.csv"
+        elif specific == "supported_audio":
+            path = f"{data_path}supported_languages.csv"
 
-    output = load_data(path)
+        output = load_data(path)
 
-    return output
+        return output
+    except Exception as e:
+        print(f"An exception ocurred -- get_data_specific\n{e}")
 
 # get_data_apart_sub(datasets)
 #   get_data will read the needed data out of the CSV-files and put these in a pandas dataframe.
@@ -68,14 +80,17 @@ def get_data_specific(specific):
 #   params:     datasets:   Array of dataset names.
 #   returns:    output:     Array of dataframes.            
 def get_data_apart_sub(datasets):
-    output =  []
+    try:
+        output =  []
 
-    for dataset in datasets:
-        tmp = get_data_specific(dataset)
+        for dataset in datasets:
+            tmp = get_data_specific(dataset)
 
-        output.append(tmp)
-    
-    return output
+            output.append(tmp)
+        
+        return output
+    except Exception as e:
+        print(f"An exception ocurred -- get_data_apart_sub\n{e}")
 # get_data_apart()
 #   get_data will read the needed data out of the CSV-files and put these in a pandas dataframe.
 #
@@ -86,15 +101,18 @@ def get_data_apart_sub(datasets):
 #               genres_data:            DataFrame
 #               supported_audio_data:   DataFrame
 def get_data_apart():
-    dataframes = get_data_apart_sub(all_datasets)
+    try:
+        dataframes = get_data_apart_sub(all_datasets)
 
-    categories_data = dataframes[0]
-    cleaned_data = dataframes[1]
-    full_audio_data = dataframes[2]
-    genres_data = dataframes[3]
-    supported_audio_data = dataframes[4]
+        categories_data = dataframes[0]
+        cleaned_data = dataframes[1]
+        full_audio_data = dataframes[2]
+        genres_data = dataframes[3]
+        supported_audio_data = dataframes[4]
 
-    return categories_data, cleaned_data, full_audio_data, genres_data, supported_audio_data
+        return categories_data, cleaned_data, full_audio_data, genres_data, supported_audio_data
+    except Exception as e:
+        print(f"An exception ocurred -- get_data_apart\n{e}")
 
 # get_data_together_sub(datasets)
 #   get_data_sub will read given data.
@@ -102,23 +120,29 @@ def get_data_apart():
 #   params:     datasets:   Array of datasets.
 #   returns:    output:     DataFrame
 def get_data_together_sub(datasets):
-    tobe_merged = get_data_apart_sub(datasets)
-     
-    output = pd.concat(tobe_merged, axis=1)
+    try:
+        tobe_merged = get_data_apart_sub(datasets)
+        
+        output = pd.concat(tobe_merged, axis=1)
 
-    return output
+        return output
+    except Exception as e:
+        print(f"An exception ocurred -- get_data_together_sub\n{e}")
 # get_data_together()
 #   get_data will read the needed data out of the CSV-files and put these in a pandas dataframe.
 #
 #   params:     /
 #   returns:    output: DataFrame
 def get_data_together():
-    categories_data, cleaned_data, full_audio_data, genres_data, supported_audio_data = get_data_apart()
-    tobe_merged = [categories_data, cleaned_data, full_audio_data, genres_data, supported_audio_data]
+    try:
+        categories_data, cleaned_data, full_audio_data, genres_data, supported_audio_data = get_data_apart()
+        tobe_merged = [categories_data, cleaned_data, full_audio_data, genres_data, supported_audio_data]
 
-    output = pd.concat(tobe_merged, axis=0)
+        output = pd.concat(tobe_merged, axis=0)
 
-    return output
+        return output
+    except Exception as e:
+        print(f"An exception ocurred -- get_data_together\n{e}")
 
 # group_by_column(data, grouped_by, column, per_thing, new_name)
 #   group_by_column will give the percentages of the "column" following the given groupe dataframe.
@@ -130,25 +154,28 @@ def get_data_together():
 #               new_name:   The name of the new column.
 #   returns:    DataFrame
 def group_by_column(data, grouped_by, column, per_thing, new_name):
-    percentages = []
+    try:
+        percentages = []
 
-    total = data[column].sum()
-    
-    grouped_by_1 =  grouped_by[column]
-    grouped_by_2 = data[per_thing].unique()
-    
-    for thing in grouped_by_2:
-        go = isinstance(thing, str)
+        total = data[column].sum()
+        
+        grouped_by_1 =  grouped_by[column]
+        grouped_by_2 = data[per_thing].unique()
+        
+        for thing in grouped_by_2:
+            go = isinstance(thing, str)
 
-        if go:
-            val = grouped_by_1[thing]
-            per = (val / total) * 100
-            
-            percentages.append(per)
+            if go:
+                val = grouped_by_1[thing]
+                per = (val / total) * 100
+                
+                percentages.append(per)
 
-    d = {per_thing: grouped_by_2, new_name: percentages}
+        d = {per_thing: grouped_by_2, new_name: percentages}
 
-    return d
+        return d
+    except Exception as e:
+        print(f"An exception ocurred -- group_by_column\n{e}")
 # group_by_column_all_numerics(columns, per_thing)
 #   group_by_column will give the percentages of the "columns" values per "per_thing" values.
 #
@@ -156,26 +183,29 @@ def group_by_column(data, grouped_by, column, per_thing, new_name):
 #               per_thing:  per whichch column there have to be grouped.
 #   returns:    /
 def group_by_column_all_numerics(columns, per_thing):
-    if per_thing == "cleaned":
-        data = get_data_specific(per_thing)
-    else:
-        datasets = ["cleaned", per_thing]
+    try:
+        if per_thing == "cleaned":
+            data = get_data_specific(per_thing)
+        else:
+            datasets = ["cleaned", per_thing]
 
-        data  = get_data_together_sub(datasets)
-    
-    grouped = data.groupby(per_thing, axis=1).sum()
+            data  = get_data_together_sub(datasets)
+        
+        grouped = data.groupby(per_thing).sum()
 
-    d = {}
+        d = {}
 
-    for column in columns:
-        new_name = f"{column}%"
-        print(f"\tBusy with:\t{new_name}")
+        for column in columns:
+            new_name = f"{column}%"
+            print(f"\tBusy with:\t{new_name}")
 
-        d.update(group_by_column(data, grouped, column, per_thing, new_name))
+            d.update(group_by_column(data, grouped, column, per_thing, new_name))
 
-    df = pd.DataFrame(d)
+        df = pd.DataFrame(d)
 
-    return df
+        return df
+    except Exception as e:
+        print(f"An exception ocurred -- group_by_column_all_numerics\n{e}")
 
 # make_percentage_files(columns, per_thing)
 #   make-percentage_files will loop through the per_things array and make a new CSV file containing percentages of that per_thing.
@@ -184,27 +214,30 @@ def group_by_column_all_numerics(columns, per_thing):
 #               per_things: An array of columns on what should be grouped by.
 #   returns:    /
 def make_percentage_files(columns, per_things):
-    for per_thing in per_things:
-        if not is_done[per_thing]:
-            print(f"Dealing with\t{per_thing}")
+    try:
+        for per_thing in per_things:
+            if not is_done[per_thing]:
+                print(f"Dealing with\t{per_thing}")
 
-            path = f"./Data/{per_thing}_grouped_by.csv"
+                path = f"./Data/{per_thing}_grouped_by.csv"
 
-            df = group_by_column_all_numerics(columns, per_thing)
+                df = group_by_column_all_numerics(columns, per_thing)
 
-            print(df)
+                print(df)
 
-            write_data(df, path)
+                write_data(df, path)
 
-            print(f"Done with\t{per_thing}")
-        else:
-            print(f"{per_thing}\t\tis already translatted into a CSV-file.")
+                print(f"Done with\t{per_thing}")
+            else:
+                print(f"{per_thing}\t\tis already translatted into a CSV-file.")
+    except Exception as e:
+        print(f"An exception ocurred -- make_percentage_files\n{e}")
 
 
 
 columns = ["price", "dlc_count", "positive", "negative", "average_playtime_forever", "median_playtime_forever", "peak_ccu", "min_owners", "max_owners"]
 per_things = ["categories", "full_audio_languages", "genres", "supported_languages"]
 
-is_done = {"categories": True, "full_audio_languages": False, "genres": False, "supported_languages": False} # Please change the truth-statement as needed.
+is_done = {"categories": False, "full_audio_languages": False, "genres": False, "supported_languages": False} # Please change the truth-statement as needed.
 
 make_percentage_files(columns, per_things)

@@ -11,7 +11,7 @@ def load_data(file_path):
     try:
         return pd.read_csv(file_path)
     except Exception as e:
-        print(f"An exception ocurred -- load_data:\n{e}")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- load_data:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # write_data(dataframe, file_path)
 #   write_data will write the given dataframe to a CSV-file stored on the given path.
@@ -23,8 +23,7 @@ def write_data(dataframe, file_path):
     try:
         dataframe.to_csv(file_path)
     except Exception as e:
-        print(f"An exception ocurred -- write_data:\n{e}")
-
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- write_data:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 # translate_column_dataset(column):
 #   This dataset translate the name of a column into the name of the correct dataset where it can be found.
 #
@@ -45,7 +44,7 @@ def translate_column_dataset(column):
 
         return output
     except Exception as e:
-        print(f"An exception ocurred -- translate_column_dataset\n{e}")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- translate_column_dataset:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # get_data_specific(specific)
 #   get_data_specific will read the data for one specific dataset.
@@ -72,7 +71,7 @@ def get_data_specific(specific):
 
         return output
     except Exception as e:
-        print(f"An exception ocurred -- get_data_specific\n{e}")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_data_specific:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # get_data_apart_sub(datasets)
 #   get_data will read the needed data out of the CSV-files and put these in a pandas dataframe.
@@ -90,7 +89,7 @@ def get_data_apart_sub(datasets):
         
         return output
     except Exception as e:
-        print(f"An exception ocurred -- get_data_apart_sub\n{e}")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_data_apart_sub:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 # get_data_apart()
 #   get_data will read the needed data out of the CSV-files and put these in a pandas dataframe.
 #
@@ -112,7 +111,7 @@ def get_data_apart():
 
         return categories_data, cleaned_data, full_audio_data, genres_data, supported_audio_data
     except Exception as e:
-        print(f"An exception ocurred -- get_data_apart\n{e}")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_data_apart:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # get_data_together_sub(datasets)
 #   get_data_sub will read given data.
@@ -127,7 +126,7 @@ def get_data_together_sub(datasets):
 
         return output
     except Exception as e:
-        print(f"An exception ocurred -- get_data_together_sub\n{e}")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_data_together_sub:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 # get_data_together()
 #   get_data will read the needed data out of the CSV-files and put these in a pandas dataframe.
 #
@@ -142,7 +141,7 @@ def get_data_together():
 
         return output
     except Exception as e:
-        print(f"An exception ocurred -- get_data_together\n{e}")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_data_together:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # group_by_column(data, grouped_by, column, per_thing, new_name)
 #   group_by_column will give the percentages of the "column" following the given groupe dataframe.
@@ -175,7 +174,7 @@ def group_by_column(data, grouped_by, column, per_thing, new_name):
 
         return d
     except Exception as e:
-        print(f"An exception ocurred -- group_by_column\n{e}")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_column:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 # group_by_column_all_numerics(columns, per_thing)
 #   group_by_column will give the percentages of the "columns" values per "per_thing" values.
 #
@@ -199,13 +198,17 @@ def group_by_column_all_numerics(columns, per_thing):
             new_name = f"{column}%"
             print(f"\tBusy with:\t{new_name}")
 
-            d.update(group_by_column(data, grouped, column, per_thing, new_name))
+            f = group_by_column(data, grouped, column, per_thing, new_name)
+
+            print(f)
+
+            d.update(f)
 
         df = pd.DataFrame(d)
 
         return df
     except Exception as e:
-        print(f"An exception ocurred -- group_by_column_all_numerics\n{e}")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_column_all_numerics:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # make_percentage_files(columns, per_thing)
 #   make-percentage_files will loop through the per_things array and make a new CSV file containing percentages of that per_thing.
@@ -231,13 +234,13 @@ def make_percentage_files(columns, per_things):
             else:
                 print(f"{per_thing}\t\tis already translatted into a CSV-file.")
     except Exception as e:
-        print(f"An exception ocurred -- make_percentage_files\n{e}")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- make_percentage_files:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 
 
 columns = ["price", "dlc_count", "positive", "negative", "average_playtime_forever", "median_playtime_forever", "peak_ccu", "min_owners", "max_owners"]
 per_things = ["categories", "full_audio_languages", "genres", "supported_languages"]
 
-is_done = {"categories": False, "full_audio_languages": False, "genres": False, "supported_languages": False} # Please change the truth-statement as needed.
+is_done = {"categories": True, "full_audio_languages": False, "genres": False, "supported_languages": False} # Please change the truth-statement as needed.
 
-make_percentage_files(columns, per_things)
+# make_percentage_files(columns, per_things)

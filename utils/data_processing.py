@@ -2,8 +2,41 @@ import pandas as pd
 
 all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audio"]
 
+# load_data(file_path)
+#   load_data will read a CSV file on the given path.
+# 
+#   params:     file_path:  The path to the tobe red CSV-file.
+#   returns:    DataFrame.
 def load_data(file_path):
     return pd.read_csv(file_path)
+
+# write_data(dataframe, file_path)
+#   write_data will write the given dataframe to a CSV-file stored on the given path.
+#
+#   params:     dataframe:  Dataframe to be save to an CSV-file
+#               file_path:  The path where the dataframe has to be written.
+#   returns:    /
+def write_data(dataframe, file_path):
+    dataframe.to_csv(file_path)
+
+# translate_column_dataset(column):
+#   This dataset translate the name of a column into the name of the correct dataset where it can be found.
+#
+#   params:     column: Name of the column.
+#   returns:    output: Name of dataset where column is to be found.
+def translate_column_dataset(column):
+    if column == "categories":
+        output = "categories"
+    elif column == "full_audio_languages" :
+        output = "full_audio"
+    elif column == "genres":
+        output = "genres"
+    elif column == "supported_languages":
+        output = "supported_audio"
+    else:
+        output = "cleaned"
+
+    return output
 
 # get_data_specific(specific)
 #   get_data_specific will read the data for one specific dataset.
@@ -11,6 +44,7 @@ def load_data(file_path):
 #   params:     specific:   Name of the specific dataset tob red out.      
 #   returns:    output:     DataFrame
 def get_data_specific(specific):
+    specific =  translate_column_dataset(specific)
     data_path = "./Data/"
 
     if specific == "categories":
@@ -122,8 +156,6 @@ def group_by_column(data, grouped_by, column, per_thing, new_name):
 #               per_thing:  per whichch column there have to be grouped.
 #   returns:    /
 def group_by_column_all_numerics(columns, per_thing):
-    path = f"./Data/{per_thing}_grouped_by.csv"
-
     if per_thing == "cleaned":
         data = get_data_specific(per_thing)
     else:
@@ -131,20 +163,48 @@ def group_by_column_all_numerics(columns, per_thing):
 
         data  = get_data_together_sub(datasets)
     
-    grouped = data.groupby(per_thing).sum()
+    grouped = data.groupby(per_thing, axis=1).sum()
 
     d = {}
 
     for column in columns:
         new_name = f"{column}%"
-        print(f"Busy with:\t{new_name}")
+        print(f"\tBusy with:\t{new_name}")
 
         d.update(group_by_column(data, grouped, column, per_thing, new_name))
 
     df = pd.DataFrame(d)
 
     return df
-columns = ["price", "dlc_count", "positive", "negative", "average_playtime_forever", "median_playtime_forever", "peak_ccu", "min_owners", "max_owners"]
-per_thing = "categories"
 
-print(group_by_column_all_numerics(columns, per_thing))
+# make_percentage_files(columns, per_thing)
+#   make-percentage_files will loop through the per_things array and make a new CSV file containing percentages of that per_thing.
+#
+#   params:     columns:    An array of  numeric columns.
+#               per_things: An array of columns on what should be grouped by.
+#   returns:    /
+def make_percentage_files(columns, per_things):
+    for per_thing in per_things:
+        if not is_done[per_thing]:
+            print(f"Dealing with\t{per_thing}")
+
+            path = f"./Data/{per_thing}_grouped_by.csv"
+
+            df = group_by_column_all_numerics(columns, per_thing)
+
+            print(df)
+
+            write_data(df, path)
+
+            print(f"Done with\t{per_thing}")
+        else:
+            print(f"{per_thing}\t\tis already translatted into a CSV-file.")
+
+
+
+columns = ["price", "dlc_count", "positive", "negative", "average_playtime_forever", "median_playtime_forever", "peak_ccu", "min_owners", "max_owners"]
+per_things = ["categories", "full_audio_languages", "genres", "supported_languages"]
+
+is_done = {"categories": True, "full_audio_languages": False, "genres": False, "supported_languages": False} # Please change the truth-statement as needed.
+
+make_percentage_files(columns, per_things)

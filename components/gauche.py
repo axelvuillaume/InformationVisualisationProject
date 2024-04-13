@@ -4,25 +4,6 @@ import pandas as pd
 
 import utils.data_processing as dp
 
-# translate_column_dataset(column):
-#   This dataset translate the name of a column into the name of the correct dataset where it can be found.
-#
-#   params:     column: Name of the column.
-#   returns:    output: Name of dataset where column is to be found.
-def translate_column_dataset(column):
-    if column == "categories":
-        output = "categories"
-    elif column == "full_audio_languages" :
-        output = "full_audio"
-    elif column == "genres":
-        output = "genres"
-    elif column == "supported_languages":
-        output = "supported_audio"
-    else:
-        output = "cleaned"
-
-    return output
-
 # foo(column):
 # foo will get the needed data out of the cleanded_games CSV and analyse this for percentages.
 # TODO: rename to more descriptive name
@@ -31,7 +12,7 @@ def translate_column_dataset(column):
 #   returns:    /
 def foo(column, per_thing, plot):
     output = []
-    column_1 = translate_column_dataset(per_thing)
+    column_1 = dp.translate_column_dataset(per_thing)
     
     if column_1 == "cleaned":
         data = dp.get_data_specific(column_1)

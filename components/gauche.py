@@ -1,54 +1,36 @@
-import utils.data_processing as dp
-
 from dash import dcc
+from dash import html
 import plotly.graph_objects as go
 import pandas as pd
 
-# foo(column):
+from utils import data_processing as dp
+
+# foo(column, per_thing):
 # foo will get the needed data out of the cleanded_games CSV and analyse this for percentages.
 # TODO: rename to more descriptive name
 #
 #   params:     columns:    The numeric column to be analysed.
+#               per_thing:  The element there should be grouped by.
 #   returns:    /
-def foo(column, per_thing, plot):
+def foo(column, per_thing):
+    output = []
+
     path = dp.get_file_name(per_thing)
-    df = dp.load_data(path)
-
-    print(df)
+    true_colunm = f"{column}%"
     
-    # output = []
-    # column_1 = dp.translate_column_dataset(per_thing)
-    
-    # if column_1 == "cleaned":
-    #     data = dp.get_data_specific(column_1)
-    # else:
-    #     datasets = ["cleaned", column_1]
+    df = dp.load_data(path).sort_values(by=true_colunm, ascending=False)
+    top = df[[per_thing,true_colunm]].head(3)
 
-    #     data  = dp.get_data_together_sub(datasets)
+    names = top[per_thing].to_numpy()
+    values = top[true_colunm].to_numpy()
     
-    # grouped = data.groupby(per_thing).sum()
-    # grouped = grouped.sort.head(10)
-    # total = data[column].sum()
+    for i in range(0, len(names)):
+        name = names[i]
+        value = values[i]
+
+        output.append(gauche(value, name))
     
-    # grouped_by_1 =  grouped[column]
-    # grouped_by_2 = data[per_thing].unique()
-    # t = 0
-    
-    # for thing in grouped_by_2:
-    #     go = isinstance(thing, str)
-
-    #     if go:
-    #         val = grouped_by_1[thing]
-    #         per = (val / total) * 100
-    #         t += per
-
-    #         print(f"\t{thing}:\t{val}\t<=>\t{per}")
-    #         if plot:
-    #             output.append(gauche(per))
-    #         else:
-    #             print("foo")
-
-    # return output
+    return output
 
 # decide_colour(value)
 #   decide_colour will change the colour of the gauche depending on the actual value.
@@ -63,12 +45,13 @@ def decide_colour(value):
     else:
         return "Green"
 
-# gauche(value)
+# gauche(value, name)
 #   gauche will create a gauche depeninding on the percentage given to the plot.
 #
-#   params: value:   a percentual value that has to be shown.
-#   returns: /
-def gauche(value):
+#   params:     value:  A percentual value that has to be shown.
+#               name:   The name of the plot
+#   returns:    /
+def gauche(value, name):
     x=  [0, 1]
     y = [0, 1]
 
@@ -86,13 +69,14 @@ def gauche(value):
         value=value,
         domain= d,
         gauge= gauge,
-        number=number
+        number=number,
+        title=name
     ))
 
     fig.update_layout(height=400)
 
-    fig.show()
+    # fig.show()
 
     return dcc.Graph(id='top-games-chart', figure=fig)
 
-foo("price", "categories", False)
+# foo("price", "categories", False)

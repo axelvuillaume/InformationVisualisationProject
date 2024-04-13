@@ -24,7 +24,18 @@ def generate_home_layout(data):
             html.Div(
                 className="component-container",
                 children=[
-                    foo("price", "categories", True)
+                    html.Div(
+                        className="component-container",
+                        children=[foo("price", "categories")[0]]
+                        ),
+                    html.Div(
+                        className="component-container",
+                        children=[foo("price", "categories")[1]]
+                        ),
+                    html.Div(
+                        className="component-container",
+                        children=[foo("price", "categories")[2]]
+                        ),
                 ]
             )
         ]

@@ -17,8 +17,6 @@ def hexagon(categories, genres, steam_id, n):
     if(select == 'categories'):
         ranking = get_n_best_gen_or_cat_by_hours(games, categories, n)
 
-    print(ranking)
-
     ranking_pairs = list(ranking.items())
     random.shuffle(ranking_pairs)
     ranking = dict(ranking_pairs)

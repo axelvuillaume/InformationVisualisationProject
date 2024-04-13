@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output
 
 from components.top_games_chart import generate_top_games_chart
 from layouts.home_layout import generate_home_layout
-from Data.load_data import cleaned_games, categories, genres, supported_languages, full_audio_languages
+from utils.load_data import cleaned_games, categories, genres, supported_languages, full_audio_languages
 
 # Initialize the Dash app
 app = dash.Dash(__name__, suppress_callback_exceptions=True)

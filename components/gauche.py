@@ -11,39 +11,44 @@ import utils.data_processing as dp
 #   params:     columns:    The numeric column to be analysed.
 #   returns:    /
 def foo(column, per_thing, plot):
-    output = []
-    column_1 = dp.translate_column_dataset(per_thing)
-    
-    if column_1 == "cleaned":
-        data = dp.get_data_specific(column_1)
-    else:
-        datasets = ["cleaned", column_1]
+    path = dp.get_file_name(per_thing)
+    df = dp.load_data(path)
 
-        data  = dp.get_data_together_sub(datasets)
+    print(df)
     
-    grouped = data.groupby(per_thing).sum()
-    grouped = grouped.sort.head(10)
-    total = data[column].sum()
+    # output = []
+    # column_1 = dp.translate_column_dataset(per_thing)
     
-    grouped_by_1 =  grouped[column]
-    grouped_by_2 = data[per_thing].unique()
-    t = 0
+    # if column_1 == "cleaned":
+    #     data = dp.get_data_specific(column_1)
+    # else:
+    #     datasets = ["cleaned", column_1]
+
+    #     data  = dp.get_data_together_sub(datasets)
     
-    for thing in grouped_by_2:
-        go = isinstance(thing, str)
+    # grouped = data.groupby(per_thing).sum()
+    # grouped = grouped.sort.head(10)
+    # total = data[column].sum()
+    
+    # grouped_by_1 =  grouped[column]
+    # grouped_by_2 = data[per_thing].unique()
+    # t = 0
+    
+    # for thing in grouped_by_2:
+    #     go = isinstance(thing, str)
 
-        if go:
-            val = grouped_by_1[thing]
-            per = (val / total) * 100
-            t += per
+    #     if go:
+    #         val = grouped_by_1[thing]
+    #         per = (val / total) * 100
+    #         t += per
 
-            print(f"\t{thing}:\t{val}\t<=>\t{per}")
-            if plot:
-                output.append(gauche(per))
-            else:
-                print("foo")
+    #         print(f"\t{thing}:\t{val}\t<=>\t{per}")
+    #         if plot:
+    #             output.append(gauche(per))
+    #         else:
+    #             print("foo")
 
-    return output
+    # return output
 
 # decide_colour(value)
 #   decide_colour will change the colour of the gauche depending on the actual value.
@@ -90,4 +95,4 @@ def gauche(value):
 
     return dcc.Graph(id='top-games-chart', figure=fig)
 
-# foo("price", "categories", False)
+foo("price", "categories", False)

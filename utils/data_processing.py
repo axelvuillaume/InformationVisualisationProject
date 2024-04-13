@@ -2,6 +2,16 @@ import pandas as pd
 
 all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audio"]
 
+# get_file_name_group_by(per_thing)
+#   get_file_name_group_by will generate a file name for the grouped_by CSV-files.
+#
+#   params:     per_thing:  Variant name for CSV-file.
+#   returns:    output:     Path name of CSV-file.
+def get_file_name(per_thing):
+    output = f"./Data/{per_thing}_grouped_by.csv"
+
+    return output
+
 # load_data(file_path)
 #   load_data will read a CSV file on the given path.
 # 
@@ -222,7 +232,7 @@ def make_percentage_files(columns, per_things):
             if not is_done[per_thing]:
                 print(f"Dealing with\t{per_thing}")
 
-                path = f"./Data/{per_thing}_grouped_by.csv"
+                path = get_file_name(per_thing)
 
                 df = group_by_column_all_numerics(columns, per_thing)
 

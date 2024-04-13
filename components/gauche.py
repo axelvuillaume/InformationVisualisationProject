@@ -1,8 +1,8 @@
+import utils.data_processing as dp
+
 from dash import dcc
 import plotly.graph_objects as go
 import pandas as pd
-
-import utils.data_processing as dp
 
 # foo(column):
 # foo will get the needed data out of the cleanded_games CSV and analyse this for percentages.

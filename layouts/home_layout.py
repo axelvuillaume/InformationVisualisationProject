@@ -86,8 +86,9 @@ def bubble(steam_id):
     # transform data to use the percentage of positive reviews
     df['positive reviews (%)'] = df['positive reviews']/(df['positive reviews'] + df['negative reviews']) * 100
    
-    fig = px.scatter(df, x="median playtime", y="positive reviews (%)", size="score", 
-                     color="genre", hover_name="name",
+    fig = px.scatter(df, x="price", y="positive reviews (%)", size="total reviews", 
+                     color="genre", hover_name="name", #log_x=True,
                      size_max=50)
-    fig.update_layout(yaxis_title='Positive reviews (%)', xaxis_title='Median Playtime', title='Interesting games based on your favorite genres')
+    fig.update_layout(yaxis_title='Positive reviews (%)', xaxis_title='Price', title='Interesting games based on your favorite genres')
+    #fig.update_traces(marker_size=15)
     return dcc.Graph(id='bubble-chart-figure',figure=fig)

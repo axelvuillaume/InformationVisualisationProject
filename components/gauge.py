@@ -28,7 +28,7 @@ def foo(column, per_thing):
         name = names[i]
         value = values[i]
 
-        output.append(gauche(value, name))
+        output.append(gauge(value, name))
     
     return output
 
@@ -51,7 +51,7 @@ def decide_colour(value):
 #   params:     value:  A percentual value that has to be shown.
 #               name:   The name of the plot
 #   returns:    /
-def gauche(value, name):
+def gauge(value, name):
     x=  [0, 1]
     y = [0, 1]
 
@@ -62,7 +62,7 @@ def gauche(value, name):
             'bordercolor': "gray",
             'steps': [{'range': [0, value], 'color': 'lightblue'}, {'range': [value, 100], 'color': 'lightgray'}],
             'shape': "angular"}
-    number = {'font': {'size': 100, 'color': decide_colour(value)}, 'suffix': "%"}
+    number = {'font': {'size': 50, 'color': decide_colour(value)}, 'suffix': "%"}
 
     fig = go.Figure(go.Indicator(
         mode="gauge+number",

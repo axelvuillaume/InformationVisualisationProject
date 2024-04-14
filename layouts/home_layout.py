@@ -2,7 +2,7 @@ from dash import dcc
 from dash import html
 
 from components.top_games_chart import generate_top_games_chart
-from components.gauche import foo
+from components.gauge import foo
 
 def generate_home_layout(data):
     return html.Div(

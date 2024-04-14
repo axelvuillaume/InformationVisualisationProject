@@ -251,6 +251,6 @@ def make_percentage_files(columns, per_things):
 columns = ["price", "dlc_count", "positive", "negative", "average_playtime_forever", "median_playtime_forever", "peak_ccu", "min_owners", "max_owners"]
 per_things = ["categories", "full_audio_languages", "genres", "supported_languages"]
 
-is_done = {"categories": True, "full_audio_languages": False, "genres": False, "supported_languages": False} # Please change the truth-statement as needed.
+is_done = {"categories": True, "full_audio_languages": False, "genres": True, "supported_languages": True} # Please change the truth-statement as needed.
 
-# make_percentage_files(columns, per_things)
+make_percentage_files(columns, per_things)

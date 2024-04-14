@@ -5,6 +5,7 @@ import plotly.express as px
 from components.top_games_chart import generate_top_games_chart
 from components.hexagon import hexagon
 from components.bubble_chart import bubble_chart
+from components.user_playtime_bar_chart import playtime_per_genre
 from utils.load_data import cleaned_games, categories, genres, supported_languages, full_audio_languages
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
 
@@ -39,6 +40,12 @@ def generate_home_layout():
                     #bubble(n=8)
                 ]
             ),
+            html.Div(
+                className="component-container",
+                id = 'user-playtime-chart',
+                children=[
+                ]
+            ),
         ]
     )
 
@@ -55,3 +62,11 @@ def compute_hexagon(steam_id):
 )
 def bubble(steam_id):
     return bubble_chart(steam_id)
+
+@callback(
+    Output('user-playtime-chart', "children"),
+    Input("steam-id", "value"),
+)
+def playtime_chart(steam_id):
+    return playtime_per_genre(steam_id)
+

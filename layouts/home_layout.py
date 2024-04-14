@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.express as px
 from components.top_games_chart import generate_top_games_chart
 from components.hexagon import hexagon
+from components.bubble_chart import bubble_chart
 from utils.load_data import cleaned_games, categories, genres, supported_languages, full_audio_languages
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
 
@@ -53,42 +54,4 @@ def compute_hexagon(steam_id):
     Input("steam-id", "value"),
 )
 def bubble(steam_id):
-    games = get_game_list_from_api(steam_id)
-    ranking = get_n_best_gen_or_cat_by_hours(games, genres, n=8)
-    #get from cleaned_games the top 5 games of each genre in ranking, by score
-    
-    games_per_genre = []
-    for gen in ranking:
-        top_games_in_genre = cleaned_games[
-             cleaned_games['app_id'].isin(
-                 genres[genres['genres'] == gen]['app_id']
-             )]
-        top_games_in_genre = top_games_in_genre.nlargest(5, 'score')[['name', 'price', 'positive', 'negative', 'score', 'median_playtime_forever']]
-        top_games_in_genre['genre'] = gen
-        games_per_genre += top_games_in_genre.values.tolist()
-    
-    # for gen in ranking:
-    #     random_games_in_genre = cleaned_games[
-    #         cleaned_games['app_id'].isin(
-    #             genres[genres['genres'] == gen]['app_id'].head(5)
-    #         )
-    #     ][['name', 'price', 'positive', 'negative']]
-    #     random_games_in_genre['genre'] = gen
-    #     games_per_genre += random_games_in_genre.values.tolist()
-
-    df = pd.DataFrame(games_per_genre)
-    df.columns=['name', 'price', 'positive reviews', 'negative reviews', 'score', 'median playtime', 'genre']
-
-    # Add a column containing total number of reviews, 
-    # NOTE: total reviews seems to be a better indicator of games sold than min_owners/max_owners 
-    df['total reviews'] = df['positive reviews'] + df['negative reviews']
-
-    # transform data to use the percentage of positive reviews
-    df['positive reviews (%)'] = df['positive reviews']/(df['positive reviews'] + df['negative reviews']) * 100
-   
-    fig = px.scatter(df, x="price", y="positive reviews (%)", size="total reviews", 
-                     color="genre", hover_name="name", #log_x=True,
-                     size_max=50)
-    fig.update_layout(yaxis_title='Positive reviews (%)', xaxis_title='Price', title='Interesting games based on your favorite genres')
-    #fig.update_traces(marker_size=15)
-    return dcc.Graph(id='bubble-chart-figure',figure=fig)
+    return bubble_chart(steam_id)

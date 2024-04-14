@@ -45,8 +45,8 @@ def decide_colour(value):
     else:
         return "Green"
 
-# gauche(value, name)
-#   gauche will create a gauche depeninding on the percentage given to the plot.
+# gauge(value, name)
+#   gauge will create a gauge depeninding on the percentage given to the plot.
 #
 #   params:     value:  A percentual value that has to be shown.
 #               name:   The name of the plot

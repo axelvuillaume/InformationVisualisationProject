@@ -253,4 +253,4 @@ per_things = ["categories", "full_audio_languages", "genres", "supported_languag
 
 is_done = {"categories": True, "full_audio_languages": False, "genres": True, "supported_languages": True} # Please change the truth-statement as needed.
 
-make_percentage_files(columns, per_things)
+# make_percentage_files(columns, per_things)

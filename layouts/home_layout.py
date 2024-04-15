@@ -1,4 +1,4 @@
-from dash import Dash, dcc, html, Input, Output, callback
+from dash import Dash, dcc, html, Input, Output, callback, State
 
 import pandas as pd
 import plotly.express as px
@@ -21,6 +21,7 @@ def generate_home_layout():
             html.Div([
                 "Steam Id: ",
                 dcc.Input(id='steam-id', placeholder="Insert Steam Id", value='76561198150561997'),
+                html.Button(id='submit-steamid', n_clicks=0, children='Submit')
             ], style={'color': 'white'}),
 
             html.Div(
@@ -97,30 +98,34 @@ def generate_home_layout():
 
 @callback(
     Output('hexagon', "children"),
-    Input("steam-id", "value"),
+    Input("submit-steamid", "n_clicks"),
+    State("steam-id", "value")
 )
-def compute_hexagon(steam_id):
+def compute_hexagon(_, steam_id):
     return hexagon(categories, genres, steam_id, n=8)
 
 @callback(
     Output('bubble-chart', "children"),
-    Input("steam-id", "value"),
+    Input("submit-steamid", "n_clicks"),
+    State("steam-id", "value")
 )
-def bubble(steam_id):
+def bubble(_, steam_id):
     return bubble_chart(steam_id)
 
 @callback(
     Output('user-playtime-chart', "children"),
-    Input("steam-id", "value"),
+    Input("submit-steamid", "n_clicks"),
+    State("steam-id", "value"),
     Input("user-playtime-slider", "value"),
-    Input("genre-slider", "value"),
+    Input("genre-slider", "value")
 )
-def playtime_chart(steam_id, games_slider_value, genre_slider_value):
+def playtime_chart(_, steam_id, games_slider_value, genre_slider_value):
     return playtime_per_genre(steam_id, games_amount=games_slider_value, genres_amount=genre_slider_value)
 
 @callback(
     Output('user-game-slider', "children"),
-    Input("steam-id", "value"),
+    Input("submit-steamid", "n_clicks"),
+    State("steam-id", "value")
 )
-def playtime_slider(steam_id):
+def playtime_slider(_, steam_id):
     return steam_game_slider(steam_id)

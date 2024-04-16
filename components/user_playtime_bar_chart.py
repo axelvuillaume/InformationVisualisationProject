@@ -2,11 +2,11 @@ from dash import Dash, dcc, html, Input, Output, callback
 
 import pandas as pd
 import plotly.express as px
-from utils.load_data import cleaned_games, genres
+from utils.load_data import cleaned_games, genres, current_user_games
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
 
-def playtime_per_genre(steamid, genres_amount=4, games_amount=10):
-    games = get_game_list_from_api(steamid)
+def playtime_per_genre(genres_amount=4, games_amount=10):
+    games = current_user_games
 
     # Get the top 8 genres by playtime
     top_n_genres = list(get_n_best_gen_or_cat_by_hours(games, genres, n=genres_amount).keys())

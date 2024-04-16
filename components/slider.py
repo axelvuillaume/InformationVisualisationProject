@@ -2,11 +2,11 @@ from dash import Dash, dcc, html, Input, Output, callback
 
 import pandas as pd
 import plotly.express as px
-from utils.load_data import cleaned_games, genres
+from utils.load_data import cleaned_games, genres, current_user_games
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
 
-def steam_game_slider(steam_id):
-    games = get_game_list_from_api(steam_id)
+def steam_game_slider():
+    games = current_user_games
     print(len(games))
     return dcc.Slider(
                 0, #min value

@@ -136,7 +136,7 @@ def playtime_chart(_, games_slider_value, genre_slider_value):
 
 @callback(
     Output('user-game-slider', "children"),
-    Input("submit-steamid", "n_clicks")
+    Input('steam-id-store', 'data')
 )
 def playtime_slider(_):
     return steam_game_slider()

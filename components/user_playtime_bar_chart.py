@@ -16,6 +16,12 @@ def playtime_per_genre(genres_amount=4, games_amount=10):
     games = games.join(cleaned_games[['name', 'app_id']].set_index('app_id'), on='app_id', how='inner')
     games = games.drop_duplicates(subset='app_id', keep='first') # Only assign one genre to each game (some games have multiple genres)
     games['playtime_forever'] = games['playtime_forever'] / 60
+
+    games = games.sort_values('playtime_forever', ascending=True) 
+    # As you increase the slider, bigger blocks of games start showing up, which makes the
+    # lesser played games harder to see. This is why we sort the games by playtime, so the
+    # lesser played games are still visible if you decrease game_amount
+    
     if(games_amount > 0):
         games = games.head(games_amount)
 

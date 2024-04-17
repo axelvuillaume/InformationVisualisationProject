@@ -2,7 +2,7 @@ from dash import Dash, dcc, html, Input, Output, callback
 
 import pandas as pd
 import plotly.express as px
-from utils.load_data import cleaned_games, genres, current_user_games
+from utils.load_data import cleaned_games, genres, current_user
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
 
 """
@@ -21,7 +21,7 @@ from: 'price', 'positive reviews', 'negative reviews', 'score', 'median playtime
 """
 def bubble_chart(y_label='Positive reviews (%)', x_label='Price', title='Interesting games based on your favorite genres',
                  x_axis="price", y_axis="positive reviews (%)", size_col="total reviews", color_col="genre"):
-    games = current_user_games
+    games = current_user.games
     ranking = get_n_best_gen_or_cat_by_hours(games, genres, n=8)
 
     #get from cleaned_games the top 5 games of each genre in ranking, by score

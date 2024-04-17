@@ -1,5 +1,6 @@
 from dash import dcc
 from dash import html
+from utils.load_data import current_user
 from utils.data_processing import get_game_list_from_api
 from utils.data_processing import get_n_best_gen_or_cat
 from utils.data_processing import get_n_best_gen_or_cat_by_hours
@@ -7,9 +8,8 @@ import plotly.graph_objs as go
 import numpy as np
 import random
 
-def hexagon(categories, genres, steam_id, n):
-
-    games = get_game_list_from_api(steam_id)
+def hexagon(categories, genres, n):
+    games = current_user.games
     select = 'genres' 
 
     if(select == 'genres'):

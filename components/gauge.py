@@ -25,7 +25,7 @@ def foo(column, per_thing):
     values = top[true_colunm].to_numpy()
     
     for i in range(0, len(names)):
-        name = names[i]
+        name = f"{names[i]} vs. {true_colunm}"
         value = values[i]
 
         output.append(gauge(value, name))
@@ -38,12 +38,14 @@ def foo(column, per_thing):
 #   params: value:  The value tobe displayed
 #   return: String.
 def decide_colour(value):
-    if value < 50:
-        return "Red"
-    elif (value >= 50) and (value < 60):
-        return "Orange"
-    else:
-        return "Green"
+    # if value < 50:
+    #     return "White"
+    # elif (value >= 50) and (value < 60):
+    #     return "Grey"
+    # else:
+    #     return "Black"
+
+    return "Black"
 
 # gauge(value, name)
 #   gauge will create a gauge depeninding on the percentage given to the plot.
@@ -62,7 +64,7 @@ def gauge(value, name):
             'bordercolor': "gray",
             'steps': [{'range': [0, value], 'color': 'lightblue'}, {'range': [value, 100], 'color': 'lightgray'}],
             'shape': "angular"}
-    number = {'font': {'size': 50, 'color': decide_colour(value)}, 'suffix': "%"}
+    number = {'font': {'size': 45, 'color': decide_colour(value)}, 'suffix': "%"}
 
     fig = go.Figure(go.Indicator(
         mode="gauge+number",

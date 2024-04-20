@@ -14,18 +14,17 @@ from utils import data_processing as dp
 #   returns:    /
 def foo(column, per_thing):
     output = []
-
-    path = dp.get_file_name(per_thing)
-    true_colunm = f"{column}%"
+    new_column = f"{column}%"
     
-    df = dp.load_data(path).sort_values(by=true_colunm, ascending=False)
-    top = df[[per_thing,true_colunm]].head(3)
+    df = dp.get_percentages(column, per_thing).sort_values(by=new_column, ascending=False)
+    top = df.head(3)
 
     names = top[per_thing].to_numpy()
-    values = top[true_colunm].to_numpy()
+    values = top[new_column].to_numpy()
+
     
     for i in range(0, len(names)):
-        name = f"{names[i]} vs. {true_colunm}"
+        name = f"{names[i]} vs. {column}"
         value = values[i]
 
         output.append(gauge(value, name))

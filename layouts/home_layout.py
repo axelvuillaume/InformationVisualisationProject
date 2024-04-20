@@ -83,15 +83,15 @@ def generate_home_layout():
                     children=[
                         html.Div(
                             className="component-container",
-                                children=[foo("price", "categories")[0]]
+                                children=[foo("positive", "full_audio_languages")[0]]
                             ),
                         html.Div(
                             className="component-container",
-                            children=[foo("price", "categories")[1]]
+                            children=[foo("positive", "full_audio_languages")[1]]
                             ),
                         html.Div(
                             className="component-container",
-                            children=[foo("price", "categories")[2]]
+                            children=[foo("positive", "full_audio_languages")[2]]
                             ),
                     ]
                 )

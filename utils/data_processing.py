@@ -168,16 +168,15 @@ def get_data_together():
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_data_together:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
-# get_percentages(data, grouped_by, column, per_thing, new_name)
+# get_percentages(data, grouped_by, column, per_thing)
 #   get_percentages will give the percentages of the "column" following the given groupe dataframe.
 #
 #   params:     data:       Dataframe with original data.
 #               grouped_by: Dataframe grouped by certain column.
 #               column:     Name of the numeric column.
 #               per_thing:  Name of the column on which is grouped.
-#               new_name:   The name of the new column.
 #   returns:    DataFrame
-def get_percentages(column, per_thing, new_name):
+def get_percentages(column, per_thing):
     try:
         percentages = []
         path = f"./Data/{translate_column_group_by(per_thing)}"
@@ -197,7 +196,7 @@ def get_percentages(column, per_thing, new_name):
 
             percentages.append(per)
 
-        d = {per_thing: grouped_by_2, new_name: percentages}
+        d = {per_thing: grouped_by_2, f"{column}%": percentages}
         
         output = pd.DataFrame(d)
 
@@ -313,6 +312,3 @@ def get_n_best_gen_or_cat_by_hours(games, gen_or_cat, n=6):
     result = {row[grouping_column]: row['playtime_forever'] for index, row in top_n.iterrows()}
     
     return result
-
-
-print(get_percentages("price", "categories", "price%"))

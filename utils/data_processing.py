@@ -2,7 +2,6 @@ import pandas as pd
 import requests
 
 all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audio"]
-is_done = {"categories": False, "full_audio_languages": False, "genres": False, "supported_languages": False} # Please change the truth-statement as needed.
 
 # get_file_name_group_by(per_thing)
 #   get_file_name_group_by will generate a file name for the grouped_by CSV-files.
@@ -239,13 +238,14 @@ def group_by_all(per_thing):
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_all:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
-# make_file(columns, per_thing)
+# make_file(columns, per_thing, is_done)
 #   make-file will loop through the per_things array and make a new CSV file containing percentages of that per_thing.
 #
 #   params:     columns:    An array of  numeric columns.
 #               per_things: An array of columns on what should be grouped by.
+#               is_done:    An dictionary keeping wich datasets are already prepared and wich not.
 #   returns:    /
-def make_file(columns, per_things):
+def make_file(columns, per_things, is_done):
     try:
         for per_thing in per_things:
             if not is_done[per_thing]:

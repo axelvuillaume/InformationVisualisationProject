@@ -155,8 +155,8 @@ def get_data_together():
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_data_together:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
-# group_by_column(data, grouped_by, column, per_thing, new_name)
-#   group_by_column will give the percentages of the "column" following the given groupe dataframe.
+# get_percentages(data, grouped_by, column, per_thing, new_name)
+#   get_percentages will give the percentages of the "column" following the given groupe dataframe.
 #
 #   params:     data:       Dataframe with original data.
 #               grouped_by: Dataframe grouped by certain column.
@@ -164,7 +164,7 @@ def get_data_together():
 #               per_thing:  Name of the column on which is grouped.
 #               new_name:   The name of the new column.
 #   returns:    DataFrame
-def group_by_column(data, grouped_by, column, per_thing, new_name):
+def get_percentages(data, grouped_by, column, per_thing, new_name):
     try:
         percentages = []
 
@@ -186,14 +186,15 @@ def group_by_column(data, grouped_by, column, per_thing, new_name):
 
         return d
     except Exception as e:
-        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_column:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_percentages:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+
 # group_by_column_all_numerics(columns, per_thing)
 #   group_by_column will give the percentages of the "columns" values per "per_thing" values.
 #
 #   params:     columns:    An array of column numeric columns.
 #               per_thing:  per whichch column there have to be grouped.
 #   returns:    /
-def group_by_column_all_numerics(columns, per_thing):
+def group_by_to_file(columns, per_thing):
     try:
         if per_thing == "cleaned":
             data = get_data_specific(per_thing)
@@ -210,7 +211,7 @@ def group_by_column_all_numerics(columns, per_thing):
             new_name = f"{column}%"
             print(f"\tBusy with:\t{new_name}")
 
-            f = group_by_column(data, grouped, column, per_thing, new_name)
+            f = get_percentages(data, grouped, column, per_thing, new_name)
 
             print(f)
 
@@ -221,6 +222,67 @@ def group_by_column_all_numerics(columns, per_thing):
         return df
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_column_all_numerics:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+
+# group_by_files(columns, per_things)
+#   group_by_files will group a dataframe by "per_things" for all the columns in the array "columns".
+#
+#   params:     columns:    An array columns with numeric values.
+#               per_things: Per which column  there have to be grouped.
+#   returns:    /
+# group_by_column_all_numerics(columns, per_thing)
+#   group_by_column will give the percentages of the "columns" values per "per_thing" values.
+#
+#   params:     columns:    An array of column numeric columns.
+#               per_thing:  per whichch column there have to be grouped.
+#   returns:    /
+def group_by_to_file(columns, per_thing):
+    try:
+        if per_thing == "cleaned":
+            data = get_data_specific(per_thing)
+        else:
+            datasets = ["cleaned", per_thing]
+
+            data  = get_data_together_sub(datasets)
+        
+        grouped = data.groupby(per_thing).sum()
+
+        d = {}
+
+        for column in columns:
+            new_name = f"{column}%"
+            print(f"\tBusy with:\t{new_name}")
+
+            f = get_percentages(data, grouped, column, per_thing, new_name)
+
+            print(f)
+
+            d.update(f)
+
+        df = pd.DataFrame(d)
+
+        return df
+    except Exception as e:
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_column_all_numerics:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+# group_by_to_file(columns, per_thing)
+#   group_by_to_file will give the percentages of the "columns" values per "per_thing" values.
+#
+#   params:     columns:    An array of column numeric columns.
+#               per_thing:  per whichch column there have to be grouped.
+#   returns:    /
+def group_by_to_file(columns, per_thing):
+    try:
+        if per_thing == "cleaned":
+            data = get_data_specific(per_thing)
+        else:
+            datasets = ["cleaned", per_thing]
+
+            data  = get_data_together_sub(datasets)
+        
+        grouped = data.groupby(per_thing).sum()
+
+        write_data(grouped)
+    except Exception as e:
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_to_file:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # make_percentage_files(columns, per_thing)
 #   make-percentage_files will loop through the per_things array and make a new CSV file containing percentages of that per_thing.
@@ -236,7 +298,7 @@ def make_percentage_files(columns, per_things):
 
                 path = get_file_name(per_thing)
 
-                df = group_by_column_all_numerics(columns, per_thing)
+                df = group_by_to_file(columns, per_thing)
 
                 print(df)
 

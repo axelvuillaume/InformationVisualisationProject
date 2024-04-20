@@ -2,7 +2,7 @@ import pandas as pd
 import requests
 
 all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audio"]
-is_done = {"categories": False, "full_audio_languages": True, "genres": True, "supported_languages": True} # Please change the truth-statement as needed.
+is_done = {"categories": True, "full_audio_languages": False, "genres": False, "supported_languages": False} # Please change the truth-statement as needed.
 
 # get_file_name_group_by(per_thing)
 #   get_file_name_group_by will generate a file name for the grouped_by CSV-files.
@@ -198,11 +198,7 @@ def group_by_per_thing(data, per_thing):
     try:
         grouped = data.groupby(per_thing).sum()
 
-        print(grouped)
-
         grouped[per_thing] = grouped.index
-
-        print(grouped)
 
         return grouped
     except Exception as e:
@@ -241,7 +237,7 @@ def make_file(columns, per_things):
 
                 path = get_file_name(per_thing)
 
-                df = group_by_all(per_thing)
+                df = group_by_all(per_thing)[columns]
 
                 write_data(df, path)
 

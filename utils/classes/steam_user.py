@@ -20,5 +20,7 @@ class Steam_User:
         self._update_user_data(value)
 
     def _update_user_data(self, steamid):
-        self._games = get_game_list_from_api(steamid)
+        games = get_game_list_from_api(steamid)
+        if(games is not None):
+            self._games = get_game_list_from_api(steamid)
         # Update other fields related to user data from steam api here

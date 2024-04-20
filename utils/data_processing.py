@@ -259,7 +259,7 @@ def make_file(columns, per_things, is_done):
 
                 print(f"Done with\t{per_thing}")
             else:
-                print(f"{per_thing}\t\tis already translatted into a CSV-file.")
+                print('{:<20} is already translated into a CSV-file'.format(per_thing)) #:<20 is used to left-align the first word
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- make_file:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 

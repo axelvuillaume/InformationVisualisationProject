@@ -2,7 +2,7 @@ import pandas as pd
 import requests
 
 all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audio"]
-is_done = {"categories": True, "full_audio_languages": False, "genres": False, "supported_languages": False} # Please change the truth-statement as needed.
+is_done = {"categories": False, "full_audio_languages": False, "genres": False, "supported_languages": False} # Please change the truth-statement as needed.
 
 # get_file_name_group_by(per_thing)
 #   get_file_name_group_by will generate a file name for the grouped_by CSV-files.
@@ -24,7 +24,6 @@ def load_data(file_path):
         return pd.read_csv(file_path)
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- load_data:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
-
 # write_data(dataframe, file_path)
 #   write_data will write the given dataframe to a CSV-file stored on the given path.
 #
@@ -36,6 +35,7 @@ def write_data(dataframe, file_path):
         dataframe.to_csv(file_path)
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- write_data:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+
 # translate_column_dataset(column):
 #   This dataset translate the name of a column into the name of the correct dataset where it can be found.
 #
@@ -57,6 +57,19 @@ def translate_column_dataset(column):
         return output
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- translate_column_dataset:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+# translate_column_group_by(per_thing):
+#   This dataset translate the name of a column into the name of the correct dataset where it can be found.
+#   This for the grouped_by CSV-files.
+#
+#   params:     per_thing:  The name of the column on what the CSV-file is grouped
+#   returns:    output: Name of dataset where column is to be found.
+def translate_column_group_by(per_thing):
+    try:
+        output = f"{per_thing}_grouped_by.csv"
+
+        return output
+    except Exception as e:
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- translate_column_group_by:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # get_data_specific(specific)
 #   get_data_specific will read the data for one specific dataset.
@@ -164,27 +177,31 @@ def get_data_together():
 #               per_thing:  Name of the column on which is grouped.
 #               new_name:   The name of the new column.
 #   returns:    DataFrame
-def get_percentages(data, grouped_by, column, per_thing, new_name):
+def get_percentages(column, per_thing, new_name):
     try:
         percentages = []
+        path = f"./Data/{translate_column_group_by(per_thing)}"
+
+        data = load_data(path)
 
         total = data[column].sum()
         
-        grouped_by_1 =  grouped_by[column]
+        grouped_by_1 =  data[column]
         grouped_by_2 = data[per_thing].unique()
         
-        for thing in grouped_by_2:
-            go = isinstance(thing, str)
+        for i in range(0, len(grouped_by_1)):
+            value = grouped_by_1[i]
+            name = grouped_by_2[i]
 
-            if go:
-                val = grouped_by_1[thing]
-                per = (val / total) * 100
-                
-                percentages.append(per)
+            per = (value / total) * 100
+
+            percentages.append(per)
 
         d = {per_thing: grouped_by_2, new_name: percentages}
+        
+        output = pd.DataFrame(d)
 
-        return d
+        return output
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_percentages:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
@@ -296,3 +313,6 @@ def get_n_best_gen_or_cat_by_hours(games, gen_or_cat, n=6):
     result = {row[grouping_column]: row['playtime_forever'] for index, row in top_n.iterrows()}
     
     return result
+
+
+print(get_percentages("price", "categories", "price%"))

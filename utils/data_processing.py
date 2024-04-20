@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 
 all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audio"]
+is_done = {"categories": True, "full_audio_languages": False, "genres": True, "supported_languages": True} # Please change the truth-statement as needed.
 
 # get_file_name_group_by(per_thing)
 #   get_file_name_group_by will generate a file name for the grouped_by CSV-files.
@@ -246,15 +247,6 @@ def make_percentage_files(columns, per_things):
                 print(f"{per_thing}\t\tis already translatted into a CSV-file.")
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- make_percentage_files:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
-
-
-
-columns = ["price", "dlc_count", "positive", "negative", "average_playtime_forever", "median_playtime_forever", "peak_ccu", "min_owners", "max_owners"]
-per_things = ["categories", "full_audio_languages", "genres", "supported_languages"]
-
-is_done = {"categories": True, "full_audio_languages": False, "genres": True, "supported_languages": True} # Please change the truth-statement as needed.
-
-# make_percentage_files(columns, per_things)
 
 def get_game_list_from_api(player_id):
     print("Getting games from API")

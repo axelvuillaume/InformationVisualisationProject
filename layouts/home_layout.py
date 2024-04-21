@@ -1,12 +1,12 @@
 from dash import Dash, dcc, html, Input, Output, callback, State
-
+import json
 import pandas as pd
 import plotly.express as px
 from components.top_games_chart import generate_top_games_chart
 
 from components.hexagon import hexagon
 from components.bubble_chart import bubble_chart
-from components.user_playtime_bar_chart import playtime_per_genre
+from components.user_playtime_bar_chart import playtime_per_genre, playtime_games_per_genre
 from components.slider import steam_game_slider, genre_slider
 from components.gauge import foo
 from utils.load_data import cleaned_games, categories, genres, current_user, supported_languages, full_audio_languages
@@ -65,6 +65,7 @@ def generate_home_layout():
                             )
                         ]
                     ),
+                    # TODO: check if we need the genre slider else remove
                     html.Div(
                         style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'flex-start', 'align-items': 'center'},
                         children=[
@@ -78,7 +79,19 @@ def generate_home_layout():
                             )
                         ]
                     ),
-                  html.Div(
+               ],
+            ),
+            html.Div(
+                className="component-container",
+                id = 'detail-playtime-chart',
+                children=[
+                ]
+            ),
+            html.Div(
+                className="component-container",
+                id = 'gauges',
+                children=[
+                    html.Div(
                     className="component-container",
                     children=[
                         html.Div(
@@ -95,7 +108,7 @@ def generate_home_layout():
                             ),
                     ]
                 )
-               ],
+                ]
             ),
         ]
     )
@@ -140,3 +153,11 @@ def playtime_chart(_, games_slider_value, genre_slider_value):
 )
 def playtime_slider(_):
     return steam_game_slider()
+
+@callback(
+    Output('detail-playtime-chart', 'children'),
+    Input('playtime-bar-chart-figure', 'clickData'))
+def display_click_data(clickData):
+    # 'x' key of the clickData contains the genre name
+    genre_name = clickData['points'][0]['x'] if clickData else None
+    return playtime_games_per_genre(genre_name)

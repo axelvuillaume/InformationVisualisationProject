@@ -14,7 +14,14 @@ def playtime_per_genre(genres_amount=4, games_amount=10):
 
     games = games.join(filtered_genres.set_index('app_id'), on='app_id', how='inner')
     games = games.join(cleaned_games[['name', 'app_id']].set_index('app_id'), on='app_id', how='inner')
-    games = games.drop_duplicates(subset='app_id', keep='first') # Only assign one genre to each game (some games have multiple genres)
+    
+    # Shuffle the entries, so the same genre doesn't always show up first
+    # Then drop duplicates based on app_id so each game only belongs to 1 genre
+    games = games.sample(frac=1).drop_duplicates(subset='app_id')
+
+    # Alternatively assign only first genre encountered (which means most games will end up in the same genre)
+    # games = games.drop_duplicates(subset='app_id', keep='first')
+    
     games['playtime_forever'] = games['playtime_forever'] / 60
 
     games = games.sort_values('playtime_forever', ascending=True) 
@@ -25,6 +32,30 @@ def playtime_per_genre(genres_amount=4, games_amount=10):
     if(games_amount > 0):
         games = games.head(games_amount)
 
-    fig = px.bar(games, x="genres", y="playtime_forever", color="name", text="name", title="User Playtime Chart")
+    fig = px.bar(games, x="genres", y="playtime_forever", color="genres", text="name", title="User Playtime Chart")
     fig.update_layout(yaxis_title="Playtime (hours)", xaxis_title="Genre")
     return dcc.Graph(id='playtime-bar-chart-figure',figure=fig)
+
+def playtime_games_per_genre(genre_name):
+    # TODO: extract duplicate code with previous function into a separate function
+    if genre_name is not None:
+        games = current_user.games
+        filtered_genres = genres[genres['genres'] == genre_name]
+
+        games = games.join(filtered_genres.set_index('app_id'), on='app_id', how='inner')
+        games = games.join(cleaned_games[['name', 'app_id']].set_index('app_id'), on='app_id', how='inner')
+        games['playtime_forever'] = round(games['playtime_forever'] / 60, 2)
+        games['playtime_formatted'] = games['playtime_forever'].map(lambda playtime: f"{int(playtime):02d}:{int((playtime*60) % 60):02d}")
+        games.sort_values('playtime_forever', ascending=True, inplace=True)
+
+        fig = px.bar(games, x="name", y="playtime_forever", text="playtime_formatted", 
+                     title=f"Playtimes for genre: {genre_name}")
+        
+        fig.update_layout(yaxis_title="Playtime (hours)", xaxis_title="Game")
+        fig.update_traces(textangle=0, textposition="outside", cliponaxis=False, hovertemplate="Game: %{x}<br>Playtime: %{y} hours")
+        return dcc.Graph(id='detail-playtime-figure', figure=fig)
+    else:
+        return html.Div(
+            "Select a genre on the 'User Playtime Chart' to see the playtimes for that genre",
+            style={'color': 'white'}
+            )

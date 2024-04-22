@@ -9,7 +9,7 @@ all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audi
 #   params:     per_thing:  Variant name for CSV-file.
 #   returns:    output:     Path name of CSV-file.
 def get_file_name(per_thing):
-    output = f"./Data/{per_thing}_grouped_by.csv"
+    output = f"./data/{per_thing}_grouped_by.csv"
 
     return output
 
@@ -78,7 +78,7 @@ def translate_column_group_by(per_thing):
 def get_data_specific(specific):
     try:
         specific =  translate_column_dataset(specific)
-        data_path = "./Data/"
+        data_path = "./data/"
 
         if specific == "categories":
             path = f"{data_path}categories.csv"

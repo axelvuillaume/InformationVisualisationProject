@@ -1,7 +1,5 @@
 from dash import dcc
-from dash import html
 import plotly.graph_objects as go
-import pandas as pd
 
 from utils import data_processing as dp
 
@@ -55,31 +53,30 @@ def decide_colour(value):
 #               name:   The name of the plot
 #   returns:    /
 def gauge(value, name):
-    x=  [0, 1]
-    y = [0, 1]
+    try:
+        x=  [0, 1]
+        y = [0, 1]
 
-    d = {'x': x, 'y': y}
-    gauge = {'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
-            'bar': {'color': decide_colour(value)}, 'bgcolor': "white",
-            'borderwidth': 2,
-            'bordercolor': "gray",
-            'steps': [{'range': [0, value], 'color': 'lightblue'}, {'range': [value, 100], 'color': 'lightgray'}],
-            'shape': "angular"}
-    number = {'font': {'size': 45, 'color': decide_colour(value)}, 'suffix': "%"}
+        d = {'x': x, 'y': y}
+        gauge = {'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
+                'bar': {'color': decide_colour(value)}, 'bgcolor': "white",
+                'borderwidth': 2,
+                'bordercolor': "gray",
+                'steps': [{'range': [0, value], 'color': 'lightblue'}, {'range': [value, 100], 'color': 'lightgray'}],
+                'shape': "angular"}
+        number = {'font': {'size': 45, 'color': decide_colour(value)}, 'suffix': "%"}
 
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=value,
-        domain= d,
-        gauge= gauge,
-        number=number,
-        title=name
-    ))
+        fig = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=value,
+            domain= d,
+            gauge= gauge,
+            number=number,
+            title=name
+        ))
 
-    fig.update_layout(height=400)
+        fig.update_layout(height=400)
 
-    # fig.show()
-
-    return dcc.Graph(id='top-games-chart', figure=fig)
-
-# foo("price", "categories", False)
+        return dcc.Graph(id='top-games-chart', figure=fig)
+    except Exception as e:
+            print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- gauge:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")

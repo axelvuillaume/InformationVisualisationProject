@@ -5,31 +5,33 @@ import pandas as pd
 
 from utils import data_processing as dp
 
-# foo(column, per_thing):
-# foo will get the needed data out of the cleanded_games CSV and analyse this for percentages.
-# TODO: rename to more descriptive name
+# gauge_percentages(column, per_thing):
+#   gauge_percentages will get the needed data out of the cleanded_games CSV and analyse this for percentages.
 #
 #   params:     columns:    The numeric column to be analysed.
 #               per_thing:  The element there should be grouped by.
 #   returns:    /
-def foo(column, per_thing):
-    output = []
-    new_column = f"{column}%"
-    
-    df = dp.get_percentages(column, per_thing).sort_values(by=new_column, ascending=False)
-    top = df.head(3)
+def gauge_percentages(column, per_thing):
+    try:
+        output = []
+        new_column = f"{column}%"
+        
+        df = dp.get_percentages(column, per_thing).sort_values(by=new_column, ascending=False)
+        top = df.head(3)
 
-    names = top[per_thing].to_numpy()
-    values = top[new_column].to_numpy()
+        names = top[per_thing].to_numpy()
+        values = top[new_column].to_numpy()
 
-    
-    for i in range(0, len(names)):
-        name = f"{names[i]} vs. {column}"
-        value = values[i]
+        
+        for i in range(0, len(names)):
+            name = f"{names[i]} vs. {column}"
+            value = values[i]
 
-        output.append(gauge(value, name))
-    
-    return output
+            output.append(gauge(value, name))
+        
+        return output
+    except Exception as e:
+            print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- gauge_percentages:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # decide_colour(value)
 #   decide_colour will change the colour of the gauche depending on the actual value.

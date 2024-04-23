@@ -8,7 +8,7 @@ from components.hexagon import hexagon
 from components.bubble_chart import bubble_chart
 from components.user_playtime_bar_chart import playtime_per_genre
 from components.slider import steam_game_slider, genre_slider
-from components.gauge import foo
+from components.gauge import gauge_percentages
 from utils.load_data import cleaned_games, categories, genres, current_user, supported_languages, full_audio_languages
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
 
@@ -117,15 +117,15 @@ def generate_home_layout():
                     children=[
                         html.Div(
                             className="component-container",
-                                children=[foo("positive", "full_audio_languages")[0]]
+                                children=[gauge_percentages("positive", "full_audio_languages")[0]]
                             ),
                         html.Div(
                             className="component-container",
-                            children=[foo("positive", "full_audio_languages")[1]]
+                            children=[gauge_percentages("positive", "full_audio_languages")[1]]
                             ),
                         html.Div(
                             className="component-container",
-                            children=[foo("positive", "full_audio_languages")[2]]
+                            children=[gauge_percentages("positive", "full_audio_languages")[2]]
                             ),
                     ]
                 )

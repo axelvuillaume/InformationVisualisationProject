@@ -263,6 +263,29 @@ def make_file(columns, per_things, is_done):
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- make_file:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
+def get_friends_list_from_api(player_id):
+    print("Getting friends from API")
+    api_url = f"https://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=5E613902A6191613402845D8EDD65A1C&steamid={player_id}&relationship=friend&format=json"
+
+    try:
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            friends = data['friendslist']['friends']
+            friends_data = {'steamid': []}
+
+            for friend in friends:
+                friends_data['steamid'].append(friend['steamid'])
+
+            friends_df = pd.DataFrame(friends_data)
+            return friends_df
+        else:
+            print(f"Error: {response.status_code} - {response.text}")
+            return None
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
 def get_game_list_from_api(player_id):
     print("Getting games from API")
     api_url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=5E613902A6191613402845D8EDD65A1C&steamid={player_id}&format=json"

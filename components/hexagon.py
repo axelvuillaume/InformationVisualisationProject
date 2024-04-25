@@ -8,43 +8,46 @@ import plotly.graph_objs as go
 import numpy as np
 import random
 
-def hexagon(categories, genres, n):
+def hexagon(categories, genres, category_select, n):
     games = current_user.games
-    select = 'genres' 
+    select = category_select
 
     if(select == 'genres'):
         ranking = get_n_best_gen_or_cat_by_hours(games, genres, n)
     if(select == 'categories'):
         ranking = get_n_best_gen_or_cat_by_hours(games, categories, n)
+    else:
+        ranking = get_n_best_gen_or_cat_by_hours(games, genres, n)
 
-    ranking_pairs = list(ranking.items())
-    random.shuffle(ranking_pairs)
+    ranking_pairs = sorted(ranking.items())  # Sort by keys
     ranking = dict(ranking_pairs)
 
     max_value = max(ranking.values())
     normalized_values = [value / max_value for value in ranking.values()]
 
     polygon_back = get_polygon(n, [1] * n, 'blue', 0.1)
-    text_trace = add_text_labels(list(ranking.keys()))
+    text_trace = add_text_labels(list(ranking.keys()),list(ranking.values()))
     polygon_top = get_polygon(n, normalized_values, 'blue', 1)
     lines = get_middle_lines(n, [1] * n)
 
     # Create the layout for the graph
     layout = go.Layout(
-        xaxis=dict(visible=False, range=[-1.5, 1.5]),  # Hide x-axis
-        yaxis=dict(visible=False, range=[-1.5, 1.5]),  # Hide y-axis
-        showlegend=False,  # Hide legend
-        width=500,  # Set width of the graph
-        height=500,  # Set height of the graph
+        xaxis=dict(visible=False, range=[-1.5, 1.5], fixedrange=True),  # Hide x-axis
+        yaxis=dict(visible=False, range=[-1.5, 1.5], fixedrange=True),  # Hide y-axis
+        showlegend=False,  #Hide legend
+        width=400,  #Set width of the graph
+        height=400,  #Set height of the graph
         margin=dict(l=1, r=1, t=1, b=1),
-        dragmode='select',  # Disable zoom and pan
+        dragmode='pan',  #Disable zoom and pan
+        clickmode='none'  # Disable click interaction
     )
 
     # Create the figure containing the trace and layout
-    fig = go.Figure(data=[polygon_back, polygon_top, text_trace] + lines , layout=layout)
+    fig = go.Figure(data=[polygon_back, polygon_top, text_trace] + lines , layout=layout) 
 
     # Return the Dash component with the graph
-    return dcc.Graph(id='hexagone-component',figure=fig)
+    return dcc.Graph(id='hexagon-component',figure=fig)
+
 
 def get_polygon_coords(n, center_distances):
     angles = np.linspace(0, 2 * np.pi, n, endpoint=False)
@@ -61,7 +64,8 @@ def get_polygon(n, center_distances, color, opacity):
         mode='lines',  # Draw lines to connect vertices
         line=dict(color=color),  # Set line color
         fill='toself',  # Fill the area inside the polygon
-        fillcolor=f'rgba(0, 0, 255, {opacity})'  # Set fill color with opacity
+        fillcolor=f'rgba(0, 0, 255, {opacity})',  # Set fill color with opacity
+        hoverinfo='none'
     )
     return polygon_trace
 
@@ -77,13 +81,14 @@ def get_middle_lines(n, center_distances,  color='white'):
             x=[center_x, x[i]],
             y=[center_y, y[i]],
             mode='lines',
-            line=dict(color=color, width=1)
+            line=dict(color=color, width=1),
+            hoverinfo='none'
         )
         line_traces.append(line_trace)
     
     return line_traces
 
-def add_text_labels(labels):
+def add_text_labels(labels, user_values):
     x, y = get_polygon_coords(len(labels), [1] * len(labels))
     #multiply all x and y by 1.1 to make the text appear outside the polygon
     x = [i * 1.3 for i in x]
@@ -94,10 +99,12 @@ def add_text_labels(labels):
     text_trace = go.Scatter(
         x=x,
         y=y,
-        mode='text',  # Display text
-        text=labels,  # Set text to display
-        textposition='middle center',  # Position text in the middle of the polygon
-        textfont=dict(size=10, color='black')  # Set text font size and color  
+        mode='text',
+        text=labels,
+        textposition='middle center',
+        textfont=dict(size=10, color='black'),
+        hoverinfo='text',
+        hovertext=[f'{label}<br>My hours: {values}<br>Friends hours avg:' for label, values in zip(labels, user_values)]
     )
     return text_trace
     

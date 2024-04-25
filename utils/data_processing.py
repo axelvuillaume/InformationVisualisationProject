@@ -9,7 +9,7 @@ all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audi
 #   params:     per_thing:  Variant name for CSV-file.
 #   returns:    output:     Path name of CSV-file.
 def get_file_name(per_thing):
-    output = f"./Data/{per_thing}_grouped_by.csv"
+    output = f"./data/{per_thing}_grouped_by.csv"
 
     return output
 
@@ -23,7 +23,6 @@ def load_data(file_path):
         return pd.read_csv(file_path)
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- load_data:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
-
 # write_data(dataframe, file_path)
 #   write_data will write the given dataframe to a CSV-file stored on the given path.
 #
@@ -35,6 +34,7 @@ def write_data(dataframe, file_path):
         dataframe.to_csv(file_path)
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- write_data:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+
 # translate_column_dataset(column):
 #   This dataset translate the name of a column into the name of the correct dataset where it can be found.
 #
@@ -56,6 +56,19 @@ def translate_column_dataset(column):
         return output
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- translate_column_dataset:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+# translate_column_group_by(per_thing):
+#   This dataset translate the name of a column into the name of the correct dataset where it can be found.
+#   This for the grouped_by CSV-files.
+#
+#   params:     per_thing:  The name of the column on what the CSV-file is grouped
+#   returns:    output: Name of dataset where column is to be found.
+def translate_column_group_by(per_thing):
+    try:
+        output = f"{per_thing}_grouped_by.csv"
+
+        return output
+    except Exception as e:
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- translate_column_group_by:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # get_data_specific(specific)
 #   get_data_specific will read the data for one specific dataset.
@@ -65,7 +78,7 @@ def translate_column_dataset(column):
 def get_data_specific(specific):
     try:
         specific =  translate_column_dataset(specific)
-        data_path = "./Data/"
+        data_path = "./data/"
 
         if specific == "categories":
             path = f"{data_path}categories.csv"
@@ -154,45 +167,63 @@ def get_data_together():
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_data_together:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
-# group_by_column(data, grouped_by, column, per_thing, new_name)
-#   group_by_column will give the percentages of the "column" following the given groupe dataframe.
+# get_percentages(data, grouped_by, column, per_thing)
+#   get_percentages will give the percentages of the "column" following the given groupe dataframe.
 #
 #   params:     data:       Dataframe with original data.
 #               grouped_by: Dataframe grouped by certain column.
 #               column:     Name of the numeric column.
 #               per_thing:  Name of the column on which is grouped.
-#               new_name:   The name of the new column.
 #   returns:    DataFrame
-def group_by_column(data, grouped_by, column, per_thing, new_name):
+def get_percentages(column, per_thing):
     try:
         percentages = []
+        path = f"./Data/{translate_column_group_by(per_thing)}"
+
+        data = load_data(path)
 
         total = data[column].sum()
         
-        grouped_by_1 =  grouped_by[column]
+        grouped_by_1 =  data[column]
         grouped_by_2 = data[per_thing].unique()
         
-        for thing in grouped_by_2:
-            go = isinstance(thing, str)
+        for i in range(0, len(grouped_by_1)):
+            value = grouped_by_1[i]
+            name = grouped_by_2[i]
 
-            if go:
-                val = grouped_by_1[thing]
-                per = (val / total) * 100
-                
-                percentages.append(per)
+            per = (value / total) * 100
 
-        d = {per_thing: grouped_by_2, new_name: percentages}
+            percentages.append(per)
 
-        return d
+        d = {per_thing: grouped_by_2, f"{column}%": percentages}
+        
+        output = pd.DataFrame(d)
+
+        return output
     except Exception as e:
-        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_column:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
-# group_by_column_all_numerics(columns, per_thing)
-#   group_by_column will give the percentages of the "columns" values per "per_thing" values.
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- get_percentages:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+
+# group_by_per_thing(data, per_thing)
+#   group_by_per_thing will give the percentages of the "columns" values per "per_thing" values.
 #
-#   params:     columns:    An array of column numeric columns.
+#   params:     data:       The dataframe where the information will be red out.
 #               per_thing:  per whichch column there have to be grouped.
-#   returns:    /
-def group_by_column_all_numerics(columns, per_thing):
+#   returns:    grouped:    Dataframe of the grouped data.
+def group_by_per_thing(data, per_thing):
+    try:
+        grouped = data.groupby(per_thing).sum()
+
+        grouped[per_thing] = grouped.index
+
+        return grouped
+    except Exception as e:
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_per_thing:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+# group_by_all(per_thing)
+#   group_by_all will give the percentages of the "columns" values per "per_thing" values.
+#
+#   params:     per_thing:  per whichch column there have to be grouped.
+#   returns:    grouped:    Dataframe of the grouped data.
+def group_by_all(per_thing):
     try:
         if per_thing == "cleaned":
             data = get_data_specific(per_thing)
@@ -201,33 +232,20 @@ def group_by_column_all_numerics(columns, per_thing):
 
             data  = get_data_together_sub(datasets)
         
-        grouped = data.groupby(per_thing).sum()
+        grouped = group_by_per_thing(data, per_thing)
 
-        d = {}
-
-        for column in columns:
-            new_name = f"{column}%"
-            print(f"\tBusy with:\t{new_name}")
-
-            f = group_by_column(data, grouped, column, per_thing, new_name)
-
-            print(f)
-
-            d.update(f)
-
-        df = pd.DataFrame(d)
-
-        return df
+        return grouped
     except Exception as e:
-        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_column_all_numerics:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_all:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
-# make_percentage_files(columns, per_thing)
-#   make-percentage_files will loop through the per_things array and make a new CSV file containing percentages of that per_thing.
+# make_file(columns, per_thing, is_done)
+#   make-file will loop through the per_things array and make a new CSV file containing percentages of that per_thing.
 #
 #   params:     columns:    An array of  numeric columns.
 #               per_things: An array of columns on what should be grouped by.
+#               is_done:    An dictionary keeping wich datasets are already prepared and wich not.
 #   returns:    /
-def make_percentage_files(columns, per_things):
+def make_file(columns, per_things, is_done):
     try:
         for per_thing in per_things:
             if not is_done[per_thing]:
@@ -235,26 +253,38 @@ def make_percentage_files(columns, per_things):
 
                 path = get_file_name(per_thing)
 
-                df = group_by_column_all_numerics(columns, per_thing)
-
-                print(df)
+                df = group_by_all(per_thing)[columns]
 
                 write_data(df, path)
 
                 print(f"Done with\t{per_thing}")
             else:
-                print(f"{per_thing}\t\tis already translatted into a CSV-file.")
+                print('{:<20} is already translated into a CSV-file'.format(per_thing)) #:<20 is used to left-align the first word
     except Exception as e:
-        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- make_percentage_files:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+        print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- make_file:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
+def get_friends_list_from_api(player_id):
+    print("Getting friends from API")
+    api_url = f"https://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=5E613902A6191613402845D8EDD65A1C&steamid={player_id}&relationship=friend&format=json"
 
+    try:
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            friends = data['friendslist']['friends']
+            friends_data = {'steamid': []}
 
-columns = ["price", "dlc_count", "positive", "negative", "average_playtime_forever", "median_playtime_forever", "peak_ccu", "min_owners", "max_owners"]
-per_things = ["categories", "full_audio_languages", "genres", "supported_languages"]
+            for friend in friends:
+                friends_data['steamid'].append(friend['steamid'])
 
-is_done = {"categories": True, "full_audio_languages": False, "genres": True, "supported_languages": True} # Please change the truth-statement as needed.
-
-# make_percentage_files(columns, per_things)
+            friends_df = pd.DataFrame(friends_data)
+            return friends_df
+        else:
+            print(f"Error: {response.status_code} - {response.text}")
+            return None
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
 
 def get_game_list_from_api(player_id):
     print("Getting games from API")

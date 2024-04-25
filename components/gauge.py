@@ -1,36 +1,35 @@
 from dash import dcc
-from dash import html
 import plotly.graph_objects as go
-import pandas as pd
 
 from utils import data_processing as dp
 
-# foo(column, per_thing):
-# foo will get the needed data out of the cleanded_games CSV and analyse this for percentages.
-# TODO: rename to more descriptive name
+# gauge_percentages(column, per_thing):
+#   gauge_percentages will get the needed data out of the cleanded_games CSV and analyse this for percentages.
 #
 #   params:     columns:    The numeric column to be analysed.
 #               per_thing:  The element there should be grouped by.
 #   returns:    /
-def foo(column, per_thing):
-    output = []
+def gauge_percentages(column, per_thing):
+    try:
+        output = []
+        new_column = f"{column}%"
+        
+        df = dp.get_percentages(column, per_thing).sort_values(by=new_column, ascending=False)
+        top = df.head(3)
 
-    path = dp.get_file_name(per_thing)
-    true_colunm = f"{column}%"
-    
-    df = dp.load_data(path).sort_values(by=true_colunm, ascending=False)
-    top = df[[per_thing,true_colunm]].head(3)
+        names = top[per_thing].to_numpy()
+        values = top[new_column].to_numpy()
 
-    names = top[per_thing].to_numpy()
-    values = top[true_colunm].to_numpy()
-    
-    for i in range(0, len(names)):
-        name = f"{names[i]} vs. {true_colunm}"
-        value = values[i]
+        
+        for i in range(0, len(names)):
+            name = f"{names[i]} vs. {column}"
+            value = values[i]
 
-        output.append(gauge(value, name))
-    
-    return output
+            output.append(gauge(value, name))
+        
+        return output
+    except Exception as e:
+            print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- gauge_percentages:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 # decide_colour(value)
 #   decide_colour will change the colour of the gauche depending on the actual value.
@@ -54,31 +53,30 @@ def decide_colour(value):
 #               name:   The name of the plot
 #   returns:    /
 def gauge(value, name):
-    x=  [0, 1]
-    y = [0, 1]
+    try:
+        x=  [0, 1]
+        y = [0, 1]
 
-    d = {'x': x, 'y': y}
-    gauge = {'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
-            'bar': {'color': decide_colour(value)}, 'bgcolor': "white",
-            'borderwidth': 2,
-            'bordercolor': "gray",
-            'steps': [{'range': [0, value], 'color': 'lightblue'}, {'range': [value, 100], 'color': 'lightgray'}],
-            'shape': "angular"}
-    number = {'font': {'size': 45, 'color': decide_colour(value)}, 'suffix': "%"}
+        d = {'x': x, 'y': y}
+        gauge = {'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
+                'bar': {'color': decide_colour(value)}, 'bgcolor': "white",
+                'borderwidth': 2,
+                'bordercolor': "gray",
+                'steps': [{'range': [0, value], 'color': 'lightblue'}, {'range': [value, 100], 'color': 'lightgray'}],
+                'shape': "angular"}
+        number = {'font': {'size': 45, 'color': decide_colour(value)}, 'suffix': "%"}
 
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=value,
-        domain= d,
-        gauge= gauge,
-        number=number,
-        title=name
-    ))
+        fig = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=value,
+            domain= d,
+            gauge= gauge,
+            number=number,
+            title=name
+        ))
 
-    fig.update_layout(height=400)
+        fig.update_layout(height=400)
 
-    # fig.show()
-
-    return dcc.Graph(id='top-games-chart', figure=fig)
-
-# foo("price", "categories", False)
+        return dcc.Graph(id='top-games-chart', figure=fig)
+    except Exception as e:
+            print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- gauge:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")

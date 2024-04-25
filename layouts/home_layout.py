@@ -8,7 +8,7 @@ from components.hexagon import hexagon
 from components.bubble_chart import bubble_chart
 from components.user_playtime_bar_chart import playtime_per_genre, playtime_games_per_genre
 from components.slider import steam_game_slider, genre_slider
-from components.gauge import foo
+from components.gauge import gauge_percentages
 from utils.load_data import cleaned_games, categories, genres, current_user, supported_languages, full_audio_languages
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
 
@@ -36,9 +36,43 @@ def generate_home_layout():
             ),
             html.Div(
                 className="component-container",
-                id = 'hexagon',
+                id='hexagonContainer',
                 children=[
-                    #hexagon(categories, genres, n=8)
+                    html.Div(
+                        children=[
+                        html.H2("User Vs Friends Profile", style={'color': 'white'}),
+                        html.Div(
+                            id='hexagon-menu',
+                            children=[
+                                html.H4("Number of sides:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
+                                dcc.Dropdown(
+                                    id='side-selector',
+                                    options=[
+                                        {'label': str(i), 'value': i} for i in range(5, 9)
+                                    ],
+                                    value=6,  #default value
+                                    clearable=False,
+                                    searchable=False,
+                                    style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
+                                ),
+                                html.H4("Types:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
+                                dcc.RadioItems(
+                                    id='chart-type',
+                                    options=[
+                                        {'label': 'Categories', 'value': 'categories'},
+                                        {'label': 'Genres', 'value': 'genres'}
+                                    ],
+                                    value='categories',  #default value
+                                    labelStyle={'color': 'white'},
+                                    style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
+                                )
+                            ],
+                            style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between' , 'width': '400px','background-color': '#171D25'}
+                        ),
+                        html.Div(id='hexagon')
+                        ],
+                        style={'display': 'flex', 'flex-direction': 'column','width': '25%'}
+                    )
                 ]
             ),
             html.Div(
@@ -96,15 +130,15 @@ def generate_home_layout():
                     children=[
                         html.Div(
                             className="component-container",
-                                children=[foo("price", "categories")[0]]
+                                children=[gauge_percentages("positive", "full_audio_languages")[0]]
                             ),
                         html.Div(
                             className="component-container",
-                            children=[foo("price", "categories")[1]]
+                            children=[gauge_percentages("positive", "full_audio_languages")[1]]
                             ),
                         html.Div(
                             className="component-container",
-                            children=[foo("price", "categories")[2]]
+                            children=[gauge_percentages("positive", "full_audio_languages")[2]]
                             ),
                     ]
                 )
@@ -126,10 +160,12 @@ def update_current_user(_, steamid):
 
 @callback(
     Output('hexagon', "children"),
-    Input('steam-id-store', 'data')
+    [Input('steam-id-store', 'data'),
+     Input('side-selector', 'value'),
+     Input('chart-type', 'value')]
 )
-def compute_hexagon(_):
-    return hexagon(categories, genres, n=8)
+def compute_hexagon(_, n, category_select):
+    return hexagon(categories, genres, category_select=category_select, n=n)
 
 @callback(
     Output('bubble-chart', "children"),

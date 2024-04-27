@@ -49,7 +49,12 @@ def generate_user_vs_friends_panel():
                         id='friend-menu',
                         children=[
                             html.H4("Select friend:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
-                            html.Div(id='friend-selector', style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'})
+                            dcc.Dropdown(
+                                id='friend-selector',
+                                    clearable=False,
+                                    searchable=True,
+                                    style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
+                            )
                         ],
                         style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between' , 'width': '400px','background-color': '#171D25'}
                     ),
@@ -96,28 +101,18 @@ def compute_hexagon_user(_, n, category_select):
     return hexagon_generic(ranking, colors, names)
 
 @callback(
-    Output('friend-selector', "children"),
+    [Output('friend-selector', "options"),
+    Output('friend-selector', "value"),
+    Output('friend-selector', "style")],
     [Input('steam-id-store', 'data')],
 )
 def set_friend_selector(_):
-    if current_user.friends.empty:
-        options = []
-        default_value = None
-        dropdown_width = 'auto'
-    else:
-        options = [{'label': f"{index+1}. {row['steamid']}", 'value': row['steamid']} for index, row in current_user.friends.iterrows()]
-        default_value = current_user.friends.iloc[0]['steamid']
-        max_option_length = max(len(option['label']) for option in options)
-        dropdown_width = max_option_length * 11
+    options = [{'label': f"{index+1}. {row['steamid']}", 'value': row['steamid']} for index, row in current_user.friends.iterrows()]
+    default_value = current_user.friends.iloc[0]['steamid']
+    max_option_length = max(len(option['label']) for option in options)
+    dropdown_width = max_option_length * 11
 
-    return dcc.Dropdown(
-        id='friend-selector',
-        options=options,
-        value=default_value,
-        clearable=False,
-        searchable=True,
-        style={'width': dropdown_width,'align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
-    )
+    return options, default_value, {'width': dropdown_width ,'align-self': 'center', 'padding-left': '0.5em', 'padding-right': '0.5em'}
 
 #def compute_hexagon(_, n, category_select):
 #    return hexagon(categories, genres, category_select=category_select, n=n)

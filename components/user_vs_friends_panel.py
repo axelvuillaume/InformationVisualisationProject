@@ -1,7 +1,7 @@
 from dash import Dash, dcc, html, Input, Output, callback, State
 
 from components.hexagon import hexagon_old, hexagon_generic
-from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_all_gen_or_cat
+from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_all_gen_or_cat, get_game_list_from_api, get_all_gen_or_cat_by_hours
 from utils.load_data import cleaned_games, categories, genres, current_user, supported_languages, full_audio_languages
 
 def generate_user_vs_friends_panel():
@@ -58,12 +58,14 @@ def generate_user_vs_friends_panel():
                         ],
                         style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between' , 'width': '400px','background-color': '#171D25'}
                     ),
+                    html.Div(id='hexagonfriend')
                 ],
                 style={'display': 'flex', 'flex-direction': 'column','width': '25%'}
             )
         ],
         style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between'}
     )
+
 
 
 @callback(
@@ -75,19 +77,48 @@ def generate_user_vs_friends_panel():
 def compute_hexagon_user(_, n, category_select):
 
     games = current_user.games
-    select = category_select
+    if (games is None or games.empty) :
+        return html.Div("No data available for this user")
 
-    if(select == 'genres'):
-        data_to_use = genres
-    if(select == 'categories'):
-        data_to_use = categories
-    else:
-        data_to_use = genres
+    data_to_use = genres if(category_select == 'genres') else categories
 
+    ranking = {}
     playtime_by_gen_or_cat = get_n_best_gen_or_cat_by_hours(games, data_to_use, n)
     count_by_gen_or_cat = get_all_gen_or_cat(games, data_to_use)
-    
-    #Merge the two dictionaries
+    for key in playtime_by_gen_or_cat.keys():
+        ranking[key] = [int(playtime_by_gen_or_cat.get(key,0)/60), count_by_gen_or_cat.get(key,0)]
+
+    ranking_pairs = sorted(ranking.items())  #Sort by keys
+    ranking = dict(ranking_pairs)
+
+    colors = ['#1b3b80', '#1999ff']
+    names = ['Playtime', 'Count']
+
+    return hexagon_generic(ranking, colors, names)
+
+@callback(
+    Output('hexagonfriend', "children"),
+    [Input('steam-id-store', 'data'),
+     Input('side-selector', 'value'),
+     Input('chart-type', 'value'),
+     Input('friend-selector', 'value')]
+)
+def compute_hexagon_friend(_, n, category_select, friend_id):
+
+
+    games = get_game_list_from_api(friend_id)
+    if (games is None or games.empty):
+        return html.Div("No data available for this user")
+
+    data_to_use = genres if(category_select == 'genres') else categories
+
+    playtime_by_gen_or_cat_all = get_all_gen_or_cat_by_hours(games, data_to_use)
+    playtime_by_gen_or_cat = {}
+    for key in get_n_best_gen_or_cat_by_hours(current_user.games, data_to_use, n).keys():
+        playtime_by_gen_or_cat[key] = playtime_by_gen_or_cat_all.get(key,0)
+
+
+    count_by_gen_or_cat = get_all_gen_or_cat(games, data_to_use)
     ranking = {}
     for key in playtime_by_gen_or_cat.keys():
         ranking[key] = [int(playtime_by_gen_or_cat.get(key,0)/60), count_by_gen_or_cat.get(key,0)]

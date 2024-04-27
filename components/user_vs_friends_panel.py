@@ -7,38 +7,57 @@ from utils.load_data import cleaned_games, categories, genres, current_user, sup
 def generate_user_vs_friends_panel():
     return html.Div(
         children=[
-            html.H2("User Vs Friends Profile", style={'color': 'white'}),
             html.Div(
-                id='hexagon-menu',
                 children=[
-                    html.H4("Number of sides:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
-                    dcc.Dropdown(
-                        id='side-selector',
-                        options=[
-                            {'label': str(i), 'value': i} for i in range(5, 9)
+                    html.H2("My Profile", style={'color': 'white'}),
+                    html.Div(
+                        id='hexagon-menu',
+                        children=[
+                            html.H4("Number of sides:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
+                            dcc.Dropdown(
+                                id='side-selector',
+                                options=[
+                                    {'label': str(i), 'value': i} for i in range(5, 9)
+                                ],
+                                value=6,  #default value
+                                clearable=False,
+                                searchable=False,
+                                style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
+                            ),
+                            html.H4("Types:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
+                            dcc.RadioItems(
+                                id='chart-type',
+                                options=[
+                                    {'label': 'Categories', 'value': 'categories'},
+                                    {'label': 'Genres', 'value': 'genres'}
+                                ],
+                                value='categories',  #default value
+                                labelStyle={'color': 'white'},
+                                style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
+                            )
                         ],
-                        value=6,  #default value
-                        clearable=False,
-                        searchable=False,
-                        style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
+                        style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between' , 'width': '400px','background-color': '#171D25'}
                     ),
-                    html.H4("Types:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
-                    dcc.RadioItems(
-                        id='chart-type',
-                        options=[
-                            {'label': 'Categories', 'value': 'categories'},
-                            {'label': 'Genres', 'value': 'genres'}
-                        ],
-                        value='categories',  #default value
-                        labelStyle={'color': 'white'},
-                        style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
-                    )
+                    html.Div(id='hexagonuser')
                 ],
-                style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between' , 'width': '400px','background-color': '#171D25'}
+                style={'display': 'flex', 'flex-direction': 'column','width': '25%'}
             ),
-            html.Div(id='hexagonuser')
+            html.Div(
+                children=[
+                    html.H2("Friends", style={'color': 'white'}),
+                    html.Div(
+                        id='friend-menu',
+                        children=[
+                            html.H4("Select friend:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
+                            html.Div(id='friend-selector', style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'})
+                        ],
+                        style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between' , 'width': '400px','background-color': '#171D25'}
+                    ),
+                ],
+                style={'display': 'flex', 'flex-direction': 'column','width': '25%'}
+            )
         ],
-        style={'display': 'flex', 'flex-direction': 'column','width': '25%'}
+        style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between'}
     )
 
 
@@ -48,7 +67,7 @@ def generate_user_vs_friends_panel():
      Input('side-selector', 'value'),
      Input('chart-type', 'value')]
 )
-def compute_hexagon2(_, n, category_select):
+def compute_hexagon_user(_, n, category_select):
 
     games = current_user.games
     select = category_select
@@ -76,6 +95,29 @@ def compute_hexagon2(_, n, category_select):
 
     return hexagon_generic(ranking, colors, names)
 
+@callback(
+    Output('friend-selector', "children"),
+    [Input('steam-id-store', 'data')],
+)
+def set_friend_selector(_):
+    if current_user.friends.empty:
+        options = []
+        default_value = None
+        dropdown_width = 'auto'
+    else:
+        options = [{'label': f"{index+1}. {row['steamid']}", 'value': row['steamid']} for index, row in current_user.friends.iterrows()]
+        default_value = current_user.friends.iloc[0]['steamid']
+        max_option_length = max(len(option['label']) for option in options)
+        dropdown_width = max_option_length * 11
+
+    return dcc.Dropdown(
+        id='friend-selector',
+        options=options,
+        value=default_value,
+        clearable=False,
+        searchable=True,
+        style={'width': dropdown_width,'align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
+    )
 
 #def compute_hexagon(_, n, category_select):
 #    return hexagon(categories, genres, category_select=category_select, n=n)

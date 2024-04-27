@@ -48,6 +48,51 @@ def hexagon(categories, genres, category_select, n):
     # Return the Dash component with the graph
     return dcc.Graph(id='hexagon-component',figure=fig)
 
+def hexagon2(data, colors):
+
+    if(len(data) == 0 or (len(colors == 0)) or len(data.values()) != len(colors)):
+        return html.Div('No data available or somthing went wrong.')
+
+    n = len(data)
+    datas = []
+    polygon_shape = get_polygon(n, [1] * n, 'blue', 0.1)
+    polygon_spider_lines = get_middle_lines(n, [1] * n)
+    datas.append(polygon_spider_lines)
+
+    text_trace = add_text_labels(list(data.keys()),list(data.values()))
+    polygon_data = get_polygon(n, normalized_values, 'blue', 1)
+
+    datas.append(polygon_shape)
+    for i in range(0, len(data)):
+        valuesi = [value[i] for value in data.values()]
+        max_value = max(valuesi)
+        normalized_values = [value[i] / max_value for value in valuesi]
+
+        polygon_data = get_polygon(n, normalized_values, colors[i], 1)
+        data.append(polygon_data)
+        
+    datas.append(polygon_spider_lines)
+    datas.append(text_trace)
+
+
+    # Create the layout for the graph
+    layout = go.Layout(
+        xaxis=dict(visible=False, range=[-1.5, 1.5], fixedrange=True),  # Hide x-axis
+        yaxis=dict(visible=False, range=[-1.5, 1.5], fixedrange=True),  # Hide y-axis
+        showlegend=False,  #Hide legend
+        width=400,  #Set width of the graph
+        height=400,  #Set height of the graph
+        margin=dict(l=1, r=1, t=1, b=1),
+        dragmode='pan',  #Disable zoom and pan
+        clickmode='none'  # Disable click interaction
+    )
+
+    # Create the figure containing the trace and layout
+    fig = go.Figure(data=datas, layout=layout) 
+
+    # Return the Dash component with the graph
+    return dcc.Graph(id='hexagon-component',figure=fig)
+
 
 def get_polygon_coords(n, center_distances):
     angles = np.linspace(0, 2 * np.pi, n, endpoint=False)

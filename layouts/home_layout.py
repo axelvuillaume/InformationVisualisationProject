@@ -4,7 +4,6 @@ import pandas as pd
 import plotly.express as px
 from components.top_games_chart import generate_top_games_chart
 
-from components.hexagon import hexagon
 from components.user_vs_friends_panel import generate_user_vs_friends_panel
 from components.bubble_chart import bubble_chart
 from components.user_playtime_bar_chart import playtime_per_genre, playtime_games_per_genre

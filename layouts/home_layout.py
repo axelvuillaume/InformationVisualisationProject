@@ -9,6 +9,8 @@ from components.bubble_chart import bubble_chart
 from components.user_playtime_bar_chart import playtime_per_genre, playtime_games_per_genre
 from components.slider import steam_game_slider, genre_slider
 from components.gauge import gauge_percentages
+from components.map import graph_map
+from components.sunburst import graph_sunburst
 from utils.load_data import cleaned_games, categories, genres, current_user, supported_languages, full_audio_languages
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
 
@@ -110,8 +112,24 @@ def generate_home_layout():
                 )
                 ]
             ),
+            html.Div(
+                className="component-container",
+                id='sunburst_by_categries',
+                children=[
+                    graph_sunburst()
+            ]
+            ),
+            html.Div(
+                className="component-container",
+                id='map_by_supported_languages',
+                children=[
+                    graph_map()
+            ]
+            ),
         ]
     )
+    
+  
 
 @callback(
     Output('steam-id-store', 'data'),

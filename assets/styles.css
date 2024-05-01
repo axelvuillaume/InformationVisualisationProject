@@ -41,3 +41,30 @@ h1 {
     width: 30%;
     height: 100%;
 }
+
+
+/* Button swap page */
+
+.button-container {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+.button {
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+    vertical-align: middle;
+    border-radius: 10%;
+    color: white;
+    background-color: greenyellow;
+    height: 40px;
+    width: 100px;
+}
+.button:hover {
+    background-color: green;
+}
+.button.active {
+    font-weight: bold;
+    background-color: green;;
+}

@@ -5,6 +5,7 @@ from dash.dependencies import Input, Output
 
 from components.top_games_chart import generate_top_games_chart
 from layouts.home_layout import generate_home_layout
+from layouts.profile_layout import generate_profile_layout
 from utils.load_data import cleaned_games, categories, genres, supported_languages, full_audio_languages
 
 # Initialize the Dash app
@@ -29,6 +30,8 @@ app.layout = html.Div(
 def display_page(pathname):
     if pathname == '/home':
         return generate_home_layout()
+    if pathname == '/profile':
+        return generate_profile_layout()
     # Add more pages as needed
     else:
         return '404 - Page not found'

@@ -18,7 +18,12 @@ def generate_home_layout():
     return html.Div(
         id='main-canva',
         children=[
+            
+            html.Div([
             html.H1('STEAM DASHBOARD'),
+                dcc.Link('Home', href='/home', id='home-link', className='button'),
+                dcc.Link('Profile', href='/profile', id='profile-link', className='button')
+        ], className='button-container',style={'width': '100%'} ),
 
             dcc.Store(id='steam-id-store'), 
             # once update-user-data is finished, store the steam id, once this changes the graph updates are triggered
@@ -129,7 +134,16 @@ def generate_home_layout():
         ]
     )
     
-  
+@callback(
+    Output('home-link', 'className'),
+    Output('profile-link', 'className'),
+    Input('url', 'pathname')
+)
+def update_links(pathname):
+    home_class = 'button active' if pathname == '/home' else 'button'
+    profile_class = 'button active' if pathname == '/profile' else 'button'
+    return home_class, profile_class
+
 
 @callback(
     Output('steam-id-store', 'data'),

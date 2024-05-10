@@ -75,8 +75,6 @@ def gauge(value, name):
             title=name
         ))
 
-        fig.update_layout(height=400)
-
         return dcc.Graph(id='top-games-chart', figure=fig)
     except Exception as e:
             print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- gauge:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")

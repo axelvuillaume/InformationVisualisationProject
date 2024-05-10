@@ -22,7 +22,7 @@ def generate_top_games_chart(data, n=10):
 
     fig = go.Figure(data=[trace], layout=layout)
 
-    fig.update_layout(modebar_add=["?"])
+    fig.update_layout(modebar_add=['help'])
 
     return dcc.Graph(
         id='top-games-chart',

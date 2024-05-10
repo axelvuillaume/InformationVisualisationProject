@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 from utils.load_data import cleaned_games, genres, current_user
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
-
+from components.alert import alert
 def playtime_per_genre(genres_amount=4, games_amount=10):
     games = current_user.games
     
@@ -34,7 +34,11 @@ def playtime_per_genre(genres_amount=4, games_amount=10):
 
     fig = px.bar(games, x="genres", y="playtime_forever", color="genres", text="name", title="User Playtime Chart")
     fig.update_layout(yaxis_title="Playtime (hours)", xaxis_title="Genre")
-    return dcc.Graph(id='playtime-bar-chart-figure',figure=fig)
+
+    g =  dcc.Graph(id='playtime-bar-chart-figure',figure=fig)
+    a = alert(6)
+
+    return html.Div([a, g])
 
 def playtime_games_per_genre(genre_name):
     # TODO: extract duplicate code with previous function into a separate function

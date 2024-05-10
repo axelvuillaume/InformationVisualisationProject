@@ -39,7 +39,7 @@ def generate_profile_layout():
                         html.Div(
                 className="component-container",
                 id='user_vs_friends_panel',
-                children=[alert(5),
+                children=[alert(4),
                           generate_user_vs_friends_panel()
                          ]
             ),

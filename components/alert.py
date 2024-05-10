@@ -3,10 +3,20 @@ from dash.dependencies import Input, Output, State
 
 import dash_bootstrap_components as dbc
 
-def alert(unique_id, alert_message="Hello! I am an alert!"):
+graph_dict = {0: "A bar  chart given the Top 10 games based on average playtime.\nx-axis:\tGame titles\ny-axis:\tAverage play time in Minutes",
+              1: "A gauge given the percentage of positive review for the top 3 languages.",
+              2: "A sunburst graph showing distribution of average playtime\nClick on an area to see composition.",
+              3: "Geographic map showing how many games are supported for a given language.\nThe bluer the colour the more games there are.",
+              4: "Spider graph showing amount of games per genre or category in comparison with the chosen friend",
+              5: "A bubble chart showing the the players most positive genres size indicate the amount of reviews.\nx-axis:\tPrice\ny-axis:\tPercentage of the reviews that are positive.\nColour:\tGenre\nSize:\tTotal amount of reviews.",
+              6: "Barchart showing the playtime in hours for the amount of genres shown.\nUse the slide beneath to change the amount of games or amount of genres shown."
+             }
+
+def alert(unique_id):
     button_id = f"{unique_id}-toggle"
     alert_id = f"{unique_id}-alert"
     button_label = "?"
+    alert_message = get_message(unique_id)
 
     layout = html.Div([dbc.Button(button_label, id=button_id, n_clicks=0),
                        dbc.Alert(alert_message, id=alert_id, is_open=False, dismissable=True)
@@ -20,3 +30,8 @@ def alert(unique_id, alert_message="Hello! I am an alert!"):
         return not n_clicks == 0
 
     return layout
+
+def get_message(id):
+    message = graph_dict.get(id)
+
+    return message

@@ -39,7 +39,7 @@ def generate_home_layout():
         
             html.Div(
                 className="component-container two",
-                children=[alert(0, "Dit is een test "),
+                children=[alert(0),
                           generate_top_games_chart(cleaned_games, n=10)
                          ]
             ),

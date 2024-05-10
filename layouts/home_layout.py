@@ -3,8 +3,6 @@ import json
 import pandas as pd
 import plotly.express as px
 
-import dash_bootstrap_components as dbc
-
 from components.top_games_chart import generate_top_games_chart
 
 from components.user_vs_friends_panel import generate_user_vs_friends_panel
@@ -14,7 +12,6 @@ from components.slider import steam_game_slider, genre_slider
 from components.gauge import gauge_percentages
 from components.map import graph_map
 from components.sunburst import graph_sunburst
-from components.alert import alert_box
 from utils.load_data import cleaned_games, categories, genres, current_user, supported_languages, full_audio_languages
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
 
@@ -39,10 +36,7 @@ def generate_home_layout():
         
             html.Div(
                 className="component-container two",
-                children=[alert_box()[0],
-                          alert_box()[1],
-                          generate_top_games_chart(cleaned_games, n=10)
-                         ]
+                children=[generate_top_games_chart(cleaned_games, n=10)]
             ),
 
             html.Div(
@@ -52,8 +46,6 @@ def generate_home_layout():
                     html.Div(
                     className="component-container",
                     children=[
-                        alert_box()[0],
-                        alert_box()[1],
                         html.Div(
                             className="component-container",
                                 children=[gauge_percentages("positive", "full_audio_languages")[0]]
@@ -87,16 +79,10 @@ def generate_home_layout():
         ]
     )
     
-@callback(
-    Output('home-link', 'className'),
-    Output('profile-link', 'className'),
-    Input('url', 'pathname')
-)
-@callback(Output("alert", "is_open"),
-          Input("alert-toggle", "n_clicks")
+@callback(Output('home-link', 'className'),
+          Output('profile-link', 'className'),
+          Input('url', 'pathname')
          )
-def toggle_alert(n_clicks):
-    return n_clicks > 0
 
 def update_links(pathname):
     home_class = 'button active' if pathname == '/home' else 'button'

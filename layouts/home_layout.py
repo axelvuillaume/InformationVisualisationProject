@@ -2,6 +2,9 @@ from dash import Dash, dcc, html, Input, Output, callback, State
 import json
 import pandas as pd
 import plotly.express as px
+
+import dash_bootstrap_components as dbc
+
 from components.top_games_chart import generate_top_games_chart
 
 from components.user_vs_friends_panel import generate_user_vs_friends_panel

@@ -4,12 +4,16 @@ from dash import html
 from dash.dependencies import Input, Output
 
 from components.top_games_chart import generate_top_games_chart
+
 from layouts.home_layout import generate_home_layout
 from layouts.profile_layout import generate_profile_layout
+
 from utils.load_data import cleaned_games, categories, genres, supported_languages, full_audio_languages
 
+import dash_bootstrap_components as dbc
+
 # Initialize the Dash app
-app = dash.Dash(__name__, suppress_callback_exceptions=True)
+app = dash.Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 # External CSS stylesheets
 global_style = ['assets/styles.css']

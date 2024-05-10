@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import plotly.express as px
 from components.top_games_chart import generate_top_games_chart
-
+from components.steam_id import steam_id_component
 from components.user_vs_friends_panel import generate_user_vs_friends_panel
 from components.bubble_chart import bubble_chart
 from components.user_playtime_bar_chart import playtime_per_genre, playtime_games_per_genre
@@ -23,25 +23,16 @@ def generate_profile_layout():
                 dcc.Link('Home', href='/home', id='home-link', className='button'),
                 dcc.Link('Profile', href='/profile', id='profile-link', className='button')
         ], className='button-container',style={'width': '100%'} ),
-            
-        
-        dcc.Store(id='steam-id-store'), 
-        
-        
-            html.Div([
-                "Steam Id: ",
-                dcc.Input(id='steam-id', placeholder="Insert Steam Id", value='76561198150561997'),
-                html.Button(id='submit-steamid', n_clicks=0, children='Submit')
-            ], style={'color': 'white'}),
-            
-                        html.Div(
+
+            steam_id_component(),
+
+            html.Div(
                 className="component-container",
                 id='user_vs_friends_panel',
                 children=[
                     generate_user_vs_friends_panel()
                 ]
             ),
-                        
                     
             html.Div(
                 className="component-container",
@@ -91,12 +82,21 @@ def generate_profile_layout():
                 children=[
                 ]
             ),
-        ]
+        ],
+        style={
+            'box-sizing':'border-box',
+            'display': 'flex', 
+            'flex-direction': 'column',
+            'row-gap': '1em',
+            'padding': '1em'
+        }
     )
     
+# Note: Most callbacks are activated once steam-id-store is changed, 
+# this is a dcc.Store component in the steam_id.py file (which is updated everytime the user submits a new steamid)
 
 @callback(
-    Output('steam-id-store', 'data'),
+    Output('steam-id-store', 'data'), 
     Input("submit-steamid", "n_clicks"),
     State("steam-id", "value"),
     running=[(Output("submit-steamid", "disabled"), True, False)] 

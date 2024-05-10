@@ -13,21 +13,26 @@ graph_dict = {0: "A bar  chart given the Top 10 games based on average playtime.
              }
 
 def alert(unique_id):
-    button_id = f"{unique_id}-toggle"
-    alert_id = f"{unique_id}-alert"
+    button_id = "0-toggle"
+    alert_id = "0-alert"
+    # button_id = f"{unique_id}-toggle"
+    # alert_id = f"{unique_id}-alert"
     button_label = "?"
     alert_message = get_message(unique_id)
 
-    layout = html.Div([dbc.Button(button_label, id=button_id, n_clicks=0),
-                       dbc.Alert(alert_message, id=alert_id, is_open=False, dismissable=True)
-                       ])
+    button = dbc.Button(button_label, id=button_id, n_clicks=0, color="info")
+    alert = dbc.Alert(alert_message, id=alert_id, is_open=False, dismissable=True, color="info")
+
+    layout = html.Div([button,alert])
 
     @callback(Output(alert_id, "is_open"),
-                  [Input(button_id, "n_clicks")],
-                  [State(alert_id, "is_open")]
-                 )
+              Input(button_id, "n_clicks"),
+              State(alert_id, "is_open")
+              )
     def toggle_alert(n_clicks, is_open):
-        return not n_clicks == 0
+        print(is_open)
+        return n_clicks >= 0
+
 
     return layout
 

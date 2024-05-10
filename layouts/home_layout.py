@@ -90,3 +90,10 @@ def update_links(pathname):
     home_class = 'button active' if pathname == '/home' else 'button'
     profile_class = 'button active' if pathname == '/profile' else 'button'
     return home_class, profile_class
+
+# @callback(Output("0-alert", "is_open"),
+#                   [Input("0-toggle", "n_clicks")],
+#                   [State("0-alert", "is_open")]
+#           )
+# def toggle_alert(n_clicks, is_open):
+#     return not n_clicks == 0

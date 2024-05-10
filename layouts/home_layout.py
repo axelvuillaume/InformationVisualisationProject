@@ -39,9 +39,10 @@ def generate_home_layout():
         
             html.Div(
                 className="component-container two",
-                children=[
-                    generate_top_games_chart(cleaned_games, n=10)
-                ]
+                children=[alert_box()[0],
+                          alert_box()[1],
+                          generate_top_games_chart(cleaned_games, n=10)
+                         ]
             ),
 
             html.Div(
@@ -51,6 +52,8 @@ def generate_home_layout():
                     html.Div(
                     className="component-container",
                     children=[
+                        alert_box()[0],
+                        alert_box()[1],
                         html.Div(
                             className="component-container",
                                 children=[gauge_percentages("positive", "full_audio_languages")[0]]
@@ -89,6 +92,12 @@ def generate_home_layout():
     Output('profile-link', 'className'),
     Input('url', 'pathname')
 )
+@callback(Output("alert", "is_open"),
+          Input("alert-toggle", "n_clicks")
+         )
+def toggle_alert(n_clicks):
+    return n_clicks > 0
+
 def update_links(pathname):
     home_class = 'button active' if pathname == '/home' else 'button'
     profile_class = 'button active' if pathname == '/profile' else 'button'

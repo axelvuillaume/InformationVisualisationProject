@@ -1,4 +1,4 @@
-from dash import html, callback
+from dash import html, callback, MATCH
 from dash.dependencies import Input, Output, State
 
 import dash_bootstrap_components as dbc
@@ -12,27 +12,23 @@ graph_dict = {0: "A bar  chart given the Top 10 games based on average playtime.
               6: "Barchart showing the playtime in hours for the amount of genres shown.\nUse the slide beneath to change the amount of games or amount of genres shown."
              }
 
+@callback(
+    Output({'type': 'alert_message', 'alert-id': MATCH}, "is_open"),
+    Input({'type': 'alert_button', 'alert-id': MATCH}, "n_clicks"),
+    State({'type': 'alert_message', 'alert-id': MATCH}, 'is_open'),
+    prevent_initial_call=True,
+)
+def toggle_alert(_, is_open):
+    return not is_open #return opposite of current is_open state
+
 def alert(unique_id):
-    button_id = "0-toggle"
-    alert_id = "0-alert"
-    # button_id = f"{unique_id}-toggle"
-    # alert_id = f"{unique_id}-alert"
+    alert_id = f"{unique_id}-alert"
     button_label = "?"
     alert_message = get_message(unique_id)
 
-    button = dbc.Button(button_label, id=button_id, n_clicks=0, color="info")
-    alert = dbc.Alert(alert_message, id=alert_id, is_open=False, dismissable=True, color="info")
-
-    layout = html.Div([button,alert])
-
-    @callback(Output(alert_id, "is_open"),
-              Input(button_id, "n_clicks"),
-              State(alert_id, "is_open")
-              )
-    def toggle_alert(n_clicks, is_open):
-        print(is_open)
-        return n_clicks >= 0
-
+    layout = html.Div([dbc.Button(button_label, id={"type" : "alert_button", "alert-id": alert_id}, n_clicks=0),
+                       dbc.Alert(alert_message, id={"type" : "alert_message", "alert-id": alert_id}, is_open=False, dismissable=True)
+                       ])
 
     return layout
 

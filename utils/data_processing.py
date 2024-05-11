@@ -23,6 +23,7 @@ def load_data(file_path):
         return pd.read_csv(file_path)
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- load_data:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+
 # write_data(dataframe, file_path)
 #   write_data will write the given dataframe to a CSV-file stored on the given path.
 #
@@ -218,6 +219,7 @@ def group_by_per_thing(data, per_thing):
         return grouped
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- group_by_per_thing:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
+
 # group_by_all(per_thing)
 #   group_by_all will give the percentages of the "columns" values per "per_thing" values.
 #
@@ -263,6 +265,30 @@ def make_file(columns, per_things, is_done):
     except Exception as e:
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- make_file:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
+def get_player_information_from_api(player_ids):
+    # TODO: (if time left) this api call works with up to 100 steamids at once, 
+    # so we could potentially get all friends in one go and save some api calls
+    player_info_list = []
+    player_ids_chunks = [player_ids[i:i+100] for i in range(0, len(player_ids), 100)]
+    for chunk in player_ids_chunks:
+        api_url = f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=5E613902A6191613402845D8EDD65A1C&steamids={','.join(chunk)}&format=json"
+        try:
+            response = requests.get(api_url)
+            if response.status_code == 200:
+                # example json output can be found here: https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=5E613902A6191613402845D8EDD65A1C&steamids=76561198222609456&format=json
+                data = response.json()
+                players_info = data['response']['players']
+
+                player_info_list.extend(players_info)
+            else:
+                print(f"Error: {response.status_code} - {response.text}")
+                return None
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+    
+    return player_info_list
+
 def get_friends_list_from_api(player_id):
     print("Getting friends from API")
     api_url = f"https://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=5E613902A6191613402845D8EDD65A1C&steamid={player_id}&relationship=friend&format=json"
@@ -272,10 +298,14 @@ def get_friends_list_from_api(player_id):
         if response.status_code == 200:
             data = response.json()
             friends = data['friendslist']['friends']
-            friends_data = {'steamid': []}
+            friends_data = {'steamid': [], 'displayname': []}
+            friends_ids = [friend['steamid'] for friend in friends]
+            friends_displaynames = [friend['personaname'] for friend in get_player_information_from_api(friends_ids)]
 
             for friend in friends:
                 friends_data['steamid'].append(friend['steamid'])
+            for displayname in friends_displaynames:
+                friends_data['displayname'].append(displayname)
 
             friends_df = pd.DataFrame(friends_data)
             return friends_df

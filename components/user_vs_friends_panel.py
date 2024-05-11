@@ -13,7 +13,6 @@ def generate_user_vs_friends_panel():
             dcc.Store(id='current-friend-id-store'), 
             html.Div(
                 children=[
-                    html.H2("My Profile", style={'color': 'white'}),
                     html.Div(
                         id='hexagon-menu',
                         children=[
@@ -147,7 +146,7 @@ def set_friend_selector(_):
     if (current_user.friends is None or current_user.friends.empty):
         return [], None, {'width': 'auto', 'align-self': 'center', 'padding-left': '0.5em', 'padding-right': '0.5em'}
 
-    options = [{'label': f"{index+1}. {row['steamid']}", 'value': row['steamid']} for index, row in current_user.friends.iterrows()]
+    options = [{'label': f"{index+1}. {row['displayname']}", 'value': row['steamid']} for index, row in current_user.friends.iterrows()]
     default_value = current_user.friends.iloc[0]['steamid']
     max_option_length = max(len(option['label']) for option in options)
     dropdown_width = max_option_length * 11

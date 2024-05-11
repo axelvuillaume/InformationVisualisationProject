@@ -300,12 +300,11 @@ def get_friends_list_from_api(player_id):
             friends = data['friendslist']['friends']
             friends_data = {'steamid': [], 'displayname': []}
             friends_ids = [friend['steamid'] for friend in friends]
-            friends_displaynames = [friend['personaname'] for friend in get_player_information_from_api(friends_ids)]
+            friends_displaynames = {friend['steamid']: friend['personaname'] for friend in get_player_information_from_api(friends_ids)}
 
             for friend in friends:
                 friends_data['steamid'].append(friend['steamid'])
-            for displayname in friends_displaynames:
-                friends_data['displayname'].append(displayname)
+                friends_data['displayname'].append(friends_displaynames[friend['steamid']])
 
             friends_df = pd.DataFrame(friends_data)
             return friends_df

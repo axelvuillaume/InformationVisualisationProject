@@ -339,7 +339,23 @@ def get_game_list_from_api(player_id):
     except Exception as e:
         print(f"Error: {e}")
         return None
-    
+
+def get_games_and_name_of_specific_gen_or_cat(games,all_games_infos, gen_or_cat, specific):
+    column = 'genres' if 'genres' in gen_or_cat.columns else 'categories'
+    # Filter gen_or_cat DataFrame to include only app_ids present in games
+    filtered_gen_or_cat = gen_or_cat[gen_or_cat['app_id'].isin(games['app_id'])]
+    # Filter the DataFrame to include only the specific genre or category
+    specific_gen_or_cat = filtered_gen_or_cat[filtered_gen_or_cat[column] == specific]
+    # Get the app_ids of the games that fall under the specific genre or category
+    specific_games = specific_gen_or_cat['app_id']
+    # Filter the games DataFrame to include only the games that fall under the specific genre or category
+    specific_games_df = games[games['app_id'].isin(specific_games)]
+    # Merging the two datasets on 'app_id' column
+    merged_df = pd.merge(specific_games_df, all_games_infos[['app_id', 'name']], on='app_id')
+    #sort by playtime_forever
+    merged_df = merged_df.sort_values(by='playtime_forever', ascending=False)
+    return merged_df
+
 def get_n_best_gen_or_cat(games, gen_or_cat, n=6):
     column = 'genres' if 'genres' in gen_or_cat.columns else 'categories'
     # Filter gen_or_cat DataFrame to include only app_ids present in games

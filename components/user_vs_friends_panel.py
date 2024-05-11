@@ -199,10 +199,6 @@ def display_click_data(clickData_friend, clickData_user):
     prevent_initial_call=True
 )
 def centralplot_handler(gen_cat_clicked, category_select):
-    print("GEN OR CAT:")
-    print(gen_cat_clicked)
-    print("CATEGORY SELECT:")
-    print(category_select)
 
     if gen_cat_clicked is None:
         return html.Div("Click on a hexagon to see the top games", style={'color': 'white'})
@@ -219,9 +215,7 @@ def centralplot_handler(gen_cat_clicked, category_select):
     data_to_use = genres if(category_select == 'genres') else categories
     friendgames = current_friend_UVFcompo.games
     df1 = get_games_and_name_of_specific_gen_or_cat(games, cleaned_games, data_to_use, gen_cat_clicked)
-    print(df1)
     df2 = get_games_and_name_of_specific_gen_or_cat(friendgames, cleaned_games, data_to_use, gen_cat_clicked)
-    print(df2)
     return html.Div(
         children=[
             html.H2(f"Top Games for {gen_cat_clicked}", style={'color': 'white', 'text-align': 'center'}),

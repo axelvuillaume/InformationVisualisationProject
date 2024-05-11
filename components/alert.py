@@ -21,12 +21,19 @@ graph_dict = {0: "A bar  chart given the Top 10 games based on average playtime.
 def toggle_alert(_, is_open):
     return not is_open #return opposite of current is_open state
 
+@callback(
+    Output({'type': 'alert_button', 'alert-id': MATCH}, "style"),
+    Input({'type': 'alert_message', 'alert-id': MATCH}, "is_open")
+)
+def toggle_button_hide(is_open):
+    return {'display':'none'} if is_open else {'display':'block'} # if alert message is open, hide the button
+
 def alert(unique_id):
     alert_id = f"{unique_id}-alert"
     button_label = "?"
     alert_message = get_message(unique_id)
 
-    layout = html.Div([dbc.Button(button_label, id={"type" : "alert_button", "alert-id": alert_id}, n_clicks=0),
+    layout = html.Div([dbc.Button(button_label, id={"type" : "alert_button", "alert-id": alert_id}, n_clicks=0, className="mb-1"),
                        dbc.Alert(alert_message, id={"type" : "alert_message", "alert-id": alert_id}, is_open=False, dismissable=True)
                        ])
 

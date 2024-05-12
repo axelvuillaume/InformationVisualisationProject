@@ -181,7 +181,7 @@ def update_current_friend(friend_id):
     Input('sub-hexagon-user', 'clickData')],
     prevent_initial_call=True
 )
-def display_click_data(clickData_friend, clickData_user):
+def update_clicked_gen_cat(clickData_friend, clickData_user):
     if clickData_friend:
         # Extract the label clicked from the clickData
         clicked_label = clickData_friend['points'][0]['text']

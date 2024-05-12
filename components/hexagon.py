@@ -115,7 +115,7 @@ def get_polygon(n, center_distances, color, opacity, name = None):
         x=x + [x[0]], 
         y=y + [y[0]],
         mode='lines',
-        line=dict(color=color),
+        line=dict(color=color,  width=0.75),
         fill='toself',
         fillcolor=fillcolor,
         hoverinfo='none'

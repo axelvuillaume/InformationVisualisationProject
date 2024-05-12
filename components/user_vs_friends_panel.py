@@ -2,6 +2,7 @@ from dash import Dash, dcc, html, Input, Output, callback, State
 import plotly.graph_objs as go
 
 from components.hexagon import hexagon_old, hexagon_generic
+from components.top_games_for_UVFpanel import generate_topgames
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_all_gen_or_cat, get_game_list_from_api, get_all_gen_or_cat_by_hours, get_games_and_name_of_specific_gen_or_cat
 from utils.load_data import cleaned_games, categories, genres, current_user
 from utils.classes.steam_user import Steam_User
@@ -48,7 +49,7 @@ def generate_user_vs_friends_panel():
                 ],
                 style={'display': 'flex', 'flex-direction': 'column','width': '400px'}
             ),
-            html.Div("Interact with the hexagons", id='centralplot', style={'display': 'flex', 'flex-direction': 'column','color': 'white','background-color': 'red','width':'50%','height':'auto'}),
+            html.Div("Click on a hexagon to see the top games", id='centralplot', style={'display': 'flex', 'flex-direction': 'column','color': 'white','background-color': '#171D25','width':'50%','height':'auto','padding':'0.5em'}),
             html.Div(
                 children=[
                     html.H2("Friends", style={'color': 'white'}),
@@ -84,7 +85,7 @@ def generate_user_vs_friends_panel():
 def compute_hexagon_user(_, n, category_select):
 
     games = current_user.games
-    if (games is None or games.empty) :
+    if (games is None or games.empty or games['playtime_forever'].max() == 0):
         return html.Div("No data available for this user", style={'color': 'white'})
 
     data_to_use = genres if(category_select == 'genres') else categories
@@ -98,7 +99,7 @@ def compute_hexagon_user(_, n, category_select):
     ranking_pairs = sorted(ranking.items())  #Sort by keys
     ranking = dict(ranking_pairs)
 
-    colors = ['#1b3b80', '#1999ff']
+    colors = ['#1b3b80', '#00d4ff']
     names = ['Playtime', 'Count']
 
     df1 = get_games_and_name_of_specific_gen_or_cat(games, cleaned_games, data_to_use, 'Simulation')
@@ -118,7 +119,7 @@ def compute_hexagon_friend(_,__, n, category_select):
         return html.Div("No friends", style={'color': 'white'})
     else:
         friendgames = current_friend_UVFcompo.games
-    if (friendgames is None or friendgames.empty):
+    if (friendgames is None or friendgames.empty or friendgames['playtime_forever'].max() == 0):
         return html.Div("No data available for this user", style={'color': 'white'})
 
     data_to_use = genres if(category_select == 'genres') else categories
@@ -137,7 +138,7 @@ def compute_hexagon_friend(_,__, n, category_select):
     ranking_pairs = sorted(ranking.items())  #Sort by keys
     ranking = dict(ranking_pairs)
 
-    colors = ['#ff1400', '#ff9f00']
+    colors = ['#ff1400', '#ffb600']
     names = ['Playtime', 'Count']
 
     return hexagon_generic(ranking, colors, names, 'sub-hexagon-friend')
@@ -216,46 +217,19 @@ def centralplot_handler(gen_cat_clicked, category_select):
     friendgames = current_friend_UVFcompo.games
     df1 = get_games_and_name_of_specific_gen_or_cat(games, cleaned_games, data_to_use, gen_cat_clicked)
     df2 = get_games_and_name_of_specific_gen_or_cat(friendgames, cleaned_games, data_to_use, gen_cat_clicked)
+    n = 5
     return html.Div(
         children=[
-            html.H2(f"Top Games for {gen_cat_clicked}", style={'color': 'white', 'text-align': 'center'}),
+            html.H2(f"Comparison of your {n} favourite games for {gen_cat_clicked}", style={'color': 'white', 'text-align': 'center'}),
             html.Div(
                 children=[
-                    generate_topgames(df1, '#1b3b80'),
-                    generate_topgames(df2,  '#ff1400')
+                    generate_topgames(df1, '#1b3b80',n),
+                    generate_topgames(df2,  '#ff1400',n)
                 ],
                 style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between'}
             )
-        ], style={'display': 'flex', 'flex-direction': 'column','width': 'auto'}
+        ], style={'display': 'flex', 'flex-direction': 'column','width': '100%'}
     )
-
-def generate_topgames(games_data_frame, color, nbgames=5):
-    top_games = games_data_frame.head(nbgames)
-
-
-    # Create a horizontal bar chart
-    fig = go.Figure()
-    fig.add_trace(go.Bar(
-        y=top_games['name'],  # Game names on y-axis
-        x=top_games['playtime_forever']/60,  # Playtime on x-axis
-        orientation='h',  # Horizontal orientation
-        marker=dict(color=color),  # Bar color
-        text=top_games['name'],  # Display game names on the bars
-        textposition='inside',  # Position text inside the bars
-        hoverinfo='none'  # Disable hover info
-
-    ))
-    
-    # Customize layout
-    fig.update_layout(
-        xaxis_title="Playtime (hours)",  # X-axis title
-        yaxis_title="",  # No Y-axis title
-        yaxis=dict(autorange="reversed", showticklabels=False),  # Reverse the y-axis and hide tick labels
-        margin=dict(l=0, r=0, t=10, b=0),  # Adjust margins for better visibility
-        width=400,  # Set width of the graph
-    )
-
-    return dcc.Graph(figure=fig)
 
 #def compute_hexagon(_, n, category_select):
 #    return hexagon(categories, genres, category_select=category_select, n=n)

@@ -13,6 +13,9 @@ def graph_sunburst():
             {'label': 'Hide Single-player', 'value': 'Single-player'}
         ],
         value=[],  # Balue default : no
+        style={ 
+            'color': 'white' 
+        }
     ),
     dcc.Graph(id='sunburst_graph'),
     dcc.Slider(
@@ -23,7 +26,9 @@ def graph_sunburst():
         value=20000,
         marks={i: str(i) for i in range(0, 50001, 10000)}
     ),
-    html.Div(id='slider_output')
+    html.Div(id='slider_output',         style={ 
+            'color': 'white' 
+        })
 ])
 
 @callback(

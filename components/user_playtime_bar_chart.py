@@ -1,5 +1,5 @@
 from dash import Dash, dcc, html, Input, Output, callback
-
+import plotly.graph_objects as go
 import pandas as pd
 import plotly.express as px
 from utils.load_data import cleaned_games, genres, current_user
@@ -48,14 +48,34 @@ def playtime_games_per_genre(genre_name):
         games['playtime_formatted'] = games['playtime_forever'].map(lambda playtime: f"{int(playtime):02d}:{int((playtime*60) % 60):02d}")
         games.sort_values('playtime_forever', ascending=True, inplace=True)
 
-        fig = px.bar(games, x="name", y="playtime_forever", text="playtime_formatted", 
-                     title=f"Playtimes for genre: {genre_name}")
+        fig = go.Figure(
+            data=go.Bar(
+                    x=games["playtime_forever"],
+                    text=games["playtime_formatted"],  
+                ),
+            layout={
+                'bargroupgap':0.4,
+                # 'height': 2000, enable with scrollbar for bigger bars
+                'yaxis':{'visible': False},
+            }
+        )
+        for idx, name in enumerate(games["name"]): 
+            fig.add_annotation(
+                x=0,
+                y=idx + 0.45,
+                text=name,
+                xanchor='left',
+                showarrow=False,
+                yshift=0
+        )
+        # fig = px.bar(games, x="playtime_forever", y="name", text="playtime_formatted", orientation='h',
+        #              title=f"Playtimes for genre: {genre_name}")
         
-        fig.update_layout(yaxis_title="Playtime (hours)", xaxis_title="Game")
-        fig.update_traces(textangle=0, textposition="outside", cliponaxis=False, hovertemplate="Game: %{x}<br>Playtime: %{y} hours")
-        return dcc.Graph(id='detail-playtime-figure', figure=fig)
+        fig.update_layout(yaxis_title="Game", xaxis_title="Playtime (hours)", title=f"Playtimes for genre: {genre_name}")
+        # fig.update_traces(textangle=0, textposition="outside", cliponaxis=False, hovertemplate="Game: %{y}<br>Playtime: %{x} hours")
+        return dcc.Graph(id='detail-playtime-figure', figure=fig, style={'height': '100%'})
     else:
-        return html.Div(
-            "Select a genre on the 'User Playtime Chart' to see the playtimes for that genre",
-            style={'color': 'white'}
+        return dcc.Markdown(
+            "### Select a genre on the 'User Playtime Chart' to see the playtimes for that genre",
+            style={'color': 'white', 'padding': '1em'}
             )

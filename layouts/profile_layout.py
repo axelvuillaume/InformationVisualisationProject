@@ -18,10 +18,11 @@ def generate_profile_layout():
     return html.Div(
         className ="profile_wrapper",
         id='main-canva',
+        style={'padding': '1em', 'box-sizing':'border-box'},
         children=[
             html.Div([
             html.H1('PROFILE STEAM DASHBOARD'),
-                dcc.Link('Home', href='/home', id='home-link', className='button'),
+                dcc.Link('Home', href='/home', id='home-link', className='button', style={'margin-right': '0.5em'}),
                 dcc.Link('Profile', href='/profile', id='profile-link', className='button')
         ], className='button-container wrapperP_one',style={'width': '100%'} ),
 
@@ -85,13 +86,15 @@ def generate_profile_layout():
                     ),
                ],
             ),
-             
-            # html.Div(
-            #    className="component-container",
-            #    id = 'detail-playtime-chart',
-            #    children=[
-            #    ]
-            #),
+
+            html.Div(
+               className="component-container wrapperP_six",
+               id = 'detail-playtime-chart',
+               children=[
+               ],
+                #scrollbar functionality but with fixed height
+                #style={'overflowY': 'scroll', 'height': '100vh'}
+            ),
         ],
     )
     

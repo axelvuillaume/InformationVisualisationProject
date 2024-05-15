@@ -19,11 +19,12 @@ def generate_home_layout():
     return html.Div(
         className ="wrapper",
         id='main-canva',
+        style={'padding': '1em', 'box-sizing':'border-box'},
         children=[
             
             html.Div([
             html.H1('STEAM DASHBOARD'),
-                dcc.Link('Home', href='/home', id='home-link', className='button'),
+                dcc.Link('Home', href='/home', id='home-link', className='button', style={'margin-right': '0.5em'}),
                 dcc.Link('Profile', href='/profile', id='profile-link', className='button')
         ], className='button-container one'),
 

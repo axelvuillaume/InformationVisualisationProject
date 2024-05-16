@@ -18,18 +18,28 @@ from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_
 
 def generate_profile_layout():
     return html.Div(
+        className ="profile_wrapper",
         id='main-canva',
+        style={'padding': '1em', 'box-sizing':'border-box'},
         children=[
             html.Div([
             html.H1('PROFILE STEAM DASHBOARD'),
-                dcc.Link('Home', href='/home', id='home-link', className='button'),
+                dcc.Link('Home', href='/home', id='home-link', className='button', style={'margin-right': '0.5em'}),
                 dcc.Link('Profile', href='/profile', id='profile-link', className='button')
-        ], className='button-container',style={'width': '100%'} ),
+        ], className='button-container wrapperP_one',style={'width': '100%'} ),
 
-            steam_id_component(),
+            
+            
+            html.Div(
+                className="component-container wrapperP_two",
+                id='',
+                children=[
+                    steam_id_component(),
+                ]
+            ),
 
             html.Div(
-                className="component-container",
+                className="component-container wrapperP_three",
                 id='user_vs_friends_panel',
                 children=[alert(4),
                           generate_user_vs_friends_panel()
@@ -37,14 +47,14 @@ def generate_profile_layout():
             ),
 
             html.Div(
-                className="component-container",
+                className="component-container wrapperP_four",
                 id = 'bubble-chart',
                 children=[#bubble(n=8)
                          ]
             ),
 
             html.Div(
-                className="component-container",
+                className="component-container wrapperP_five",
                 id = 'user-playtime-chart',
                 children=[
                     html.Div(
@@ -76,20 +86,16 @@ def generate_profile_layout():
                     ),
                ],
             ),
+
             html.Div(
-                className="component-container",
-                id = 'detail-playtime-chart',
-                children=[
-                ]
+               className="component-container wrapperP_six",
+               id = 'detail-playtime-chart',
+               children=[
+               ],
+                #scrollbar functionality but with fixed height
+                #style={'overflowY': 'scroll', 'height': '100vh'}
             ),
         ],
-        style={
-            'box-sizing':'border-box',
-            'display': 'flex', 
-            'flex-direction': 'column',
-            'row-gap': '1em',
-            'padding': '1em'
-        }
     )
     
 # Note: Most callbacks are activated once steam-id-store is changed, 

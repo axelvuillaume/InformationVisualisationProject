@@ -12,8 +12,8 @@ from components.slider import steam_game_slider, genre_slider
 from components.gauge import gauge_percentages
 from components.map import graph_map
 from components.sunburst import graph_sunburst
-
 from components.alert import alert
+from components.graph import graph_comparaison
 
 from utils.load_data import cleaned_games, categories, genres, current_user, supported_languages, full_audio_languages
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
@@ -22,11 +22,12 @@ def generate_home_layout():
     return html.Div(
         className ="wrapper",
         id='main-canva',
+        style={'padding': '1em', 'box-sizing':'border-box'},
         children=[
             
             html.Div([
             html.H1('STEAM DASHBOARD'),
-                dcc.Link('Home', href='/home', id='home-link', className='button'),
+                dcc.Link('Home', href='/home', id='home-link', className='button', style={'margin-right': '0.5em'}),
                 dcc.Link('Profile', href='/profile', id='profile-link', className='button')
         ], className='button-container one'),
 
@@ -78,6 +79,14 @@ def generate_home_layout():
                 children=[alert(3),
                           graph_map()
                          ]
+            ),
+            
+            html.Div(
+                className="component-container six",
+                id='graph_comparaison',
+                children=[
+                    graph_comparaison()
+            ]
             ),
         ]
     )

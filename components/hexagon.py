@@ -1,5 +1,5 @@
 from dash import dcc
-from dash import html
+from dash import html, callback, Output, Input
 from utils.load_data import current_user
 from utils.data_processing import get_game_list_from_api
 from utils.data_processing import get_n_best_gen_or_cat
@@ -15,7 +15,7 @@ import random
 #       example: {'Co-op': [1185, 26], 'Multi-player': [1276, 33], 'Partial Controller Support': [919, 12], 'Single-player': [1845, 46], 'Steam Cloud': [1336, 33], 'Steam Workshop': [1105, 14]}
 # colors: array with the colors to be used in the hexagon
 # names: array with the names of the values in the hexagon
-def hexagon_generic(input_data, colors, names):
+def hexagon_generic(input_data, colors, names, id):
 
     if(len(input_data) == 0 or (len(colors) == 0) or (len(list(input_data.values())[0]) != len(colors))):
         return html.Div('No data available or something went wrong with the number of datas.')
@@ -47,13 +47,13 @@ def hexagon_generic(input_data, colors, names):
         height=400,  #Set height of the graph
         margin=dict(l=1, r=1, t=1, b=1),
         dragmode='pan',  #Disable zoom and pan
-        clickmode='none'  # Disable click interaction
+        clickmode='event' 
     )
 
     fig = go.Figure(data=datas, layout=layout) 
 
     # Return the Dash component with the graph
-    return dcc.Graph(id='hexagon-component',figure=fig)
+    return dcc.Graph(id=id,figure=fig)
 
 def hexagon_old(categories, genres, category_select, n):
     games = current_user.games
@@ -86,7 +86,7 @@ def hexagon_old(categories, genres, category_select, n):
         height=400,  #Set height of the graph
         margin=dict(l=1, r=1, t=1, b=1),
         dragmode='pan',  #Disable zoom and pan
-        clickmode='none'  # Disable click interaction
+        clickmode='event'
     )
 
     # Create the figure containing the trace and layout
@@ -115,7 +115,7 @@ def get_polygon(n, center_distances, color, opacity, name = None):
         x=x + [x[0]], 
         y=y + [y[0]],
         mode='lines',
-        line=dict(color=color),
+        line=dict(color=color,  width=0.75),
         fill='toself',
         fillcolor=fillcolor,
         hoverinfo='none'
@@ -185,7 +185,5 @@ def add_text_labels_generic(labels, user_values, colors, names):
         hovertext=hvText
     )
     return text_trace
-
-
 
 

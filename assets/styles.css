@@ -43,31 +43,39 @@ h1 {
 /* Button swap page */
 
 .button-container {
-    display: flex;
-    align-items: center;
-    margin-right: 15px;
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
 }
+
 .button {
-    text-align: center;
-    padding: 10px;
-    text-decoration: none;
-    vertical-align: middle;
-    border-radius: 10%;
-    color: white;
-    background-color: greenyellow;
-    height: 40px;
-    width: 100px;
+  text-align: center;
+  line-height: 40px;
+  padding: 10px;
+  text-decoration: none;
+  vertical-align: middle;
+  border-radius: 5px;
+  background-color: #34495E;
+  color: white; 
+  height: 40px;
+  width: 100px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
 }
+
 .button:hover {
-    background-color: green;
+  background-color: #E0ECF8; 
+  transform: scale(1.02); 
 }
+
 .button.active {
-    font-weight: bold;
-    background-color: green;;
+  font-weight: bold;
+  color: #34495E;
+  background-color: #F0F8FF;
 }
 
 
-/* CSS WRAPPER */
+/* CSS WRAPPER HOME */
 .wrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -81,7 +89,7 @@ h1 {
   .two {
     grid-column: 3;
     grid-row: 2;
-    height: 55%;
+
   }
   .three {
     grid-column: 1;
@@ -95,3 +103,42 @@ h1 {
     grid-column: 2;
     grid-row: 3;
   }
+
+
+  /* CSS WRAPPER PROFILE */
+.profile_wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
+}
+
+.wrapperP_one {
+  grid-column: 1/5;
+  grid-row: 1;
+}
+.wrapperP_two {
+  grid-column: 1/5;
+  grid-row: 2;
+}
+.wrapperP_three {
+  grid-column: 1/5;
+  grid-row: 3;
+}
+
+.wrapperP_four {
+  grid-column: 1/4;
+  grid-row: 5;
+}
+
+.wrapperP_five {
+  grid-column: 1 / 4;
+  grid-row: 4;
+}
+
+.wrapperP_six {
+  border: 1px solid #34495E;
+  grid-column: 4 / 5;
+  grid-row-start: 4;
+  grid-row-end: 6;
+}

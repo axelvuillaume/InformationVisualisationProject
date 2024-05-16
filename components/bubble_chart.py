@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 from utils.load_data import cleaned_games, genres, current_user
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
-
+from components.alert import alert
 """
 A bubble plot to recommend games based on 4 different features, chosen
 from: 'price', 'positive reviews', 'negative reviews', 'score', 'median playtime', 'genre', 
@@ -50,4 +50,7 @@ def bubble_chart(y_label='Positive reviews (%)', x_label='Price', title='Interes
                      size_max=50)
     fig.update_layout(yaxis_title=y_label, xaxis_title=x_label, title=title)
     #fig.update_traces(marker_size=15)
-    return dcc.Graph(id='bubble-chart-figure',figure=fig)
+
+    g = dcc.Graph(id='bubble-chart-figure',figure=fig)
+    a = alert(5)
+    return html.Div([a, g])

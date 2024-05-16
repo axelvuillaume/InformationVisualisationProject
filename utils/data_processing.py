@@ -266,8 +266,6 @@ def make_file(columns, per_things, is_done):
         print(f"\t>>>>>>>>>><<<<<<<<<<\n\t\tAn exception ocurred -- make_file:\n\t\t{e}\n\t>>>>>>>>>><<<<<<<<<<")
 
 def get_player_information_from_api(player_ids):
-    # TODO: (if time left) this api call works with up to 100 steamids at once, 
-    # so we could potentially get all friends in one go and save some api calls
     player_info_list = []
     player_ids_chunks = [player_ids[i:i+100] for i in range(0, len(player_ids), 100)]
     for chunk in player_ids_chunks:

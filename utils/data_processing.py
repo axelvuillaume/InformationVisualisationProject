@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 
 all_datasets = ["categories", "cleaned", "full_audio", "genres", "supported_audio"]
+API_KEY = "E145AF167FA00841A4A2956EEEBEA929"
 
 # get_file_name_group_by(per_thing)
 #   get_file_name_group_by will generate a file name for the grouped_by CSV-files.
@@ -269,11 +270,11 @@ def get_player_information_from_api(player_ids):
     player_info_list = []
     player_ids_chunks = [player_ids[i:i+100] for i in range(0, len(player_ids), 100)]
     for chunk in player_ids_chunks:
-        api_url = f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=5E613902A6191613402845D8EDD65A1C&steamids={','.join(chunk)}&format=json"
+        api_url = f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={API_KEY}&steamids={','.join(chunk)}&format=json"
         try:
             response = requests.get(api_url)
             if response.status_code == 200:
-                # example json output can be found here: https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=5E613902A6191613402845D8EDD65A1C&steamids=76561198222609456&format=json
+                # example json output can be found here: https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={API_KEY}&steamids=76561198222609456&format=json
                 data = response.json()
                 players_info = data['response']['players']
 
@@ -289,7 +290,7 @@ def get_player_information_from_api(player_ids):
 
 def get_friends_list_from_api(player_id):
     print("Getting friends from API")
-    api_url = f"https://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=5E613902A6191613402845D8EDD65A1C&steamid={player_id}&relationship=friend&format=json"
+    api_url = f"https://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={API_KEY}&steamid={player_id}&relationship=friend&format=json"
 
     try:
         response = requests.get(api_url)
@@ -315,7 +316,7 @@ def get_friends_list_from_api(player_id):
 
 def get_game_list_from_api(player_id):
     print("Getting games from API")
-    api_url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=5E613902A6191613402845D8EDD65A1C&steamid={player_id}&format=json"
+    api_url = f"https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={API_KEY}&steamid={player_id}&format=json"
 
     try:
         response = requests.get(api_url)
@@ -332,6 +333,28 @@ def get_game_list_from_api(player_id):
             return games_df
         else:
             print(f"Error: {response.status_code} - {response.text}")
+            return None
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+    
+def get_achievements_for_game(player_id, app_id):
+    print(f"Getting achievements for {app_id} from API")
+    api_url = f"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid={app_id}&key={API_KEY}&steamid={player_id}&format=json&l=en"
+    global_achievements_url = f"https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid={app_id}&format=json"
+    
+    try:
+        response = requests.get(api_url)
+        response_global = requests.get(global_achievements_url)
+        if response.status_code == 200 and response_global.status_code == 200:
+            data = response.json()
+            data_global = response_global.json()
+            game_name = data['playerstats']['gameName']
+            achievements = data['playerstats']['achievements']
+            global_achievements = data_global['achievementpercentages']['achievements']
+            return {'name': game_name, 'achievements': achievements, 'global_achievements': global_achievements}
+        else:
+            print(f"Error: {response.status_code} - {response.text}") if response.status_code != 200 else print(f"Error: {response_global.status_code} - {response_global.text}")
             return None
     except Exception as e:
         print(f"Error: {e}")

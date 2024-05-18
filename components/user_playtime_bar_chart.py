@@ -32,7 +32,7 @@ def playtime_per_genre(genres_amount=4, games_amount=10):
     if(games_amount > 0):
         games = games.head(games_amount)
 
-    fig = px.bar(games, x="genres", y="playtime_forever", color="genres", text="name", title="User Playtime Chart")
+    fig = px.bar(games, x="genres", y="playtime_forever", custom_data=["app_id"], color="genres", text="name", title="User Playtime Chart")
     fig.update_layout(yaxis_title="Playtime (hours)", xaxis_title="Genre")
 
     g =  dcc.Graph(id='playtime-bar-chart-figure',figure=fig)

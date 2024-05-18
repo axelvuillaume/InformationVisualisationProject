@@ -128,7 +128,7 @@ h1 {
 
 .wrapperP_four {
   grid-column: 1/4;
-  grid-row: 5;
+  grid-row: 6;
 }
 
 .wrapperP_five {
@@ -141,4 +141,9 @@ h1 {
   grid-column: 4 / 5;
   grid-row-start: 4;
   grid-row-end: 6;
+}
+
+.wrapperP_seven {
+  grid-column: 1/4;
+  grid-row: 5;
 }

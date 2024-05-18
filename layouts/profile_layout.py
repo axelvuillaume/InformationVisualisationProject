@@ -141,4 +141,5 @@ def playtime_slider(_):
 def display_click_data(clickData):
     # 'x' key of the clickData contains the genre name
     genre_name = clickData['points'][0]['x'] if clickData else None
+    print(clickData['points'][0]['customdata'][0])
     return playtime_games_per_genre(genre_name)

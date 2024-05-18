@@ -29,8 +29,6 @@ def generate_profile_layout():
                 dcc.Link('Profile', href='/profile', id='profile-link', className='button')
         ], className='button-container wrapperP_one',style={'width': '100%'} ),
 
-            
-            
             html.Div(
                 className="component-container wrapperP_two",
                 id='',
@@ -64,24 +62,10 @@ def generate_profile_layout():
                     html.Div(
                         style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'flex-start', 'align-items': 'center'},
                         children=[
-                            html.H4("Game Amount: ", style={'color': 'white'}),
+                            html.H5("Game Amount: ", style={'color': 'white'}),
                             html.Div(
                                 id = 'user-game-slider',
                                 style={'width': '80%', 'margin-top': '1em'}
-                            )
-                        ]
-                    ),
-                    # TODO: check if we need the genre slider else remove
-                    html.Div(
-                        style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'flex-start', 'align-items': 'center'},
-                        children=[
-                            html.H4("Genre Amount: ", style={'color': 'white'}),
-                            html.Div(
-                                id = 'genre-slider',
-                                style={'width': '80%', 'margin-top': '1em'},
-                                children=[
-                                    genre_slider()
-                                ]
                             )
                         ]
                     ),
@@ -92,6 +76,7 @@ def generate_profile_layout():
                className="component-container wrapperP_six",
                id = 'detail-playtime-chart',
                children=[
+                   
                ],
                 #scrollbar functionality but with fixed height
                 #style={'overflowY': 'scroll', 'height': '100vh'}
@@ -101,6 +86,7 @@ def generate_profile_layout():
                className="component-container  wrapperP_seven",
                id = 'achievement_timeline_chart',
                children=[
+                   achievement_chart(None, None)
                ],
             ),
         ],
@@ -131,10 +117,9 @@ def bubble(_):
     Output('user-playtime-chart', "children"),
     Input('steam-id-store', 'data'),
     Input("user-playtime-slider", "value"),
-    Input("genre-slider", "value")
 )
-def playtime_chart(_, games_slider_value, genre_slider_value):
-    return playtime_per_genre(games_amount=games_slider_value, genres_amount=genre_slider_value)
+def playtime_chart(_, games_slider_value):
+    return playtime_per_genre(games_amount=games_slider_value)
 
 @callback(
     Output('user-game-slider', "children"),

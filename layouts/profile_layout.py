@@ -12,6 +12,7 @@ from components.gauge import gauge_percentages
 from components.map import graph_map
 from components.sunburst import graph_sunburst
 from components.alert import alert
+from components.achievement_chart import achievement_chart
 
 from utils.load_data import cleaned_games, categories, genres, current_user, supported_languages, full_audio_languages
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
@@ -95,6 +96,13 @@ def generate_profile_layout():
                 #scrollbar functionality but with fixed height
                 #style={'overflowY': 'scroll', 'height': '100vh'}
             ),
+
+            html.Div(
+               className="component-container",
+               id = 'achievement_timeline_chart',
+               children=[
+               ],
+            ),
         ],
     )
     
@@ -141,5 +149,11 @@ def playtime_slider(_):
 def display_click_data(clickData):
     # 'x' key of the clickData contains the genre name
     genre_name = clickData['points'][0]['x'] if clickData else None
-    print(clickData['points'][0]['customdata'][0])
     return playtime_games_per_genre(genre_name)
+
+@callback(
+    Output('achievement_timeline_chart', 'children'),
+    Input('playtime-bar-chart-figure', 'clickData'))
+def display_achievement_chart(clickData):
+    game_id = clickData['points'][0]['customdata'][0] if clickData else None
+    return achievement_chart(game_id)

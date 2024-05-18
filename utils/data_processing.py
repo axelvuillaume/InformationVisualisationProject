@@ -340,7 +340,7 @@ def get_game_list_from_api(player_id):
     
 def get_achievements_for_game(player_id, app_id):
     print(f"Getting achievements for {app_id} from API")
-    api_url = f"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid={app_id}&key={API_KEY}&steamid={player_id}&format=json"
+    api_url = f"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid={app_id}&key={API_KEY}&steamid={player_id}&format=json&l=en"
 
     try:
         response = requests.get(api_url)

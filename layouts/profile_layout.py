@@ -98,7 +98,7 @@ def generate_profile_layout():
             ),
 
             html.Div(
-               className="component-container",
+               className="component-container  wrapperP_seven",
                id = 'achievement_timeline_chart',
                children=[
                ],
@@ -156,4 +156,4 @@ def display_click_data(clickData):
     Input('playtime-bar-chart-figure', 'clickData'))
 def display_achievement_chart(clickData):
     game_id = clickData['points'][0]['customdata'][0] if clickData else None
-    return achievement_chart(game_id)
+    return achievement_chart(game_id, game_name=clickData['points'][0]['text'])

@@ -5,6 +5,7 @@ import plotly.express as px
 from utils.load_data import cleaned_games, genres, current_user
 from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api, get_achievements_for_game
 from components.alert import alert
+from datetime import datetime
 
 def playtime_per_genre(genres_amount=4, games_amount=10):
     games = current_user.games
@@ -85,7 +86,13 @@ def playtime_games_per_genre(genre_name):
             style={'color': 'white', 'padding': '1em'}
             )
 
-def achievement_chart(app_id):
+def achievement_chart(app_id, game_name):
     if(app_id is not None):
-        print([achievement['unlocktime'] for achievement in get_achievements_for_game(current_user.steamid , app_id)['achievements'] if achievement['achieved'] == 1])
+        achievement_list = [{"name": achievement['name'], "unlocktime": achievement['unlocktime'], "unlocktime_datetime": datetime.fromtimestamp(achievement['unlocktime']).strftime('%d/%m/%y %H:%M') } for achievement in get_achievements_for_game(current_user.steamid , app_id)['achievements'] if achievement['achieved'] == 1]
+        achievement_df = pd.DataFrame(achievement_list)
+        achievement_df.sort_values('unlocktime', ascending=True, inplace=True)
+        achievement_df['achievement_index'] = range(1, len(achievement_df) + 1)
+        fig = px.line(achievement_df, x='unlocktime_datetime', y='achievement_index', markers=True)
+        fig.update_layout(yaxis_title="Achievement Nr.", xaxis_title="Unlock Time", title=f"Achievement timeline for {game_name}")
+        return dcc.Graph(id='achievement-chart-figure', figure=fig)
     return None

@@ -341,16 +341,20 @@ def get_game_list_from_api(player_id):
 def get_achievements_for_game(player_id, app_id):
     print(f"Getting achievements for {app_id} from API")
     api_url = f"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid={app_id}&key={API_KEY}&steamid={player_id}&format=json&l=en"
-
+    global_achievements_url = f"https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid={app_id}&format=json"
+    
     try:
         response = requests.get(api_url)
-        if response.status_code == 200:
+        response_global = requests.get(global_achievements_url)
+        if response.status_code == 200 and response_global.status_code == 200:
             data = response.json()
+            data_global = response_global.json()
             game_name = data['playerstats']['gameName']
             achievements = data['playerstats']['achievements']
-            return {'name': game_name, 'achievements': achievements}
+            global_achievements = data_global['achievementpercentages']['achievements']
+            return {'name': game_name, 'achievements': achievements, 'global_achievements': global_achievements}
         else:
-            print(f"Error: {response.status_code} - {response.text}")
+            print(f"Error: {response.status_code} - {response.text}") if response.status_code != 200 else print(f"Error: {response_global.status_code} - {response_global.text}")
             return None
     except Exception as e:
         print(f"Error: {e}")

@@ -22,9 +22,9 @@ global_style = ['assets/styles.css']
 # Define the app layout
 app.layout = html.Div(
     id='layout',
-    children=[
-        dcc.Location(id='url', refresh=False),
-        html.Div(id='page-content')]  
+    children=[dcc.Location(id='url', refresh=False),
+              html.Div(id='page-content'),
+              dcc.Location(id='redirect-home', pathname='/home', refresh=True)]
 )
 
 # Define callback to update page content based on URL

@@ -7,6 +7,7 @@ from components.top_games_chart import generate_top_games_chart
 
 from layouts.home_layout import generate_home_layout
 from layouts.profile_layout import generate_profile_layout
+from layouts.recommender_layout import generate_recommender_layout
 
 from utils.load_data import cleaned_games, categories, genres, supported_languages, full_audio_languages
 
@@ -36,6 +37,8 @@ def display_page(pathname):
         return generate_home_layout()
     if pathname == '/profile':
         return generate_profile_layout()
+    if pathname == '/recommender':
+        return generate_recommender_layout()
     # Add more pages as needed
     else:
         return '404 - Page not found'

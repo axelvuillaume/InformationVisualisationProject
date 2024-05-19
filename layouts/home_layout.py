@@ -28,7 +28,8 @@ def generate_home_layout():
             html.Div([
             html.H1('STEAM DASHBOARD'),
                 dcc.Link('Home', href='/home', id='home-link', className='button', style={'margin-right': '0.5em'}),
-                dcc.Link('Profile', href='/profile', id='profile-link', className='button')
+                dcc.Link('Profile', href='/profile', id='profile-link', className='button', style={'margin-right': '0.5em'}),
+                dcc.Link('Recommender', href='/recommender', id='recommender-link', className='button'),
         ], className='button-container one'),
 
             
@@ -93,12 +94,14 @@ def generate_home_layout():
     
 @callback(Output('home-link', 'className'),
           Output('profile-link', 'className'),
+          Output('recommender-link', 'className'),
           Input('url', 'pathname')
          )
 def update_links(pathname):
     home_class = 'button active' if pathname == '/home' else 'button'
     profile_class = 'button active' if pathname == '/profile' else 'button'
-    return home_class, profile_class
+    recommender_class = 'button active' if pathname == '/recommender' else 'button'
+    return home_class, profile_class, recommender_class
 
 # @callback(Output("0-alert", "is_open"),
 #                   [Input("0-toggle", "n_clicks")],

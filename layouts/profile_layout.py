@@ -1,21 +1,10 @@
-from dash import Dash, dcc, html, Input, Output, callback, State
-import json
-import pandas as pd
-import plotly.express as px
-from components.top_games_chart import generate_top_games_chart
+from dash import dcc, html, Input, Output, callback, State
 from components.steam_id import steam_id_component
-from components.user_vs_friends_panel import generate_user_vs_friends_panel
-from components.bubble_chart import bubble_chart
 from components.user_playtime_bar_chart import playtime_per_genre, playtime_games_per_genre
-from components.slider import steam_game_slider, genre_slider
-from components.gauge import gauge_percentages
-from components.map import graph_map
-from components.sunburst import graph_sunburst
-from components.alert import alert
+from components.slider import steam_game_slider
 from components.achievement_chart import achievement_chart
 
-from utils.load_data import cleaned_games, categories, genres, current_user, supported_languages, full_audio_languages
-from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_game_list_from_api
+from utils.load_data import current_user
 
 def generate_profile_layout():
     return html.Div(
@@ -23,12 +12,6 @@ def generate_profile_layout():
         id='main-canva',
         style={'padding': '1em', 'box-sizing':'border-box'},
         children=[
-            html.Div([
-            html.H1('PROFILE STEAM DASHBOARD'),
-                dcc.Link('Home', href='/home', id='home-link', className='button', style={'margin-right': '0.5em'}),
-                dcc.Link('Profile', href='/profile', id='profile-link', className='button')
-        ], className='button-container wrapperP_one',style={'width': '100%'} ),
-
             html.Div(
                 className="component-container wrapperP_two",
                 id='',
@@ -37,20 +20,13 @@ def generate_profile_layout():
                 ]
             ),
 
-            html.Div(
-                className="component-container wrapperP_three",
-                id='user_vs_friends_panel',
-                children=[alert(4),
-                          generate_user_vs_friends_panel()
-                         ]
-            ),
-
-            html.Div(
-                className="component-container wrapperP_four",
-                id = 'bubble-chart',
-                children=[#bubble(n=8)
-                         ]
-            ),
+            #html.Div(
+            #    className="component-container wrapperP_two",
+            #    id='',
+            #    children=[
+            #        steam_id_component(),
+            #    ]
+            #),
 
             html.Div(
                 className="component-container wrapperP_five",
@@ -94,24 +70,6 @@ def generate_profile_layout():
     
 # Note: Most callbacks are activated once steam-id-store is changed, 
 # this is a dcc.Store component in the steam_id.py file (which is updated everytime the user submits a new steamid)
-
-@callback(
-    Output('steam-id-store', 'data'), 
-    Input("submit-steamid", "n_clicks"),
-    State("steam-id", "value"),
-    running=[(Output("submit-steamid", "disabled"), True, False)] 
-    #While callback is running -> button property disabled = True; when done, disabled = False
-)
-def update_current_user(_, steamid):
-    current_user.steamid = steamid
-    return steamid
-
-@callback(
-    Output('bubble-chart', "children"),
-    Input('steam-id-store', 'data')
-)
-def bubble(_):
-    return bubble_chart()
 
 @callback(
     Output('user-playtime-chart', "children"),

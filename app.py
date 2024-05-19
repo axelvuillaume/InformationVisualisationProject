@@ -3,13 +3,9 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
 
-from components.top_games_chart import generate_top_games_chart
-
 from layouts.home_layout import generate_home_layout
 from layouts.profile_layout import generate_profile_layout
 from layouts.recommender_layout import generate_recommender_layout
-
-from utils.load_data import cleaned_games, categories, genres, supported_languages, full_audio_languages
 
 import dash_bootstrap_components as dbc
 
@@ -22,9 +18,9 @@ global_style = ['assets/styles.css']
 # Define the app layout
 app.layout = html.Div(
     id='layout',
-    children=[
-        dcc.Location(id='url', refresh=False),
-        html.Div(id='page-content')]  
+    children=[dcc.Location(id='url', refresh=False),
+              html.Div(id='page-content'),
+              dcc.Location(id='redirect-home', pathname='/home', refresh=True)]
 )
 
 # Define callback to update page content based on URL

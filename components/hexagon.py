@@ -1,12 +1,9 @@
 from dash import dcc
 from dash import html, callback, Output, Input
 from utils.load_data import current_user
-from utils.data_processing import get_game_list_from_api
-from utils.data_processing import get_n_best_gen_or_cat
 from utils.data_processing import get_n_best_gen_or_cat_by_hours
 import plotly.graph_objs as go
 import numpy as np
-import random
 
 # Generates a hexagon graph
 # input_data: dictionary with the data to be displayed in the hexagon
@@ -39,16 +36,15 @@ def hexagon_generic(input_data, colors, names, id):
     datas += polygon_spider_lines
 
     #Create the layout for the graph
-    layout = go.Layout(
-        xaxis=dict(visible=False, range=[-1.6, 1.6], fixedrange=True),  # Hide x-axis
-        yaxis=dict(visible=False, range=[-1.6, 1.6], fixedrange=True),  # Hide y-axis
-        showlegend=False,  #Hide legend
-        width=400,  #Set width of the graph
-        height=400,  #Set height of the graph
-        margin=dict(l=1, r=1, t=1, b=1),
-        dragmode='pan',  #Disable zoom and pan
-        clickmode='event' 
-    )
+    layout = go.Layout(xaxis=dict(visible=False, range=[-1.6, 1.6], fixedrange=True),    # Hide x-axis
+                       yaxis=dict(visible=False, range=[-1.6, 1.6], fixedrange=True),    # Hide y-axis
+                       showlegend=False,                                                 # Hide legend
+                       width=400,                                                        # Set width of the graph
+                       height=400,                                                       # Set height of the graph
+                       margin=dict(l=1, r=1, t=1, b=1),
+                       dragmode='pan',                                                   # Disable zoom and pan
+                       clickmode='event'
+                      )
 
     fig = go.Figure(data=datas, layout=layout) 
 
@@ -78,16 +74,15 @@ def hexagon_old(categories, genres, category_select, n):
     lines = get_middle_lines(n, [1] * n)
 
     # Create the layout for the graph
-    layout = go.Layout(
-        xaxis=dict(visible=False, range=[-1.5, 1.5], fixedrange=True),  # Hide x-axis
-        yaxis=dict(visible=False, range=[-1.5, 1.5], fixedrange=True),  # Hide y-axis
-        showlegend=False,  #Hide legend
-        width=400,  #Set width of the graph
-        height=400,  #Set height of the graph
-        margin=dict(l=1, r=1, t=1, b=1),
-        dragmode='pan',  #Disable zoom and pan
-        clickmode='event'
-    )
+    layout = go.Layout(xaxis=dict(visible=False, range=[-1.5, 1.5], fixedrange=True),    # Hide x-axis
+                       yaxis=dict(visible=False, range=[-1.5, 1.5], fixedrange=True),    # Hide y-axis
+                       showlegend=False,                                                 # Hide legend
+                       width=400,                                                        # Set width of the graph
+                       height=400,                                                       # Set height of the graph
+                       margin=dict(l=1, r=1, t=1, b=1),
+                       dragmode='pan',                                                   # Disable zoom and pan
+                       clickmode='event'
+                      )
 
     # Create the figure containing the trace and layout
     fig = go.Figure(data=[polygon_back, polygon_top, text_trace] + lines , layout=layout) 
@@ -111,15 +106,15 @@ def get_polygon(n, center_distances, color, opacity, name = None):
 
     x, y = get_polygon_coords(n, center_distances)
     #Create a Scatter trace for the polygon
-    polygon_trace = go.Scatter(
-        x=x + [x[0]], 
-        y=y + [y[0]],
-        mode='lines',
-        line=dict(color=color,  width=0.75),
-        fill='toself',
-        fillcolor=fillcolor,
-        hoverinfo='none'
-    )
+    polygon_trace = go.Scatter(x=x + [x[0]],
+                               y=y + [y[0]],
+                               mode='lines',
+                               line=dict(color=color,  width=0.75),
+                               fill='toself',
+                               fillcolor=fillcolor,
+                               hoverinfo='none'
+                              )
+
     return polygon_trace
 
 def get_middle_lines(n, center_distances,  color='white'):
@@ -129,13 +124,12 @@ def get_middle_lines(n, center_distances,  color='white'):
     
     line_traces = []
     for i in range(n):
-        line_trace = go.Scatter(
-            x=[center_x, x[i]],
-            y=[center_y, y[i]],
-            mode='lines',
-            line=dict(color=color, width=1),
-            hoverinfo='none'
-        )
+        line_trace = go.Scatter(x=[center_x, x[i]],
+                                y=[center_y, y[i]],
+                                mode='lines',
+                                line=dict(color=color, width=1),
+                                hoverinfo='none'
+                               )
         line_traces.append(line_trace)
     
     return line_traces
@@ -146,16 +140,15 @@ def add_text_labels(labels, user_values):
     x = [i * 1.3 for i in x]
     y = [i * 1.1 for i in y]
 
-    text_trace = go.Scatter(
-        x=x,
-        y=y,
-        mode='text',
-        text=labels,
-        textposition='middle center',
-        textfont=dict(size=10, color='black'),
-        hoverinfo='text',
-        hovertext=[f'{label}<br>My hours: {values}<br>Friends hours avg:' for label, values in zip(labels, user_values)]
-    )
+    text_trace = go.Scatter(x=x,
+                            y=y,
+                            mode='text',
+                            text=labels,
+                            textposition='middle center',
+                            textfont=dict(size=10, color='black'),
+                            hoverinfo='text',
+                            hovertext=[f'{label}<br>My hours: {values}<br>Friends hours avg:' for label, values in zip(labels, user_values)]
+                           )
     return text_trace
 
 def add_text_labels_generic(labels, user_values, colors, names):
@@ -172,18 +165,14 @@ def add_text_labels_generic(labels, user_values, colors, names):
             line += f'<span style="color:{colors[j]}">&#11044;</span>{names[j]}: {user_values[i][j]}<br>'
         hvText.append(line)
 
-
     # Create a Scatter trace for the text labels
-    text_trace = go.Scatter(
-        x=x,
-        y=y,
-        mode='text',
-        text=labels,
-        textposition='middle center',
-        textfont=dict(size=10, color='black'),
-        hoverinfo='text',
-        hovertext=hvText
-    )
+    text_trace = go.Scatter(x=x,
+                            y=y,
+                            mode='text',
+                            text=labels,
+                            textposition='middle center',
+                            textfont=dict(size=10, color='black'),
+                            hoverinfo='text',
+                            hovertext=hvText
+                           )
     return text_trace
-
-

@@ -12,19 +12,17 @@ graph_dict = {0: "A bar  chart given the Top 10 games based on average playtime.
               6: "Barchart showing the playtime in hours for the amount of genres shown.\nUse the slide beneath to change the amount of games or amount of genres shown."
              }
 
-@callback(
-    Output({'type': 'alert_message', 'alert-id': MATCH}, "is_open"),
-    Input({'type': 'alert_button', 'alert-id': MATCH}, "n_clicks"),
-    State({'type': 'alert_message', 'alert-id': MATCH}, 'is_open'),
-    prevent_initial_call=True,
-)
+@callback(Output({'type': 'alert_message', 'alert-id': MATCH}, "is_open"),
+          Input({'type': 'alert_button', 'alert-id': MATCH}, "n_clicks"),
+          State({'type': 'alert_message', 'alert-id': MATCH}, 'is_open'),
+          prevent_initial_call=True,
+         )
 def toggle_alert(_, is_open):
     return not is_open #return opposite of current is_open state
 
-@callback(
-    Output({'type': 'alert_button', 'alert-id': MATCH}, "style"),
-    Input({'type': 'alert_message', 'alert-id': MATCH}, "is_open")
-)
+@callback(Output({'type': 'alert_button', 'alert-id': MATCH}, "style"),
+          Input({'type': 'alert_message', 'alert-id': MATCH}, "is_open")
+         )
 def toggle_button_hide(is_open):
     return {'display':'none'} if is_open else {'display':'block'} # if alert message is open, hide the button
 
@@ -33,8 +31,13 @@ def alert(unique_id):
     button_label = "?"
     alert_message = get_message(unique_id)
 
-    layout = html.Div([dbc.Button(button_label, id={"type" : "alert_button", "alert-id": alert_id}, n_clicks=0, className=f"mb-1 alert-button{unique_id}"),
-                       dbc.Alert(alert_message, id={"type" : "alert_message", "alert-id": alert_id}, is_open=False, dismissable=True)
+    layout = html.Div([dbc.Button(button_label, id={"type" : "alert_button", "alert-id": alert_id},
+                                  n_clicks=0,
+                                  className=f"mb-1 alert-button{unique_id}"),
+                       dbc.Alert(alert_message,
+                                 id={"type" : "alert_message", "alert-id": alert_id},
+                                 is_open=False,
+                                 dismissable=True)
                        ])
 
     return layout

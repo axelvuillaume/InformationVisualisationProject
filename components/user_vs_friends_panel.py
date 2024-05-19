@@ -1,9 +1,8 @@
-from dash import Dash, dcc, html, Input, Output, callback, State
-import plotly.graph_objs as go
+from dash import dcc, html, Input, Output, callback, State
 
-from components.hexagon import hexagon_old, hexagon_generic
+from components.hexagon import hexagon_generic
 from components.top_games_for_UVFpanel import generate_topgames
-from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_all_gen_or_cat, get_game_list_from_api, get_all_gen_or_cat_by_hours, get_games_and_name_of_specific_gen_or_cat
+from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_all_gen_or_cat, get_all_gen_or_cat_by_hours, get_games_and_name_of_specific_gen_or_cat
 from utils.load_data import cleaned_games, categories, genres, current_user
 from utils.classes.steam_user import Steam_User
 
@@ -76,12 +75,11 @@ def generate_user_vs_friends_panel():
 
 
 
-@callback(
-    Output('hexagonuser', "children"),
-    [Input('steam-id-store', 'data'),
-     Input('side-selector', 'value'),
-     Input('chart-type', 'value')]
-)
+@callback(Output('hexagonuser', "children"),
+          [Input('steam-id-store', 'data'),
+           Input('side-selector', 'value'),
+           Input('chart-type', 'value')
+          ])
 def compute_hexagon_user(_, n, category_select):
 
     games = current_user.games
@@ -106,13 +104,12 @@ def compute_hexagon_user(_, n, category_select):
 
     return hexagon_generic(ranking, colors, names, 'sub-hexagon-user')
 
-@callback(
-    Output('hexagonfriend', "children"),
-    [Input('steam-id-store', 'data'),
-     Input('current-friend-id-store', 'data'),
-     Input('side-selector', 'value'),
-     Input('chart-type', 'value')]
-)
+@callback(Output('hexagonfriend', "children"),
+          [Input('steam-id-store', 'data'),
+           Input('current-friend-id-store', 'data'),
+           Input('side-selector', 'value'),
+           Input('chart-type', 'value')
+          ])
 def compute_hexagon_friend(_,__, n, category_select):
 
     if(current_friend_UVFcompo is None):
@@ -143,12 +140,12 @@ def compute_hexagon_friend(_,__, n, category_select):
 
     return hexagon_generic(ranking, colors, names, 'sub-hexagon-friend')
 
-@callback(
-    [Output('friend-selector', "options"),
-    Output('friend-selector', "value"),
-    Output('friend-selector', "style")],
-    [Input('steam-id-store', 'data')]
-)
+@callback([Output('friend-selector', "options"),
+                 Output('friend-selector', "value"),
+                 Output('friend-selector', "style")
+                ],
+          [Input('steam-id-store', 'data')]
+         )
 def set_friend_selector(_):
     if (current_user.friends is None or current_user.friends.empty):
         return [], None, {'width': 'auto', 'align-self': 'center', 'padding-left': '0.5em', 'padding-right': '0.5em'}
@@ -160,10 +157,9 @@ def set_friend_selector(_):
 
     return options, default_value, {'width': dropdown_width ,'align-self': 'center', 'padding-left': '0.5em', 'padding-right': '0.5em'}
 
-@callback(
-    Output('current-friend-id-store', 'data'),
-    Input('friend-selector', "value")
-)
+@callback(Output('current-friend-id-store', 'data'),
+          Input('friend-selector', "value")
+         )
 def update_current_friend(friend_id):
     global current_friend_UVFcompo
     if(current_friend_UVFcompo is None and friend_id is not None):
@@ -175,12 +171,12 @@ def update_current_friend(friend_id):
 
     return friend_id
 
-@callback(
-    Output('clicked-gen-cat-store', 'data'),
-    [Input('sub-hexagon-friend', 'clickData'),
-    Input('sub-hexagon-user', 'clickData')],
-    prevent_initial_call=True
-)
+@callback(Output('clicked-gen-cat-store', 'data'),
+          [Input('sub-hexagon-friend', 'clickData'),
+           Input('sub-hexagon-user', 'clickData')
+          ],
+          prevent_initial_call=True
+         )
 def update_clicked_gen_cat(clickData_friend, clickData_user):
     if clickData_friend:
         # Extract the label clicked from the clickData
@@ -193,12 +189,12 @@ def update_clicked_gen_cat(clickData_friend, clickData_user):
     else:
         return None
     
-@callback(
-    Output('centralplot', "children"),
-    [Input('clicked-gen-cat-store', 'data'),
-    Input('chart-type', 'value')],
-    prevent_initial_call=True
-)
+@callback(Output('centralplot', "children"),
+          [Input('clicked-gen-cat-store', 'data'),
+           Input('chart-type', 'value')
+          ],
+          prevent_initial_call=True
+         )
 def centralplot_handler(gen_cat_clicked, category_select):
 
     if gen_cat_clicked is None:

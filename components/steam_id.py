@@ -1,9 +1,6 @@
-from dash import Dash, dcc, html, Input, Output, callback, State
+from dash import dcc, html, Input, Output, callback, State
 
-from components.hexagon import hexagon_old, hexagon_generic
-from utils.data_processing import get_n_best_gen_or_cat_by_hours, get_all_gen_or_cat, get_game_list_from_api, get_all_gen_or_cat_by_hours
 from utils.load_data import categories, genres, current_user
-from utils.classes.steam_user import Steam_User
 
 def steam_id_component():
     return html.Div(children=[
@@ -46,28 +43,25 @@ def steam_id_component():
         # 'border-bottom': '1px solid grey',
     })
 
-@callback(
-    Output('steam-id-store', 'data', allow_duplicate=True), 
-    Input("submit-steamid", "n_clicks"),
-    State("steam-id", "value"),
-    running=[(Output("submit-steamid", "disabled"), True, False)],
-    prevent_initial_call=True
-    #While callback is running -> button property disabled = True; when done, disabled = False
-)
+@callback(Output('steam-id-store', 'data', allow_duplicate=True),
+          Input("submit-steamid", "n_clicks"),
+          State("steam-id", "value"),
+          running=[(Output("submit-steamid", "disabled"), True, False)],
+          prevent_initial_call=True
+          #While callback is running -> button property disabled = True; when done, disabled = False
+         )
 def update_current_user(_, steamid):
     current_user.steamid = steamid
     return steamid
 
-@callback(
-    Output('user-title', "children"),
-    Input('steam-id-store', 'data')
-)
+@callback(Output('user-title', "children"),
+          Input('steam-id-store', 'data')
+         )
 def user_title_message(_):
     return f"Welcome back, {current_user.displayname}!"
 
-@callback(
-    Output('avatar', "src"),
-    Input('steam-id-store', 'data')
-)
+@callback(Output('avatar', "src"),
+          Input('steam-id-store', 'data')
+         )
 def user_title_message(_):
     return current_user.avatar

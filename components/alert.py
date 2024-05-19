@@ -33,7 +33,7 @@ def alert(unique_id):
     button_label = "?"
     alert_message = get_message(unique_id)
 
-    layout = html.Div([dbc.Button(button_label, id={"type" : "alert_button", "alert-id": alert_id}, n_clicks=0, className="mb-1"),
+    layout = html.Div([dbc.Button(button_label, id={"type" : "alert_button", "alert-id": alert_id}, n_clicks=0, className=f"mb-1 alert-button{unique_id}"),
                        dbc.Alert(alert_message, id={"type" : "alert_message", "alert-id": alert_id}, is_open=False, dismissable=True)
                        ])
 

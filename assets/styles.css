@@ -138,7 +138,6 @@ h1 {
 
 .wrapperP_six {
   border: 1px solid #34495E;
-  margin-top: 3em;
   grid-column: 4 / 5;
   grid-row-start: 4;
   grid-row-end: 6;
@@ -147,4 +146,11 @@ h1 {
 .wrapperP_seven {
   grid-column: 1/4;
   grid-row: 5;
+}
+
+.alert-button6, .alert-button5{
+  position:absolute;
+  margin-left: 0.5em;
+  margin-top: 0.5em;
+  z-index: 1;
 }

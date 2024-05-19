@@ -78,7 +78,7 @@ def playtime_games_per_genre(genre_name):
         # fig.update_traces(textangle=0, textposition="outside", cliponaxis=False, hovertemplate="Game: %{y}<br>Playtime: %{x} hours")
         return dcc.Graph(id='detail-playtime-figure', figure=fig, style={'height': '100%'})
     else:
-        return dcc.Markdown(
-            "### Select a genre on the 'User Playtime Chart' to see the playtimes for that genre",
-            style={'color': 'white', 'padding': '1em'}
-            )
+        fig = go.Figure()
+        fig.update_layout(yaxis_title="Game", xaxis_title="Playtime (hours)", title="No genre selected")
+        return dcc.Graph(id='detail-playtime-figure', figure=fig, style={'height': '100%'})
+        # return dcc.Markdown("### Select a genre on the 'User Playtime Chart' to see the playtimes for that genre", style={'color': 'white', 'padding': '1em'})

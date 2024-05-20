@@ -32,7 +32,6 @@ def graph_comparaison():
         dcc.Graph(id='graph')
     ])
 
-# Callback pour mettre à jour le graphique en fonction des sélections des boutons radio
 @callback(Output('graph', 'figure'),
           [Input('x-axis-selector', 'value'),
            Input('y-axis-selector', 'value')

@@ -19,7 +19,7 @@ def steam_id_component():
         
             html.Div([
                 "Steam Id: ",
-                dcc.Input(id='steam-id', placeholder="Insert Steam Id", value='76561198150561997'),
+                dcc.Input(id='steam-id', placeholder="Insert Steam Id", value=current_user.steamid),
                 html.Button(id='submit-steamid', n_clicks=0, children='Submit')
             ], style={'color': 'white', 'display': 'inline-block', 'margin-left': '1em'}),
         ]),

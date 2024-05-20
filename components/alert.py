@@ -8,8 +8,13 @@ graph_dict = {0: "A bar  chart given the Top 10 games based on average playtime.
               2: "A sunburst graph showing the most popular categories of game according to average playtime. \nClick on an area to see composition.",
               3: "Geographic map showing how many games are supported for a given language.\nThe bluer the colour the more games there are.",
               4: "Spider graph showing amount of games and playtime per genre or category in comparison with the chosen friend.\n You can select a specific category or genre by clicking on the labels on the spider graph in order to compare the games and playtime of the selected genre or category with the selected friend.",
-              5: "A bubble chart showing the the players most positive genres size indicate the amount of reviews.\nx-axis:\tPrice\ny-axis:\tPercentage of the reviews that are positive.\nColour:\tGenre\nSize:\tTotal amount of reviews.",
-              6: "Barchart showing the playtime in hours for the amount of genres shown.\nUse the slide beneath to change the amount of games or amount of genres shown.",
+              5: "This bubble chart presents five recommended games to buy based on the players' most played genres. These games are selected using a custom score that factors in key aspects often considered important in video games, such as the number of positive reviews and overall popularity (total number of reviews). Each bubble's color represents a different genre, while the bubble's size reflects the total number of reviews for that game. Hover over the bubbles to see detailed information. You can select or deselect genres in the legend, or double-click to focus on a specific genre. Double-click on the chart to reset it. To filter games by price range, simply drag across the graph.",
+              6: "Stacked Barchart showing the playtime in hours for games in the user's steam library, each bar shows games within a certain genre. "
+              + "Use the slider to change the amount of games shown. "
+              + "Games appear in order of least to most playtime, which means bigger blocks start showing up on top as you increase the amount of games shown."
+              + "Clicking on a game results in an updated 'genre playtime' graph (right) and 'achievement timeline' graph (below), if they are available. You can select and deselect genres in the legend, or isolate one genre by double clicking on it. " 
+              + "To restore the graph to it's original state, double click somewhere on the graph. Alternately you can drag across the graph to view a zoomed in selection. The same actions can be done on the achievement chart. "
+              + "Hover over items to view the full details.",
               7: "linechart text"
              }
 

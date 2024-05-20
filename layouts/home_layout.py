@@ -65,6 +65,7 @@ def generate_home_layout():
                 className="component-container six",
                 id='graph_comparaison',
                 children=[
+                    alert(7),
                     graph_comparaison()
             ]
             ),

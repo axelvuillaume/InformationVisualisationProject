@@ -15,11 +15,11 @@ def generate_user_vs_friends_panel():
             dcc.Store(id='clicked-gen-cat-store'),
             html.Div(
                 children=[
-                    html.H2("Personal", style={'color': 'white'}),
+                    html.H3("Personal", style={'color': 'white'}),
                     html.Div(
                         id='hexagon-menu',
                         children=[
-                            html.H4("Number of sides:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
+                            html.H6("Number of sides:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em','padding-top': '1.2em'}),
                             dcc.Dropdown(
                                 id='side-selector',
                                 options=[
@@ -30,7 +30,7 @@ def generate_user_vs_friends_panel():
                                 searchable=False,
                                 style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
                             ),
-                            html.H4("Types:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
+                            html.H6("Types:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em','padding-top': '1.2em'}),
                             dcc.RadioItems(
                                 id='chart-type',
                                 options=[
@@ -42,20 +42,20 @@ def generate_user_vs_friends_panel():
                                 style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
                             )
                         ],
-                        style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between' , 'width': '400px','background-color': '#171D25'}
+                        style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between' , 'width': '400px','background-color': '#171D25','height':'4em'}
                     ),
                     html.Div("Loading...", id='hexagonuser', style={'color': 'white'})
                 ],
                 style={'display': 'flex', 'flex-direction': 'column','width': '400px'}
             ),
-            html.Div("Click on a hexagon to see the top games", id='centralplot', style={'display': 'flex', 'flex-direction': 'column','color': 'white','background-color': '#171D25','width':'50%','height':'auto','padding':'0.5em'}),
+            html.Div("Click on a label on the spider graphs to see the top games", id='centralplot', style={'display': 'flex', 'flex-direction': 'column','color': 'white','background-color': '#171D25','width':'50%','height':'auto','padding':'0.5em'}),
             html.Div(
                 children=[
-                    html.H2("Friends", style={'color': 'white'}),
+                    html.H3("Friends", style={'color': 'white'}),
                     html.Div(
                         id='friend-menu',
                         children=[
-                            html.H4("Select friend:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em'}),
+                            html.H6("Select friend:", style={'color': 'white','padding-left': '0.5em','padding-right': '0.5em','padding-top': '1.2em'}),
                             dcc.Dropdown(
                                 id='friend-selector',
                                     clearable=False,
@@ -63,7 +63,7 @@ def generate_user_vs_friends_panel():
                                     style={'width': 'auto','align-self': 'center','padding-left': '0.5em','padding-right': '0.5em'}
                             )
                         ],
-                        style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between' , 'width': '400px','background-color': '#171D25'}
+                        style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between' , 'width': '400px','background-color': '#171D25','height':'4em'}
                     ),
                     html.Div("Loading...", id='hexagonfriend', style={'color': 'white'})
                 ],
@@ -198,7 +198,7 @@ def update_clicked_gen_cat(clickData_friend, clickData_user):
 def centralplot_handler(gen_cat_clicked, category_select):
 
     if gen_cat_clicked is None:
-        return html.Div("Click on a hexagon to see the top games", style={'color': 'white'})
+        return html.Div("Click on a label on the spider graphs to see the top games", style={'color': 'white'})
     games = current_user.games
     if (games is None or games.empty) :
         return html.Div("No data available for this user", style={'color': 'white'})
@@ -216,7 +216,7 @@ def centralplot_handler(gen_cat_clicked, category_select):
     n = 5
     return html.Div(
         children=[
-            html.H2(f"Comparison of your {n} favourite games for {gen_cat_clicked}", style={'color': 'white', 'text-align': 'center'}),
+            html.H3(f"Comparison of your {n} favourite games for {gen_cat_clicked}", style={'color': 'white', 'text-align': 'center','height':'auto'}),
             html.Div(
                 children=[
                     generate_topgames(df1, '#1b3b80',n),
@@ -224,7 +224,7 @@ def centralplot_handler(gen_cat_clicked, category_select):
                 ],
                 style={'display': 'flex', 'flex-direction': 'row', 'justify-content': 'space-between'}
             )
-        ], style={'display': 'flex', 'flex-direction': 'column','width': '100%'}
+        ], style={'display': 'flex', 'flex-direction': 'column','width': '100%','justify-content': 'space-between'}
     )
 
 #def compute_hexagon(_, n, category_select):

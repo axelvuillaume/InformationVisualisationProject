@@ -47,6 +47,7 @@ def update_graph(hide_single_player, seuil_minimum):
         merged_data_filtered,
         path=['categories', 'developers', 'name'],
         values='average_playtime_forever',
+        title="Most popular categories of games",
     )
 
     return fig
@@ -55,4 +56,4 @@ def update_graph(hide_single_player, seuil_minimum):
           [Input('seuil_slider', 'value')]
          )
 def update_slider_output(seuil_minimum):
-    return f'Seuil minimum : {seuil_minimum}'
+    return f'Average playtime : {seuil_minimum}'

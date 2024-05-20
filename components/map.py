@@ -124,17 +124,31 @@ supported_languages['Pays'] = supported_languages['supported_languages'].map(lan
 counts = supported_languages['Pays'].value_counts().reset_index()
 counts.columns = ['Pays', 'number']
 
+# Fusionner les données pour lier les jeux avec leur pays et le temps de jeu
+games_with_countries = pd.merge(supported_languages, cleaned_games, on='app_id')
+
+# Trouver le jeu le plus joué par pays
+top_games = games_with_countries.loc[games_with_countries.groupby('Pays')['average_playtime_forever'].idxmax()]
+top_games = top_games[['Pays', 'name', 'average_playtime_forever']]
+
+# Ajouter les informations de survol
+counts = counts.merge(top_games, on='Pays', how='left')
+
 # Créer la carte
 fig = go.Figure(data=go.Choropleth(locations=counts['Pays'],
                                    z=counts['number'],
                                    locationmode='country names',
                                    colorscale = 'emrld',
-                                   colorbar_title='Number of games'
+                                   colorbar_title='Number of games',
+                                    text=counts.apply(lambda row: f"Country: {row['Pays']}<br>Number of games: {row['number']}<br>Top game: {row['name']}<br>Playtime: {row['average_playtime_forever']}", axis=1),
+                                    hoverinfo='text'
                                   ))
 
 fig.update_layout(title_text='Number of games by supported languages',
                   geo=dict(showframe=False, showcoastlines=False, projection_type='equirectangular'),
                  )
+
+
 
 
 def graph_map(): 

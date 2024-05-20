@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 
 graph_dict = {0: "A bar  chart given the Top 10 games based on average playtime.\nx-axis:\tGame titles\ny-axis:\tAverage play time in Minutes",
               1: "A gauge given the percentage of positive review for the top 3 languages.",
-              2: "A sunburst graph showing distribution of average playtime\nClick on an area to see composition.",
+              2: "A sunburst graph showing the most popular categories of game according to average playtime. \nClick on an area to see composition.",
               3: "Geographic map showing how many games are supported for a given language.\nThe bluer the colour the more games there are.",
               4: "Spider graph showing amount of games and playtime per genre or category in comparison with the chosen friend.\n You can select a specific category or genre by clicking on the labels on the spider graph in order to compare the games and playtime of the selected genre or category with the selected friend.",
               5: "A bubble chart showing the the players most positive genres size indicate the amount of reviews.\nx-axis:\tPrice\ny-axis:\tPercentage of the reviews that are positive.\nColour:\tGenre\nSize:\tTotal amount of reviews.",

@@ -40,5 +40,6 @@ def graph_comparaison():
 
 def update_graph(x_column, y_column):
     grouped_df = cleaned_games.groupby(x_column)[y_column].mean().reset_index()
-    fig = px.line(grouped_df, x=x_column, y=y_column, title=f"Comparaison de {y_column} selon {x_column}" )
+    merged_df = grouped_df.merge(cleaned_games[[x_column, 'name']], on=x_column, how='left')
+    fig = px.line(merged_df, x=x_column, y=y_column, hover_name="name", title=f"Comparaison of {y_column} according to {x_column}", )
     return fig

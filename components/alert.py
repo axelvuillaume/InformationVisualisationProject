@@ -15,7 +15,7 @@ graph_dict = {0: "A bar  chart given the Top 10 games based on average playtime.
               + "Clicking on a game results in an updated 'genre playtime' graph (right) and 'achievement timeline' graph (below), if they are available. You can select and deselect genres in the legend, or isolate one genre by double clicking on it. " 
               + "To restore the graph to it's original state, double click somewhere on the graph. Alternately you can drag across the graph to view a zoomed in selection. The same actions can be done on the achievement chart. "
               + "Hover over items to view the full details.",
-              7: "linechart text"
+              7: "A line chart where you can choose  different axes and see the game when you hover"
              }
 
 @callback(Output({'type': 'alert_message', 'alert-id': MATCH}, "is_open"),

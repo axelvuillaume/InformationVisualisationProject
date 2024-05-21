@@ -30,7 +30,8 @@ def bubble_chart(y_label='Positive reviews (%)', x_label='Price', title='Interes
         top_games_in_genre = cleaned_games[
              cleaned_games['app_id'].isin(
                  genres[genres['genres'] == gen]['app_id']
-             )]
+             ) & ~cleaned_games['app_id'].isin(current_user.games['app_id'])
+        ]
         top_games_in_genre = top_games_in_genre.nlargest(5, 'score')[['name', 'price', 'positive', 'negative', 'score', 'median_playtime_forever']]
         top_games_in_genre['genre'] = gen
         games_per_genre += top_games_in_genre.values.tolist()

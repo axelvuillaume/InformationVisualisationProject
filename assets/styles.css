@@ -88,7 +88,9 @@ h1 {
   .two {
     grid-column: 3;
     grid-row: 2;
-
+    width: 600px;
+    height: 800px;
+    overflow: hidden;
   }
   .three {
     grid-column: 1;

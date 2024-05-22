@@ -13,7 +13,8 @@ def achievement_chart(app_id, game_name):
         global_achievements = achievement_data['global_achievements']
         achievement_list = [{"global_percent": [g_achievement['percent'] for g_achievement in global_achievements if g_achievement['name'] == achievement['apiname']][0], 
                             "name": achievement['name'], "unlocktime": achievement['unlocktime'], 
-                            "unlocktime_datetime": datetime.fromtimestamp(achievement['unlocktime']).strftime('%d/%m/%y %H:%M') } 
+                            "unlocktime_datetime": datetime.fromtimestamp(achievement['unlocktime']).strftime('%d/%m/%y %H:%M'), 
+                            "unlocktime_day": datetime.fromtimestamp(achievement['unlocktime']).strftime('%d/%m/%y') } 
                             for achievement in achievement_data['achievements'] 
                             if achievement['achieved'] == 1]
         if achievement_list:
@@ -54,7 +55,7 @@ def achievement_chart(app_id, game_name):
             #                               ),
             #                     textposition="bottom right")
 
-            fig = px.scatter(achievement_df, x='unlocktime_datetime', y='global_percent', 
+            fig = px.scatter(achievement_df, x='unlocktime_day', y='global_percent', 
                             color="percentage_rank_name",
                             symbol="percentage_rank_name",
                             category_orders={"percentage_rank_name": 
@@ -64,8 +65,8 @@ def achievement_chart(app_id, game_name):
                                             "common (10%, 50%)",
                                             "very common (50%, 100%)"]},
                             color_discrete_sequence=px.colors.qualitative.Bold,
-                            hover_data=["name"],
-                            labels={"percentage_rank_name": "Rarity", "unlocktime_datetime": "Unlock time", 'global_percent': "Global Percentage", "name": "Achievement Name"}
+                            hover_data={"name": True, "unlocktime_datetime": True, "unlocktime_day": False},
+                            labels={"percentage_rank_name": "Rarity", "unlocktime_day": "Unlocked date",  "unlocktime_datetime": "Unlock time", 'global_percent': "Global Percentage", "name": "Achievement Name"}
                             # text=achievement_df['name']
                             )
             fig.update_traces(marker=dict(size=12,
@@ -74,7 +75,9 @@ def achievement_chart(app_id, game_name):
                                 # textposition="bottom right",
                                 showlegend=True)
             
-            fig.update_layout(yaxis=dict(autorange="reversed"), yaxis_title="Global Percentage", xaxis_title="Unlock Time", title=f"Achievement timeline for {game_name}")
+            fig.update_xaxes(tickangle=45)
+
+            fig.update_layout(yaxis=dict(autorange="reversed"), yaxis_title="Global Percentage", xaxis_title="Unlock Time (date)", title=f"Achievement timeline for {game_name}")
             return dcc.Graph(id='achievement-chart-figure', figure=fig)
         
     # if nothing was returned before this, return an empty graph

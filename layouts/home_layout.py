@@ -1,10 +1,13 @@
 from dash import dcc, html, Input, Output, callback
 
+from utils.load_data import cleaned_games
+
 from components.gauge import gauge_percentages
 from components.map import graph_map
 from components.sunburst import graph_sunburst
 from components.alert import alert
 from components.graph import graph_comparaison
+from components.top_games_chart import generate_top_games_chart
 
 def generate_home_layout():
     return html.Div(
@@ -22,12 +25,12 @@ def generate_home_layout():
             # once update-user-data is finished, store the steam id, once this changes the graph updates are triggered
             # see example 1 for more info : https://dash.plotly.com/sharing-data-between-callbacks
 
-            # html.Div(
-            #     className="component-container two",
-            #     children=[alert(0),
-            #               generate_top_games_chart(cleaned_games, n=10)
-            #              ]
-            # ),
+            html.Div(
+                className="component-container two",
+                children=[alert(0),
+                          generate_top_games_chart(cleaned_games, n=10)
+                         ]
+            ),
 
             html.Div(className="component-container three",
                      id = 'gauges',

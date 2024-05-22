@@ -55,6 +55,7 @@ def playtime_games_per_genre(genre_name):
             data=go.Bar(
                     x=games["playtime_forever"],
                     text=games["playtime_formatted"],  
+                    hovertemplate="Playtime: %{x} hours",
                 ),
             layout={
                 'bargroupgap':0.4,

@@ -89,7 +89,7 @@ h1 {
     grid-column: 3;
     grid-row: 2;
     width: 600px;
-    height: 800px;
+    height: 550px;
     overflow: hidden;
   }
   .three {

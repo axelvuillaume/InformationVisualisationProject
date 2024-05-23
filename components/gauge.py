@@ -64,7 +64,7 @@ def gauge(value, name):
                 'bordercolor': "gray",
                 'steps': [{'range': [0, value], 'color': 'lightblue'}, {'range': [value, 100], 'color': 'lightgray'}],
                 'shape': "angular"}
-        number = {'font': {'size': 45, 'color': decide_colour(value)}, 'suffix': "%"}
+        number = {'font': {'size': 35, 'color': decide_colour(value)}, 'suffix': "%"}
 
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
@@ -75,7 +75,7 @@ def gauge(value, name):
             title=name,
         ))
 
-        fig.update_layout(width=700, height=300)
+        #fig.update_layout(height=250)
 
         return dcc.Graph(id='top-games-chart', figure=fig)
     except Exception as e:

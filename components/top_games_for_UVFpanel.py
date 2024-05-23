@@ -24,7 +24,7 @@ def generate_topgames(games_data_frame, color, nbgames=5):
                       yaxis_title="",                                                    # No Y-axis title
                       yaxis=dict(autorange="reversed", showticklabels=False),            # Reverse the y-axis and hide tick labels
                       margin=dict(l=1, r=1, t=10, b=1),                                  # Adjust margins for better visibility
-                      width=450,
+                      width=300,
                       height=440
                      )
 

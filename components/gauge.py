@@ -72,8 +72,10 @@ def gauge(value, name):
             domain= d,
             gauge= gauge,
             number=number,
-            title=name
+            title=name,
         ))
+
+        fig.update_layout(width=700, height=300)
 
         return dcc.Graph(id='top-games-chart', figure=fig)
     except Exception as e:

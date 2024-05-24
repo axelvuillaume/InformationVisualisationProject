@@ -36,6 +36,35 @@
 	\section{Preprocessing}
 	
 	\section{Visualisation}
+	\subsection{Home}
+
+	\subsection{Profile}
+
+	\subsection{Recommender}
+	\subsubsection{User Vs Friends Pannel}
+	The aim of this visualisation is to compare our tastes with those of our friends. To do this, it consists of two Spider Graphs, one for yourself and one for the selected friend, as well as two graphs (one for each) that appear in the centre, listing the top 5 games for the category/genre selected in the spider graph. The code for this visualisation can be found in \textit{user\_vs\_friends\_panel.py} the file \textit{hexagon.py} and \textit{top\_games\_forUVFpanel.py}.
+
+	\paragraph{Spider Graphs}
+	\begin{itemize}
+		\item Goal : Show the user's preferences in terms of categories/genres by comparing the total playtime of the games in each category/genre and the total number of games played in each category/genre.
+		\item Data : Get the games genre and categories from the dataset and the user's playtime and number of games played from the Steam API.
+		\item Features/Interaction : You can choose between the categories and genres of the games. You can change the number of categories/genres displayed by choosing the number of sides of the spider graph (it will show first the most played categories/genres). Hovering to get the number of games played and the total playtime in hours for each label (with a legend). Clicking on a label will show the top 5 games in this category/genre in the center graph. You can select a friend to compare your preferences of your top genre/categories to his preferences for the same genre/categories you like.
+		\item Menu : Disposition on the top left, except for the friend selector which is above his spider graph (which makes more sense).
+		\item Design and choice : The user and the friend are in disctinct colors, blueish for the user and redish for the friend to make clear distinction. The user and friend infos are in distinct spidergraph because the goal is to see the tastes by looking to the ratio between the playtime and the owned games per genre/category in each spidergraph. This also avoid having too much information in one graph and better for colorblindness and black/white since tranparency is envolved in the colors.
+		\item Implementation : Since the radar charts are a bit limited in Ploty, we decided to do a custom implemented spider graph made with a scatter plot and lines between the points (a little bit risky).
+		\item Code file : \textit{hexagon.py}
+	\end{itemize}
+
+	\paragraph{Center Graphs}
+	\begin{itemize}
+		\item Goal : Show the top 5 games in the selected category/genre for the user and the friend in order to see what games are the most played by our friend in the same category/genre in order to get some inspiration.
+		\item Data : Get the games from the dataset and the user's playtime from the Steam API.
+		\item Features/Interaction : Hovering to get the playtime in hours for each game.
+		\item Menu : The spider graphs labels (whatever the user or the friend) will act as a menu to select the category/genre to display the top 5 games.
+		\item Design and choice : The user and the friend are in disctinct colors, blueish for the user and redish for the friend to make clear distinction again. \texttt{The scales for the playtime} are not the same for two reasons: first because of the goal of the graph and second because a huge difference in playtime between the user and the friend would make the user's playtime unreadable (maybe a synchronized selection between the two graphs could be pertinent here (as saw in the Exercices Sessions with the lasso) but didn't have the time to implement it).
+		\item Implementation : A simple bar chart with the top 5 games for the selected category/genre.
+		\item Code file : \textit{top\_games\_forUVFpanel.py}
+	\end{itemize}
 	
 	\section{Evaluation}
 	

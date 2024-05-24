@@ -19,7 +19,7 @@ from: 'price', 'positive reviews', 'negative reviews', 'score', 'median playtime
 :param color_col: column deciding colors of the markers
 :return: Bubble plot figure
 """
-def bubble_chart(y_label='Positive reviews (%)', x_label='Price', title='Interesting games based on your favorite genres',
+def bubble_chart(y_label='Positive reviews (%)', x_label='Price (USD)', title='Interesting games based on your favorite genres',
                  x_axis="price", y_axis="positive reviews (%)", size_col="total reviews", color_col="genre"):
     games = current_user.games
     ranking = get_n_best_gen_or_cat_by_hours(games, genres, n=8)

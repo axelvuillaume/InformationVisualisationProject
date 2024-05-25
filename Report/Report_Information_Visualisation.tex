@@ -104,7 +104,38 @@
 	\section{Visualisation}
 	\subsection{Home}
 
+    \paragraph{Sunburst graph}
+    \begin{itemize}
+        \item Goal : View the most popular game categories based on the time spent by players.
+        \item Data : Get the games, the categories and developer from the dataset .
+        \item Features/Interaction : Click on a part to zoom in to see the developer or games more clearly. You can hover over a box to see the children or parents and the player's average time.We added a button to hide the single player mode because the single player categories take up the most important part of the graph. Additionally, I added a slider to control how many games you want to see based on average playtime.
+        \item Design and choice : Choose a sunburst to see the children better and compare play times more easily.
+        \item Implementation : A sunburst chart with game, developer and categories by time spent.
+        \item Code file : \textit{sunburst.py}
+    \end{itemize}
+    
+    \paragraph{world map graph}
+    \begin{itemize}
+        \item Goal : See the number of games depending on the languages supported.
+        \item Data : Get data on supported languages and assign a country for each language.
+        \item Features/Interaction : You can zoom in and out if you want to search for a special country. By hovering over the country, you can see the name of the most played game in the country and their average playing time.
+        \item Design and choice : Choose a green gradient to be clear.
+        \item Implementation : A Choropleth chart with with supported languages.
+        \item Code file : \textit{map.py}
+    \end{itemize}
+    
+    \paragraph{Line graph}
+    \begin{itemize}
+        \item Goal : Compare different data from the dataset.
+        \item Data : Get price,metacritic\_score,user\_score,average\_playtime\_forever,score of the data set.
+        \item Features/Interaction : Using a drop-down list, you can choose the x and y axes to compare the data you want to see. On hover, you can see the game name and the x and y values.
+        \item Implementation : A line chart with x and y values from the drop-down list.
+        \item Improvement : Create an entry to choose the X axis scale.
+        \item Code file : \textit{graph.py}
+    \end{itemize}
+
 	\subsection{Profile}
+    
    	\subsubsection{User Playtimes - Stacked Barchart}
        	\begin{itemize}
            \item Goal : Show how the user's games are distributed across different genres. Giving a quick overview of which games are played most, and what genre they belong to.
@@ -114,7 +145,9 @@
            \item Implementation : By matching the app ids acquired from the steam API to the ones in our steam games dataset, we easily find the related games. The playtimes we get straight from the API, and we display them in hours played. There's usually multiple genres associated with a single game, we didn't find a surefire way to pick the "most fitting" genre for a game, so we ended up picking a random one each time, to prevent them from all appearing in the same bar. 
            \item Code file : \textit{user\_playtime\_bar\_chart.py}, (method: \textit{playtime\_per\_genre})
         \end{itemize}
+        
 	\subsection{Recommender}
+    
 	\subsubsection{User Vs Friends Panel}
 	The aim of this visualisation is to compare our tastes with those of our friends. To do this, it consists of two Spider Graphs, one for yourself and one for the selected friend, as well as two graphs (one for each) that appear in the centre, listing the top 5 games for the category/genre selected in the spider graph. The code for this visualisation can be found in \textit{user\_vs\_friends\_panel.py} the file \textit{hexagon.py} and \textit{top\_games\_forUVFpanel.py}.
 
@@ -148,37 +181,6 @@
 		\item Design and choice : Each color represents a different genre, since only the 8 most played genres are shown, it adheres to the 12-color rule. The size of the bubble represents the total reviews of the game, which is a good approximation of the popularity. The bigger the bubble, the more popular the game. The x-axis represents the price of the game in US dollars, the y-axis represents the positive review percentage of the game. The graph takes up the whole width of the page, as the scarcity of visualizations on the recommender tab allowed for this.
 		\item Implementation : The implementation is quite straightforward, for each genre the top 5 games are selected based on the score column mentioned in the preprocessing step.
 		\item Code file : \textit{bubble\_chart.py}
-	\end{itemize}
-
-	
-	\paragraph{Sunburst graph}
-	\begin{itemize}
-		\item Goal : View the most popular game categories based on the time spent by players.
-		\item Data : Get the games, the categories and developer from the dataset .
-		\item Features/Interaction : Click on a part to zoom in to see the developer or games more clearly. You can hover over a box to see the children or parents and the player's average time.We added a button to hide the single player mode because the single player categories take up the most important part of the graph. Additionally, I added a slider to control how many games you want to see based on average playtime.
-		\item Design and choice : Choose a sunburst to see the children better and compare play times more easily.
-		\item Implementation : A sunburst chart with game, developer and categories by time spent.
-		\item Code file : \textit{sunburst.py}
-	\end{itemize}
-
-	\paragraph{world map graph}
-	\begin{itemize}
-		\item Goal : See the number of games depending on the languages supported.
-		\item Data : Get data on supported languages and assign a country for each language.
-		\item Features/Interaction : You can zoom in and out if you want to search for a special country. By hovering over the country, you can see the name of the most played game in the country and their average playing time.
-		\item Design and choice : Choose a green gradient to be clear.
-		\item Implementation : A Choropleth chart with with supported languages.
-		\item Code file : \textit{map.py}
-	\end{itemize}
-
-	\paragraph{Line graph}
-	\begin{itemize}
-		\item Goal : Compare different data from the dataset.
-		\item Data : Get price,metacritic_score,user_score,average_playtime_forever,score of the data set.
-		\item Features/Interaction : Using a drop-down list, you can choose the x and y axes to compare the data you want to see. On hover, you can see the game name and the x and y values.
-		\item Implementation : A line chart with x and y values from the drop-down list.
-		\item Improvement : Create an entry to choose the X axis scale.
-		\item Code file : \textit{graph.py}
 	\end{itemize}
 
 	\section{Evaluation}

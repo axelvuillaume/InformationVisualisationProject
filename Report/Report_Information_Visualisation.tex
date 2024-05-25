@@ -38,13 +38,13 @@
 	
 	\subsection{Data Cleaning}
 	
-	This dataset as it stands needs more work in order to be usable in visualisations. This preprocessing will consist out of deleting unused columns, cleaning cells that point to outliers and dividing certain columns into separate ones.\\
+	The Steam games dataset as it stands needs more work in order to be usable in visualisations. This preprocessing will exists out of deleting not used columns, cleaning cells that point to outliers and divide the certain columns in separate file for easier and faster access.\\
 	\\
-	The first thing that will happen is to delete unused column such as \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score\_rank}, \texttt{header\_image}, \texttt{reviews}, \texttt{website}, \texttt{support\_url}, \texttt{notes}, \texttt{support\_email}, \texttt{median\_playtime\_2weeks}, \texttt{required\_age}, \texttt{metacritic\_url}, \texttt{detailed\_description}, \texttt{about\_the\_game} and \texttt{average\_playtime\_2week}.\\
-	These columns were deleted because they were either unfit for visualization as they where things like urls, notes, descriptions or emails. The other reason is that columns contained data that was not usable in our specific use case as is the case with \texttt{average\_playtime\_2weeks}.\\
+	As the dataset has more then 40 columns this means that we have to filter in the columns in order to end up with only those that will be used. The columns that will be deleted are: \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score\_rank}, \texttt{header\_image}, \texttt{reviews}, \texttt{website}, \texttt{support\_url}, \texttt{notes}, \texttt{support\_email}, \texttt{median\_playtime\_2weeks}, \texttt{required\_age}, \texttt{metacritic\_url}, \texttt{detailed\_description}, \texttt{about\_the\_game} and \texttt{average\_playtime\_2week}.\\
+	These columns where deleted because they where either unvisualizable as they where things like urls, notes, descriptions or emails or the columns contained data that was not usable in our specific use case as is the case with \texttt{average\_playtime\_2weeks}.\\
 	\\
 	After this we delete outliers or values that seem to show useless rows. First way we do this is by deleting all games with no sales. To do this we look where the \texttt{estimated\_owners} column equals \texttt{0-0} and delete these.\\
-	Besides this we see also that some games have no reviews or no categories. These are understood to be developer tests and so can be deleted.\\
+	Besides this we see also that some games have no reviews or categories. These are understood to be developer tests and so can be deleted.\\
 	If we look at the distribution of the prices we can see that we have most of them are under the 200\$. We have 1 game of 999\$ in order to not to affect the rest of the dataset this outlier is also removed from the dataset.\\
 	\\
 	The column \texttt{estimated\_owners} is a range between the minimal amount of owners and the maximum. In order for easier work with this data this is split into 2 different columns: the \texttt{min\_owners} and the \texttt{max\_owners}.\\
@@ -94,8 +94,9 @@
 	\subsection{Group By}
 	
 	As we have a couple of columns that can be used to group by such as languages, categories, genres, etc. Due to the size of the dataset it takes too long to compute the grouped by information on the fly. In order to keep the wait times low we pre-calculate all this information in the preprocessing phase of the project.\\
-	All the numeric values will be summed over all the array-like columns such as \texttt{categories}, \texttt{full\_audio\_languages}, \texttt{genres} and \texttt{supported\_languages}. The new tables will be written to \textit{./Data/[name-column]\_grouped\_by.csv}.
-	%TODO: mention file where this happens
+	All the numeric values will be summed over all the array-like columns such as \texttt{categories}, \texttt{full\_audio\_languages}, \texttt{genres} and \texttt{supported\_languages}. The new tables will be written to \textit{/Data/[name-column]\_grouped\_by.csv}.\\
+	\\
+	This is all handled by the \textit{/utils/data\_processing.py} file
 	\newpage
 	
 	\section{Visualisation}

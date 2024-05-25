@@ -30,7 +30,7 @@
 	
 	\subsection{Target User}
 	
-	The target users are gamers, both casual as experienced ones. The site will be able to do three things: The first is to give general information about the games such as how many games are supported by a country's official language, the top 5 games and constitution of the dataset per genre. The second thing that is possible for the user is to get a better inside in their own gaming-behaviour by seeing their own most played games per genre, the amount of hours played and their own achievements for these games. The third feature is to get a recommendation by comparing the stats of the user's owned games with their friend's games.
+	The target users are gamers, both casual as experienced ones. The site will be able to do three things: The first is to give general information about the games such as how many games are supported by a country's official language, the top 5 games and constitution of the dataset per genre. The second thing that is possible for the user is to get a better insight into their own gaming-behaviour by seeing their own most played games per genre, the amount of hours played and the achievements acquired for these games. The third feature is to get a recommendation by comparing the stats of the user's owned games with their friend's games.
 	
 	\newpage
 	
@@ -136,16 +136,36 @@
 
 	\subsection{Profile}
     
-   	\subsubsection{User Playtimes - Stacked Barchart}
-       	\begin{itemize}
+   	\subsubsection{User Playtimes}
+        \paragraph{Stacked Barchart}
+        \begin{itemize}
            \item Goal : Show how the user's games are distributed across different genres. Giving a quick overview of which games are played most, and what genre they belong to.
            \item Data : Playtimes from the user's game library, game name and genres acquired from matching app ids of the steam API with their respective games in the steam games dataset.
            \item Features/Interaction : A game slider underneath the graph makes it possible to add games amounts in increasing order of playtime, which makes it so the user can still view every item by adjusting the slider accordingly. Clicking on a genre in the legend makes it possible to show/hide a genre, alternatively you can double-click a genre to isolate it on the graph. Clicking a game on the graph updates 2 other graphs: the genre playtime barchart (on the right) and the achievement timeline chart (below the graph).
            \item Design and choice : We opted for a stacked barchart because it's a good way to get a quick overview of the playtime distribution over a user's library, this chart isn't meant to show detailed information. Considering there's only 33 unique genres in the games dataset, even in extreme cases where a user owns a game in every genre, the stacked barchart should still be able to serve it's purpose. The games slider underneath also helps in this regard, to gradually explore the games library. The genres are distinct colors, if the user has a large game library this means we might violate the 12-bin rule for colors. However, except for generating the legend on the right with plotly express, the colors mostly serve to differentiate the different bars. This design choice makes more sense when you consider that we were planning to link the colors on the genre chart (on the right) to the clicked genre on this stacked barchart. 
            \item Implementation : By matching the app ids acquired from the steam API to the ones in our steam games dataset, we easily find the related games. The playtimes we get straight from the API, and we display them in hours played. There's usually multiple genres associated with a single game, we didn't find a surefire way to pick the "most fitting" genre for a game, so we ended up picking a random one each time, to prevent them from all appearing in the same bar. 
-           \item Code file : \textit{user\_playtime\_bar\_chart.py}, (method: \textit{playtime\_per\_genre})
+           \item Code file : \textit{user\_playtime\_bar\_chart.py}, (function name: \textit{playtime\_per\_genre})
         \end{itemize}
         
+        \paragraph{Horizontal barchart}
+        \begin{itemize}
+            \item Goal : Show all playtimes of the user's games in descending order of a single genre.
+            \item Data : "Clickdata" relating to the clicked game on the stacked barchart, this is only used to extract the genre. Playtimes from the user's game library, filtered by genre.
+            \item Features/Interaction : A simple horizontal barchart without interaction capabilities, on hover it shows the playtime of the game in hours.
+            \item Design and choice : Considering the cluttered nature of the stacked barchart, combined with the fact that each game possibly belongs to multiple genres. We decided to add a more detailed horizontal barchart to get a closer look at the playtimes of a specific genre. 
+            \item Implementation : By clicking on a game in the stacked barchart, a callback is triggered which passes on the "clickdata. We extract from this the genre of the clicked game and display all games in this genre with their respective playtimes, in descending order of playtime.
+            \item Code file : \textit{user\_playtime\_bar\_chart.py}, (function name: \textit{playtime\_games\_per\_genre})
+        \end{itemize}
+        
+    \subsubsection{Achievement timeline}
+    \begin{itemize}
+        \item Goal : Show achievements in ascending order of date acquired, on the x-axis, with the rarity of the achievement on the y-axis.
+        \item Data : "Clickdata" resulting from clicking on a game in the stacked barchart. From this we extract the app id, by way of which we can acquire the achievement data from the steam API.
+        \item Design and choice : This chart is a scatterplot where each achievement is represented by a symbol on the plot. Both shape and color channels are used to encode an achievement tier, there are 4 tiers based on the rarity of the achievement. We decided to use both color and shape because we had both channels available, and this way colorblind people are accounted for. On hover the full unlocktime and name of the achievement are displayed, as well as it's rarity percentage (global percent of people that have this achievement). If you double click an achievement tier in the legend, you can isolate that tier on the graph. We decided not to connect the dots as this would only clutter the graph more.
+        \item Implementation : By clicking on a game in the stacked barchart, a callback is triggered which passes on the "clickdata". We extract from this the appid of the clicked game and ask the steam API for user's achievements of this game. After that we call the API again to get the global data for the achievements, add a new column to assign the 4 tiers based on global achievement percentage and encode all this data in our scatterplot.
+        \item Code file : \textit{achievement\_chart.py}
+    \end{itemize}
+    
 	\subsection{Recommender}
     
 	\subsubsection{User Vs Friends Panel}

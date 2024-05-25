@@ -26,11 +26,11 @@
 	
 	The steam game dataset contains data about games received from the Steam API and Steam Spy. The contained columns are name of the game, the release date, the amount of DLC for the game, a short description of the game, is the game is on Linux, Windows or on Mac, a metacritic score, the amount of achievements the game has, user score the amount of negative reviews and positive reviews, an email address for help, an average playtime and the amount of owners of the game. This data is found in the JSON-file \textit{/Data/games.json}.\\
 	\\
-	The second dataset is user information gotten by the Steam API. This dataset will contain the data about a given Steam user. This information includes the games he plays and the user-profiles of his friends.
+	The second dataset is user information acquired from the Steam API. This dataset will contain the data about a given Steam user. This information includes the games he plays and the user-profiles of his friends.
 	
 	\subsection{Target User}
 	
-	The target users are games, both the casual one as the more experienced one. The site will be able to do three things: The first is to give general information about the games such as where you can play the game, the top 5 games and constitution of the dataset per genre. The second thing that is possible for the user is to get a better inside in their own gaming-behaviour this by seeing their own most played games per genre the amount of hours played and their own achievements for these games. The third way is to get a recommendation by comparing the owned games with the games owned by his friends.
+	The target users are gamers, both casual as experienced ones. The site will be able to do three things: The first is to give general information about the games such as how many games are supported by a country's official language, the top 5 games and constitution of the dataset per genre. The second thing that is possible for the user is to get a better inside in their own gaming-behaviour by seeing their own most played games per genre, the amount of hours played and their own achievements for these games. The third feature is to get a recommendation by comparing the stats of the user's owned games with their friend's games.
 	
 	\newpage
 	
@@ -38,10 +38,17 @@
 	
 	\subsection{Data Cleaning}
 	
+<<<<<<< HEAD
 	The Steam games dataset as it stands needs more work in order to be usable in visualisations. This preprocessing will exists out of deleting not used columns, cleaning cells that point to outliers and divide the certain columns in separate file for easier and faster access.\\
 	\\
 	As the dataset has more then 40 columns this means that we have to filter in the columns in order to end up with only those that will be used. The columns that will be deleted are: \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score\_rank}, \texttt{header\_image}, \texttt{reviews}, \texttt{website}, \texttt{support\_url}, \texttt{notes}, \texttt{support\_email}, \texttt{median\_playtime\_2weeks}, \texttt{required\_age}, \texttt{metacritic\_url}, \texttt{detailed\_description}, \texttt{about\_the\_game} and \texttt{average\_playtime\_2week}.\\
 	These columns where deleted because they where either unvisualizable as they where things like urls, notes, descriptions or emails or the columns contained data that was not usable in our specific use case as is the case with \texttt{average\_playtime\_2weeks}.\\
+=======
+	This dataset as it stands needs more work in order to be usable in visualisations. This preprocessing will consist out of deleting unused columns, cleaning cells that point to outliers and dividing certain columns into separate ones.\\
+	\\
+	The first thing that will happen is to delete unused column such as \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score\_rank}, \texttt{header\_image}, \texttt{reviews}, \texttt{website}, \texttt{support\_url}, \texttt{notes}, \texttt{support\_email}, \texttt{median\_playtime\_2weeks}, \texttt{required\_age}, \texttt{metacritic\_url}, \texttt{detailed\_description}, \texttt{about\_the\_game} and \texttt{average\_playtime\_2week}.\\
+	These columns were deleted because they were either unfit for visualization as they where things like urls, notes, descriptions or emails. The other reason is that columns contained data that was not usable in our specific use case as is the case with \texttt{average\_playtime\_2weeks}.\\
+>>>>>>> 5b436e802bd16235bd5b60499e9c3883eb39e165
 	\\
 	After this we delete outliers or values that seem to show useless rows. First way we do this is by deleting all games with no sales. To do this we look where the \texttt{estimated\_owners} column equals \texttt{0-0} and delete these.\\
 	Besides this we see also that some games have no reviews or categories. These are understood to be developer tests and so can be deleted.\\
@@ -53,7 +60,7 @@
 	\\
 	All this cleaned data will be saved to the file \textit{/Data/cleaned\_games.csv}.\\
 	\\
-	The dataset still contains columns such as \texttt{categories} or \texttt{tags} that consist out of a list of values. In order to improve our performances we shall convert these fields separate table linked to the main table using \texttt{app\_id} as foreign key.\\
+	The dataset still contains columns such as \texttt{categories} or \texttt{tags} that consist out of a list of values. In order to improve our performance we shall convert these fields into a separate table linked to the main table using \texttt{app\_id} as foreign key.\\
 	In this implementation we went with the approach that only the games with a not-empty lists will be included in the new table. Each new item of the list will be a new row in the table, making the primary key the combination of \texttt{app\_id} and value of the list.\\
 	These different tables are saved to the files \textit{/Data/[column-name].csv}\\
 	\\
@@ -93,9 +100,15 @@
 	
 	\subsection{Group By}
 	
+<<<<<<< HEAD
 	As we have a couple of columns that can be used in order to group by the data on such ash languages, categories, genres, etc. Due to the size of the dataset it takes too long to compute the grouped by information on the fly. In order to keep the wait times low we pre-calculate all this information in the preprocessing phase of the project.\\
 	All the numeric values will be summed over all the array-like columns such as \texttt{categories}, \texttt{full\_audio\_languages}, \texttt{genres} and \texttt{supported\_languages}. The new tables will be written to \textit{/Data/[name-column]\_grouped\_by.csv}.
 	
+=======
+	As we have a couple of columns that can be used to group by such as languages, categories, genres, etc. Due to the size of the dataset it takes too long to compute the grouped by information on the fly. In order to keep the wait times low we pre-calculate all this information in the preprocessing phase of the project.\\
+	All the numeric values will be summed over all the array-like columns such as \texttt{categories}, \texttt{full\_audio\_languages}, \texttt{genres} and \texttt{supported\_languages}. The new tables will be written to \textit{./Data/[name-column]\_grouped\_by.csv}.
+	%TODO: mention file where this happens
+>>>>>>> 5b436e802bd16235bd5b60499e9c3883eb39e165
 	\newpage
 	
 	\section{Visualisation}
@@ -110,7 +123,7 @@
 	\paragraph{Spider Graphs}
 	\begin{itemize}
 		\item Goal : Show the user's preferences in terms of categories/genres by comparing the total playtime of the games in each category/genre and the total number of games played in each category/genre.
-		\item Data : Get the games genre and categories from the dataset and the user's playtime and number of games played from the Steam API.
+		\item Data : Get the games, genre and categories from the dataset and the user's playtime and number of games played from the Steam API.
 		\item Features/Interaction : You can choose between the categories and genres of the games. You can change the number of categories/genres displayed by choosing the number of sides of the spider graph (it will show first the most played categories/genres). Hovering to get the number of games played and the total playtime in hours for each label (with a legend). Clicking on a label will show the top 5 games in this category/genre in the center graph. You can select a friend to compare your preferences of your top genre/categories to his preferences for the same genre/categories you like.
 		\item Menu : Disposition on the top left, except for the friend selector which is above his spider graph (which makes more sense).
 		\item Design and choice : The user and the friend are in disctinct colors, blueish for the user and redish for the friend to make clear distinction. The user and friend infos are in distinct spidergraph because the goal is to see the tastes by looking to the ratio between the playtime and the owned games per genre/category in each spidergraph. This also avoid having too much information in one graph and better for colorblindness and black/white since tranparency is envolved in the colors.

@@ -129,6 +129,16 @@
 		\item Code file : \textit{top\_games\_forUVFpanel.py}
 	\end{itemize}
 	
+	\subsubsection{Bubble Chart Recommendations}
+	\begin{itemize}
+		\item Goal : Recommend the user 5 games he doesn't own, for each of his most played genres.
+		\item Data : User's game playtimes from the api, games and genres data from the dataset, score column to decide on the best games.
+		\item Features/Interaction : Hovering over a bubble to get details about the game (name, price, genre, positive reviews, total reviews), drag across the graph to focus on a certain price-range, (double) click on a genre in the legend to show/hide games of that genre. 
+		\item Design and choice : Each color represents a different genre, since only the 8 most played genres are shown, it adheres to the 12-color rule. The size of the bubble represents the total reviews of the game, which is a good approximation of the popularity. The bigger the bubble, the more popular the game. The x-axis represents the price of the game in US dollars, the y-axis represents the positive review percentage of the game. The graph takes up the whole width of the page, as the scarcity of visualizations on the recommender tab allowed for this.
+		\item Implementation : The implementation is quite straightforward, for each genre the top 5 games are selected based on the score column mentioned in the preprocessing step.
+		\item Code file : \textit{bubble\_chart.py}
+	\end{itemize}
+
 	\section{Evaluation}
 	
 	

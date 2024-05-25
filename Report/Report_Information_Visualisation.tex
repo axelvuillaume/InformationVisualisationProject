@@ -6,6 +6,8 @@
 \usepackage{hyperref}
 \usepackage{amsmath}
 
+\addbibresource{Report_Information_Visualisation-blx.bib} % BibLaTeX bibliography file 
+
 \begin{document}
 	\title{Report Information Visualisation}
 	\author{Oruç Kaplan; Ward Van den Bossche; Axel Daniel Vuillaume \& Laurens Devloo}
@@ -38,7 +40,7 @@
 	
 	\subsection{Data Cleaning}
 	
-	The Steam games dataset as it stands needs more work in order to be usable in visualisations. This preprocessing will exists out of deleting not used columns, cleaning cells that point to outliers and divide the certain columns in separate file for easier and faster access.\\
+	The Steam games dataset as it stands needs more work in order to be usable in visualisations. This preprocessing will exists out of deleting not used columns, cleaning cells that point to outliers and divide the certain columns in separate file for easier and faster access. The code in this notebook, up until the custom score part, were heavily inspired by a publicly available kaggle notebook by \autocite{CLARAMUNT}. However, certain modifications were made to better align with our vision.\\
 	\\
 	As the dataset has more then 40 columns this means that we have to filter in the columns in order to end up with only those that will be used. The columns that will be deleted are: \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score\_rank}, \texttt{header\_image}, \texttt{reviews}, \texttt{website}, \texttt{support\_url}, \texttt{notes}, \texttt{support\_email}, \texttt{median\_playtime\_2weeks}, \texttt{required\_age}, \texttt{metacritic\_url}, \texttt{detailed\_description}, \texttt{about\_the\_game} and \texttt{average\_playtime\_2week}.\\
 	These columns where deleted because they where either unvisualizable as they where things like urls, notes, descriptions or emails or the columns contained data that was not usable in our specific use case as is the case with \texttt{average\_playtime\_2weeks}.\\
@@ -205,6 +207,5 @@
 
 	\section{Evaluation}
 	
-	
-	\newpage
+	\printbibliography % Output the bibliography
 \end{document}

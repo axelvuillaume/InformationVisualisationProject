@@ -35,6 +35,8 @@
 	
 	\section{Preprocessing}
 	
+	\subsection{Data Cleaning}
+	
 	This dataset as it stands needs more work in order to be usable in visualisations. This preprocessing will exists out of deleting not used columns, cleaning cells that point to outliers and divide the certain columns in separate.\\
 	\\
 	The first thing that will happen is to delete unused column such as \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score\_rank}, \texttt{header\_image}, \texttt{reviews}, \texttt{website}, \texttt{support\_url}, \texttt{notes}, \texttt{support\_email}, \texttt{median\_playtime\_2weeks}, \texttt{required\_age}, \texttt{metacritic\_url}, \texttt{detailed\_description}, \texttt{about\_the\_game} and \texttt{average\_playtime\_2week}.\\
@@ -46,7 +48,12 @@
 	\\
 	The column \texttt{estimated\_owners} is a range between the minimal amount of owners and the maximum. In order for easier work with this data this is split into 2 different columns: the \texttt{min\_owners} and the \texttt{max\_owners}.\\
 	\\
-	To end we look at the \texttt{median\_playtime\_forever} column. If these values are above 60,000 this would mean that the playerbase would have played more then 1,000 hours. This would not be very realistic and so these values will be set to 0 in order to prevent skewing the data. Rows with this amount of hours will mostly not be games, but more overlays or pieces of software that is running in the background.
+	To end we look at the \texttt{median\_playtime\_forever} column. If these values are above 60,000 this would mean that the playerbase would have played more then 1,000 hours. This would not be very realistic and so these values will be set to 0 in order to prevent skewing the data. Rows with this amount of hours will mostly not be games, but more overlays or pieces of software that is running in the background.\\
+	\\
+	The dataset still contains columns such as \texttt{categories} or \texttt{tags} that consist out of a list of values. In order to improve our performances we shall convert these fields separate table linked to the main table using \texttt{app_id} as foreign key.\\
+	In this implementation we went with the approach that only the games with a not-empty lists will be included in the new table. Each new item of the list will be a new row in the table, making the primary key the combination of \texttt{app_id} and value of the list.\\
+	\\
+	
 	
 	\newpage
 	

@@ -88,6 +88,9 @@
 	
 	\subsection{Group By}
 	
+	As we have a couple of columns that can be used in order to group by the data on such ash languages, categories, genres, etc. Due to the size of the dataset it takes too long to compute the grouped by information on the fly. In order to keep the wait times low we pre-calculate all this information in the preprocessing phase of the project.\\
+	All the numeric values will be summed over all the array-like columns such as \texttt{categories}, \texttt{full\_audio\_languages}, \texttt{genres} and \texttt{supported\_languages}. The new tables will be written to \textit{./Data/[name-column]\_grouped\_by.csv}.
+	
 	\newpage
 	
 	\section{Visualisation}

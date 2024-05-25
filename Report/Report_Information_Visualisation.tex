@@ -40,7 +40,10 @@
 	The first thing that will happen is to delete unused column such as \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score\_rank}, \texttt{header\_image}, \texttt{reviews}, \texttt{website}, \texttt{support\_url}, \texttt{notes}, \texttt{support\_email}, \texttt{median\_playtime\_2weeks}, \texttt{required\_age}, \texttt{metacritic\_url}, \texttt{detailed\_description}, \texttt{about\_the\_game} and \texttt{average\_playtime\_2week}.\\
 	These columns where deleted because they where either unvisualizable as they where things like urls, notes, descriptions or emails or the columns contained data that was not usable in our specific use case as is the case with \texttt{average\_playtime\_2weeks}.\\
 	\\
-	After this the 
+	After this we delete outliers or values that seem to show useless rows. First way we do this is by deleting all games with no sales. To do this we look where the \texttt{estimated\_owners} column equals \texttt{0-0} and delete these.\\
+	Besides this we see also that some games have no reviews or no categories. These are understood to be developer tests and so can be deleted.\\
+	\\
+	
 	
 	\newpage
 	

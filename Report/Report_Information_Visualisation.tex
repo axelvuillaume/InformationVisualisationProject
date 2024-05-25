@@ -23,7 +23,7 @@
 		\item Steam API for user information
 	\end{itemize}
 	
-	The steam game dataset contains data about games received from the Steam API and Steam Spy. The contained columns are name of the game, the release date, the amount of DLC for the game, a short description of the game, is the game is on Linux, Windows or on Mac, a metacritic score, the amount of achievements the game has, user score the amount of negative reviews and positive reviews, an email address for help, an average playtime and the amount of owners of the game.\\
+	The steam game dataset contains data about games received from the Steam API and Steam Spy. The contained columns are name of the game, the release date, the amount of DLC for the game, a short description of the game, is the game is on Linux, Windows or on Mac, a metacritic score, the amount of achievements the game has, user score the amount of negative reviews and positive reviews, an email address for help, an average playtime and the amount of owners of the game. This data is found in a JSON-file.\\
 	\\
 	The second dataset is user information gotten by the Steam API. This dataset will contain the data about a given Steam user. This information includes the games he plays and the user-profiles of his friends.
 	
@@ -37,7 +37,12 @@
 	
 	This dataset as it stands needs more work in order to be usable in visualisations. This preprocessing will exists out of deleting not used columns, cleaning cells that point to outliers and divide the certain columns in separate.\\
 	\\
-	The first thing that will happen is to delete unused columns such as \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score_rank}, \texttt{header_image}, \texttt{reviews}, \texttt{website}, \texttt{support_url}, \texttt{notes}, \texttt{support_email}, \texttt{median_playtime_2weeks}, \texttt{required_age}, \texttt{metacritic_url}, \texttt{detailed_description}, \texttt{about_the_game} and \texttt{average_playtime_2week}.
+	The first thing that will happen is to delete unused column such as \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score\_rank}, \texttt{header\_image}, \texttt{reviews}, \texttt{website}, \texttt{support\_url}, \texttt{notes}, \texttt{support\_email}, \texttt{median\_playtime\_2weeks}, \texttt{required\_age}, \texttt{metacritic\_url}, \texttt{detailed\_description}, \texttt{about\_the\_game} and \texttt{average\_playtime\_2week}.\\
+	These columns where deleted because they where either unvisualizable as they where things like urls, notes, descriptions or emails or the columns contained data that was not usable in our specific use case as is the case with \texttt{average\_playtime\_2weeks}.\\
+	\\
+	After this the 
+	
+	\newpage
 	
 	\section{Visualisation}
 	\subsection{Home}

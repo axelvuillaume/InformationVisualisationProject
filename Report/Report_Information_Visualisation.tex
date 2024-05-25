@@ -4,6 +4,7 @@
 \usepackage{caption}
 \usepackage[backend=bibtex8]{biblatex}
 \usepackage{hyperref}
+\usepackage{amsmath}
 
 \begin{document}
 	\title{Report Information Visualisation}
@@ -50,10 +51,29 @@
 	\\
 	To end we look at the \texttt{median\_playtime\_forever} column. If these values are above 60,000 this would mean that the playerbase would have played more then 1,000 hours. This would not be very realistic and so these values will be set to 0 in order to prevent skewing the data. Rows with this amount of hours will mostly not be games, but more overlays or pieces of software that is running in the background.\\
 	\\
-	The dataset still contains columns such as \texttt{categories} or \texttt{tags} that consist out of a list of values. In order to improve our performances we shall convert these fields separate table linked to the main table using \texttt{app_id} as foreign key.\\
-	In this implementation we went with the approach that only the games with a not-empty lists will be included in the new table. Each new item of the list will be a new row in the table, making the primary key the combination of \texttt{app_id} and value of the list.\\
+	The dataset still contains columns such as \texttt{categories} or \texttt{tags} that consist out of a list of values. In order to improve our performances we shall convert these fields separate table linked to the main table using \texttt{app\_id} as foreign key.\\
+	In this implementation we went with the approach that only the games with a not-empty lists will be included in the new table. Each new item of the list will be a new row in the table, making the primary key the combination of \texttt{app\_id} and value of the list.\\
 	\\
+	We can see in the data that there are quite a lot of different type of score columns. In order to work easier with the data we make a custom score column named\texttt{score}.\\
+	For this custom score we take into account the columns: \texttt{price}, \texttt{metacritic\_score}, \texttt{positive}, \texttt{negative} and \texttt{median\_playtime\_forever}.\\
+	The first thing that has to happen is a normalisation of the columns so they are all in the same range. For the price we would like a range between $\left[0;1\right]$.
 	
+	$$normalised\_price = \frac{1}{\sqrt{\max{\left(price, 1\right)}}}$$
+	
+	We see that we favour lower prices. The max function will prevent divisions by 0.\\
+	The following 2 normalised score are the \texttt{metacritic\_score} and \texttt{positive\_ratio}. Following the next formulas:
+	
+	\begin{align}
+		metacritic\_score\_normalized &= \frac{metacritic\_score}{\max{\left(metacritic\_score\right)}} \\
+		positive\_ratio &= \frac{positive}{\max{\left(positive + negative, 1\right)}}
+	\end{align}
+	
+	The total review is a good indicator of how many people bought the game, so this term effectively serves as a "amount of sales"  score. The purpose of this is more to filter out games with very few reviews. This means games where the data is skewed to be overly positive or negative.
+	
+	$$total\_reviews\_normalized = \frac{positive + negative}{\max{\left(positive + negative\right)}}$$
+	$$median\_playtime\_forever\_normalized = \frac{median\_playtime\_forever}{\max{\left(median\_playtime\_forever\right)}}$$
+	
+	After normalizing all the data we can give a weight to each column. 
 	
 	\newpage
 	

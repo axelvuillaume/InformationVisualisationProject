@@ -42,8 +42,11 @@
 	\\
 	After this we delete outliers or values that seem to show useless rows. First way we do this is by deleting all games with no sales. To do this we look where the \texttt{estimated\_owners} column equals \texttt{0-0} and delete these.\\
 	Besides this we see also that some games have no reviews or no categories. These are understood to be developer tests and so can be deleted.\\
+	If we look at the distribution of the prices we can see that we have most of them are under the 200\$. We have 1 game of 999\$ in order to not to affect the rest of the dataset this outlier is also removed from the dataset.\\
 	\\
-	
+	The column \texttt{estimated\_owners} is a range between the minimal amount of owners and the maximum. In order for easier work with this data this is split into 2 different columns: the \texttt{min\_owners} and the \texttt{max\_owners}.\\
+	\\
+	To end we look at the \texttt{median\_playtime\_forever} column. If these values are above 60,000 this would mean that the playerbase would have played more then 1,000 hours. This would not be very realistic and so these values will be set to 0 in order to prevent skewing the data. Rows with this amount of hours will mostly not be games, but more overlays or pieces of software that is running in the background.
 	
 	\newpage
 	

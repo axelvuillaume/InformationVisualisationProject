@@ -24,13 +24,13 @@
 		\item Steam API for user information
 	\end{itemize}
 	
-	The steam game dataset contains data about games received from the Steam API and Steam Spy. The contained columns are name of the game, the release date, the amount of DLC for the game, a short description of the game, is the game is on Linux, Windows or on Mac, a metacritic score, the amount of achievements the game has, user score the amount of negative reviews and positive reviews, an email address for help, an average playtime and the amount of owners of the game. This data is found in a JSON-file.\\
+	The steam game dataset contains data about games received from the Steam API and Steam Spy. The contained columns are name of the game, the release date, the amount of DLC for the game, a short description of the game, is the game is on Linux, Windows or on Mac, a metacritic score, the amount of achievements the game has, user score the amount of negative reviews and positive reviews, an email address for help, an average playtime and the amount of owners of the game. This data is found in the JSON-file \textit{/Data/games.json}.\\
 	\\
 	The second dataset is user information gotten by the Steam API. This dataset will contain the data about a given Steam user. This information includes the games he plays and the user-profiles of his friends.
 	
 	\subsection{Target User}
 	
-	The target users are games, both the casual one as the more experienced one. The site will be able to recommend gamers games that might be interesting for them. It does this in two ways the first one is by showing the user general information about the games available. The second way is by giving insights in the current most popular games/genres or categories of the users and showing other games in the same vein. The user will also be able to see what is friends are playing to reap some inspirations in this way.
+	The target users are games, both the casual one as the more experienced one. The site will be able to do three things: The first is to give general information about the games such as where you can play the game, the top 5 games and constitution of the dataset per genre. The second thing that is possible for the user is to get a better inside in their own gaming-behaviour this by seeing their own most played games per genre the amount of hours played and their own achievements for these games. The third way is to get a recommendation by comparing the owned games with the games owned by his friends.
 	
 	\newpage
 	
@@ -51,8 +51,11 @@
 	\\
 	To end we look at the \texttt{median\_playtime\_forever} column. If these values are above 60,000 this would mean that the playerbase would have played more then 1,000 hours. This would not be very realistic and so these values will be set to 0 in order to prevent skewing the data. Rows with this amount of hours will mostly not be games, but more overlays or pieces of software that is running in the background.\\
 	\\
+	All this cleaned data will be saved to the file \textit{/Data/cleaned\_games.csv}.\\
+	\\
 	The dataset still contains columns such as \texttt{categories} or \texttt{tags} that consist out of a list of values. In order to improve our performances we shall convert these fields separate table linked to the main table using \texttt{app\_id} as foreign key.\\
 	In this implementation we went with the approach that only the games with a not-empty lists will be included in the new table. Each new item of the list will be a new row in the table, making the primary key the combination of \texttt{app\_id} and value of the list.\\
+	These different tables are saved to the files \textit{/Data/[column-name].csv}\\
 	\\
 	We can see in the data that there are quite a lot of different type of score columns. In order to work easier with the data we make a custom score column named\texttt{score}.\\
 	For this custom score we take into account the columns: \texttt{price}, \texttt{metacritic\_score}, \texttt{positive}, \texttt{negative} and \texttt{median\_playtime\_forever}.\\
@@ -85,6 +88,8 @@
 		 &+ total\_reviews\_normalized\cdot total\_reviews\_weight\\
 		 &+ median\_playtime\_forever\_normalized\cdot median\_playtime\_forever\_weight
 	\end{align}
+	
+	All the code for the data cleaning can be found in the found \textit{/utils/steam-games-data-transformation.ipynb}
 	
 	\subsection{Group By}
 	

@@ -105,7 +105,15 @@
 	\subsection{Home}
 
 	\subsection{Profile}
-
+   	\subsubsection{User Playtimes - Stacked Barchart}
+       	\begin{itemize}
+           \item Goal : Show how the user's games are distributed across different genres. Giving a quick overview of which games are played most, and what genre they belong to.
+           \item Data : Playtimes from the user's game library, game name and genres acquired from matching app ids of the steam API with their respective games in the steam games dataset.
+           \item Features/Interaction : A game slider underneath the graph makes it possible to add games amounts in increasing order of playtime, which makes it so the user can still view every item by adjusting the slider accordingly. Clicking on a genre in the legend makes it possible to show/hide a genre, alternatively you can double-click a genre to isolate it on the graph. Clicking a game on the graph updates 2 other graphs: the genre playtime barchart (on the right) and the achievement timeline chart (below the graph).
+           \item Design and choice : We opted for a stacked barchart because it's a good way to get a quick overview of the playtime distribution over a user's library, this chart isn't meant to show detailed information. Considering there's only 33 unique genres in the games dataset, even in extreme cases where a user owns a game in every genre, the stacked barchart should still be able to serve it's purpose. The games slider underneath also helps in this regard, to gradually explore the games library. The genres are distinct colors, if the user has a large game library this means we might violate the 12-bin rule for colors. However, except for generating the legend on the right with plotly express, the colors mostly serve to differentiate the different bars. This design choice makes more sense when you consider that we were planning to link the colors on the genre chart (on the right) to the clicked genre on this stacked barchart. 
+           \item Implementation : By matching the app ids acquired from the steam API to the ones in our steam games dataset, we easily find the related games. The playtimes we get straight from the API, and we display them in hours played. There's usually multiple genres associated with a single game, we didn't find a surefire way to pick the "most fitting" genre for a game, so we ended up picking a random one each time, to prevent them from all appearing in the same bar. 
+           \item Code file : \textit{user\_playtime\_bar\_chart.py}, (method: \textit{playtime\_per\_genre})
+        \end{itemize}
 	\subsection{Recommender}
 	\subsubsection{User Vs Friends Panel}
 	The aim of this visualisation is to compare our tastes with those of our friends. To do this, it consists of two Spider Graphs, one for yourself and one for the selected friend, as well as two graphs (one for each) that appear in the centre, listing the top 5 games for the category/genre selected in the spider graph. The code for this visualisation can be found in \textit{user\_vs\_friends\_panel.py} the file \textit{hexagon.py} and \textit{top\_games\_forUVFpanel.py}.

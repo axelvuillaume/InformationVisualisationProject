@@ -70,10 +70,23 @@
 	
 	The total review is a good indicator of how many people bought the game, so this term effectively serves as a "amount of sales"  score. The purpose of this is more to filter out games with very few reviews. This means games where the data is skewed to be overly positive or negative.
 	
-	$$total\_reviews\_normalized = \frac{positive + negative}{\max{\left(positive + negative\right)}}$$
-	$$median\_playtime\_forever\_normalized = \frac{median\_playtime\_forever}{\max{\left(median\_playtime\_forever\right)}}$$
+	\begin{align}
+		total\_reviews\_normalized &= \frac{positive + negative}{\max{\left(positive + negative\right)}}\\
+		median\_playtime\_forever\_normalized &= \frac{median\_playtime\_forever}{\max{\left(median\_playtime\_forever\right)}}	
+	\end{align}
+		
+	After normalizing all the data we can give a weight to each column. The given weights are \texttt{price\_weight} = 0, \texttt{metacritic\_score\_weight} = 0 as it is less important for not all games have one. \texttt{positive\_ratio\_weight} = 1.5 as a high positive ratio is a good indicator of a game's quality. \texttt{total\_reviews\_weight} = 2.5 in order to favour more bought games. To end the \texttt{median\_playtime\_forever\_weight} = 0 as median playtime is more easily manipulated in lower selling games.\\
+	We tie everything together by given following formula for the custom score:
 	
-	After normalizing all the data we can give a weight to each column. 
+	\begin{align}
+		score = &price\_normalized\cdot price\_weight\\
+		 &+ metacritic\_score\_normalized\cdot metacritic\_score\_weight\\
+		 &+ positive\_ratio\cdot positive\_ratio\_weight\\
+		 &+ total\_reviews\_normalized\cdot total\_reviews\_weight\\
+		 &+ median\_playtime\_forever\_normalized\cdot median\_playtime\_forever\_weight
+	\end{align}
+	
+	\subsection{Group By}
 	
 	\newpage
 	

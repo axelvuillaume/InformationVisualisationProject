@@ -204,6 +204,7 @@
 	\end{itemize}
 
 	\paragraph{Center Graphs}
+	
 	\begin{itemize}
 		\item Goal : Show the top 5 games in the selected category/genre for the user and the friend in order to see what games are the most played by our friend in the same category/genre in order to get some inspiration.
 		\item Data : Get the games from the dataset and the user's playtime from the Steam API.
@@ -215,6 +216,7 @@
 	\end{itemize}
 	
 	\subsubsection{Bubble Chart Recommendations}
+	
 	\begin{itemize}
 		\item Goal : Recommend the user 5 games he doesn't own, for each of his most played genres.
 		\item Data : User's game playtimes from the api, games and genres data from the dataset, score column to decide on the best games.
@@ -251,11 +253,15 @@
 	\par
 	
 	The results of figure \ref{fig:evaluation_result} give the average over the different categories with error bars. In here we see the same tendency that all the results are to the positive side and that only novelty is doing less so. Our best performing measure is "Attractiveness" with a mean of 1.03. The worst measure is as aspected by figure \ref{fig:mean_value} Novelty with a mean of 0.\\
+	Our two best measure are decent while everything else remains around 0. As we want as a broad a userbase as possible we are happy that these are our best categories. As the main focus of our app wasn't to invent new visualisation we can find ourself in this result. Due to the limitations of our dataset as we didn't have any data about things like sales more innovative plots where not used. In case we had access to this sales-data we could have shown things like currently on sale games etc.\\
+	This application has a Dependability rating of 0.4. We believe the reason for this low number is that there was some uncertainty about the question about predictability and so also about the definition of Dependability.\\
+	For the Efficiency we have a mean of 0.7. We see that most people find the site on the slower side. The fact we have to load in the data from the Steam-API will certainly have an impact on these speeds. On the other a majority of the experts found the side quite well organized.\\
+	The last category Stimulation with a mean of 0.65. Most people found the use of side quite interesting, but we see a high variance certainly in the boring vs. existing question. As we focussed more on the practical side of the whole.
 	
-	% TODO: Write how to enterpret these number. Are we happy with them or not?
 	These numbers can still be summarized in just 3 numbers: 1) the Attractiveness, 2) the Pragmatic Quality and 3) Hedonic Quality..\\
 	The Pragmatic Quality is the combination of Perspicuity, Efficiency and Dependability. It gives in other word how usable a site is from a technical point of view. In our case this is a 0.67.\\C
 	The Hedonic Quality gives a combination of Stimulation and Originality an gives in other word a more a look into user experience of the site. In this project we end up with a 0.33.\\
+	As usability was our highest priority we are quite happy with these results.\\
 	
 	\begin{figure}[h]
 		\includegraphics[width=\linewidth]{./Screenshots/Attractiveness_Pragmatic_Hedonic_Quality.png}

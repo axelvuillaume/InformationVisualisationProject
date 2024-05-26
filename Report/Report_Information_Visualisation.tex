@@ -45,47 +45,47 @@
 	
 	\subsection{Data Cleaning}
 	
-	The Steam games dataset as it stands needs more work in order to be usable in visualisations. This preprocessing will exists out of deleting not used columns, cleaning cells that point to outliers and divide the certain columns in separate file for easier and faster access. The code in this notebook, up until the custom score part, were heavily inspired by a publicly available kaggle notebook by \autocite{CLARAMUNT}. However, certain modifications were made to better align with our vision.\\
+	The Steam games dataset as it stands needs more work in order to be usable in visualisations. This preprocessing will consist out of deleting unused columns, cleaning cells that point to outliers and dividing the certain columns into separate files for easier and faster access. The code in the Jupyter notebook, up until the custom score part, was heavily inspired by a publicly available kaggle notebook by \autocite{CLARAMUNT}. However, certain modifications were made to better align with our vision.\\
 	\\
-	As the dataset has more then 40 columns this means that we have to filter in the columns in order to end up with only those that will be used. The columns that will be deleted are: \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score\_rank}, \texttt{header\_image}, \texttt{reviews}, \texttt{website}, \texttt{support\_url}, \texttt{notes}, \texttt{support\_email}, \texttt{median\_playtime\_2weeks}, \texttt{required\_age}, \texttt{metacritic\_url}, \texttt{detailed\_description}, \texttt{about\_the\_game} and \texttt{average\_playtime\_2week}.\\
-	These columns where deleted because they where either unvisualizable as they where things like urls, notes, descriptions or emails or the columns contained data that was not usable in our specific use case as is the case with \texttt{average\_playtime\_2weeks}.\\
+	As the dataset has more then 40 columns this means that we have to filter out the columns in order to end up with only those that will be used. The columns that will be deleted are: \texttt{packages}, \texttt{screenshots}, \texttt{movies}, \texttt{score\_rank}, \texttt{header\_image}, \texttt{reviews}, \texttt{website}, \texttt{support\_url}, \texttt{notes}, \texttt{support\_email}, \texttt{median\_playtime\_2weeks}, \texttt{required\_age}, \texttt{metacritic\_url}, \texttt{detailed\_description}, \texttt{about\_the\_game} and \texttt{average\_playtime\_2week}.\\
+	These columns were deleted because they were either unfit for visualization as they were things like urls, notes, descriptions and emails, or the columns contained data that was not usable in our specific use case as is the case with \texttt{average\_playtime\_2weeks}.\\
 	\\
-	After this we delete outliers or values that seem to show useless rows. First way we do this is by deleting all games with no sales. To do this we look where the \texttt{estimated\_owners} column equals \texttt{0-0} and delete these.\\
-	Besides this we see also that some games have no reviews or categories. These are understood to be developer tests and so can be deleted.\\
-	If we look at the distribution of the prices we can see that we have most of them are under the 200\$. We have 1 game of 999\$ in order to not to affect the rest of the dataset this outlier is also removed from the dataset.\\
+	After this we delete outliers or values that seem to show useless rows. The first way we achieve this is by deleting all games with no sales. To do this we look where the \texttt{estimated\_owners} column equals \texttt{0-0} and delete the accompanying rows.\\
+	Besides this we also see that some games have no reviews or categories. These are considered to be developer tests and so can be deleted.\\
+	If we look at the distribution of the prices we can see that most of them are under 200\$. We have 1 game of 999\$, in order to not to affect the rest of the data this outlier is also removed from the dataset.\\
 	\\
-	The column \texttt{estimated\_owners} is a range between the minimal amount of owners and the maximum. In order for easier work with this data this is split into 2 different columns: the \texttt{min\_owners} and the \texttt{max\_owners}.\\
+	The column \texttt{estimated\_owners} is a range between the minimal amount of owners and the maximum. In order for easier handling, this is split into 2 different columns: the \texttt{min\_owners} and the \texttt{max\_owners}.\\
 	\\
-	To end we look at the \texttt{median\_playtime\_forever} column. If these values are above 60,000 this would mean that the playerbase would have played more then 1,000 hours. This would not be very realistic and so these values will be set to 0 in order to prevent skewing the data. Rows with this amount of hours will mostly not be games, but more overlays or pieces of software that is running in the background.\\
+	To conclude we look at the \texttt{median\_playtime\_forever} column. If these values are above 60,000 this would mean that over half of the playerbase would have played more than 1,000 hours. This would not be very realistic and so these values will be set to 0 in order to prevent skewing the data. Entries with this amount of hours will mostly not be games, but more so overlays or pieces of software that are running in the background.\\
 	\\
 	All this cleaned data will be saved to the file \textit{/Data/cleaned\_games.csv}.\\
 	\\
-	The dataset still contains columns such as \texttt{categories} or \texttt{tags} that consist out of a list of values. In order to improve our performance we shall convert these fields into a separate table linked to the main table using \texttt{app\_id} as foreign key.\\
-	In this implementation we went with the approach that only the games with a not-empty lists will be included in the new table. Each new item of the list will be a new row in the table, making the primary key the combination of \texttt{app\_id} and value of the list.\\
+	The dataset still contains columns such as \texttt{categories} or \texttt{tags} that consist out of a lists of values. In order to improve our performance we shall convert these fields into a separate table linked to the main table using \texttt{app\_id} as foreign key.\\
+	In this implementation we went with the approach that only the games with non-empty lists will be included in the new table. Each new item of the list will be a new row in the table, making the primary key the combination of \texttt{app\_id} and value of the list.\\
 	These different tables are saved to the files \textit{/Data/[column-name].csv}\\
 	\\
 	We can see in the dataset that there are quite a lot of different types of score columns. In order to combine them for recommending purposes, we make a custom score column named \texttt{score}.\\
 	For this custom score we take into account the columns: \texttt{price}, \texttt{metacritic\_score}, \texttt{positive}, \texttt{negative} and \texttt{median\_playtime\_forever}.\\
-	The first thing that has to happen is a normalisation of the columns so they are all in the same range. For the price we would like a range between $\left[0;1\right]$.
+	The first thing that has to happen is a normalization of the columns so neither of them affects the end result more. For the price we would like a range between $\left[0;1\right]$.
 	
 	$$normalised\_price = \frac{1}{\sqrt{\max{\left(price, 1\right)}}}$$
 	
-	We see that we favour lower prices. The max function will prevent divisions by 0.\\
-	The following 2 normalised score are the \texttt{metacritic\_score} and \texttt{positive\_ratio}. Following the next formulas:
+	Notice that we favor lower prices. The max function will prevent divisions by 0.\\
+	The following 2 normalized scores are the \texttt{metacritic\_score} and \texttt{positive\_ratio}. Following these formulas:
 	
 	\begin{align}
 		metacritic\_score\_normalized &= \frac{metacritic\_score}{\max{\left(metacritic\_score\right)}} \\
 		positive\_ratio &= \frac{positive}{\max{\left(positive + negative, 1\right)}}
 	\end{align}
 	
-	The total review is a good indicator of how many people bought the game, so this term effectively serves as a "amount of sales"  score. The purpose of this is more to filter out games with very few reviews. This means games where the data is skewed to be overly positive or negative.
+	The total review is a good indicator of how many people bought the game, so this term effectively serves as a "amount of sales" score. The purpose of this is to filter out games with very few reviews, where review rating could easily be skewed to be overly positive or negative.
 	
 	\begin{align}
 		total\_reviews\_normalized &= \frac{positive + negative}{\max{\left(positive + negative\right)}}\\
 		median\_playtime\_forever\_normalized &= \frac{median\_playtime\_forever}{\max{\left(median\_playtime\_forever\right)}}	
 	\end{align}
 		
-	After normalizing all the data we can give a weight to each column. The given weights are \texttt{price\_weight} = 0, \texttt{metacritic\_score\_weight} = 0 as it is less important for not all games have one. \texttt{positive\_ratio\_weight} = 1.5 as a high positive ratio is a good indicator of a game's quality. \texttt{total\_reviews\_weight} = 2.5 in order to favour more bought games. To end the \texttt{median\_playtime\_forever\_weight} = 0 as median playtime is more easily manipulated in lower selling games. 
+	After normalizing all the data we can give a weight to each column. The given weights are \texttt{price\_weight} = 0, \texttt{metacritic\_score\_weight} = 0, \texttt{positive\_ratio\_weight} = 1.5 as a high positive ratio is a good indicator of a game's quality. \texttt{total\_reviews\_weight} = 2.5 in order to favor more bought games. To end the \texttt{median\_playtime\_forever\_weight} = 0 as median playtime is more easily manipulated in lower selling games. 
     We tie everything together by giving following formula for the custom score:
 	
 	\begin{align}
@@ -96,9 +96,9 @@
 		 &+ median\_playtime\_forever\_normalized\cdot median\_playtime\_forever\_weight
 	\end{align}
 	
-    Note that a weight value of 0 means that category wasn't used to calculate the score, effectively making a score that only combines "total reviews" and "positive review percentage". We found that this caused the bubble chart to recommend games that best aligned with our vision of what most users would find important. However, we left the full formula in the notebook to showcase the idea of the score column and for possible future reference.
+    Note that a weight value of 0 means that category wasn't used to calculate the score, effectively making a score that only combines "total reviews" and "positive review percentage" in our current implementation. We found that this caused the bubble chart to recommend games that best aligned with our vision of what most users would find important. However, we left the full formula in the notebook to showcase the idea of the score column and for possible future reference.
     
-	All the code for the data cleaning can be found in the jupyter notebook: \textit{/utils/steam-games-data-transformation.ipynb}
+	All the code for data cleaning can be found in the jupyter notebook: \textit{/utils/steam-games-data-transformation.ipynb}
 	
 	\subsection{Group By}
 	

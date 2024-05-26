@@ -6,6 +6,8 @@
 \usepackage[backend=bibtex8, style=authoryear]{biblatex}
 \usepackage{hyperref}
 \usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}
 
 \addbibresource{Report.bib} % BibLaTeX bibliography file 
 
@@ -226,11 +228,13 @@
 	To do this we have used the UEQ V12 questionnaire. 26 questions were asked where for each a number between 1 and 7 have to be filled in. Each question can be put into on of 6 categories: Attractiveness, Perspicuity, Efficiency, Dependability, Stimulation and novelty. The questionnaire is setup so that it is also tested if the person filling in the questions is paying attention are not.\\
 	\\
 	
-	\begin{centering}
-		\includegraphics[width=0.5\linewidth]{}
-		\captionof{figure}{Box Plot}
-	\end{centering}
+	\begin{figure}[h]
+		\includegraphics[width=\linewidth]{./Screenshots/Evaluation_result.png}
+		\captionof{figure}{The results of the different questions divided in categories}
+	\end{figure}
+	\par
 	
+	The results tell us that Attractiveness is our best performing measure with a mean of 1.03. The runner-up is Perspicuity with 0.90. The worst measure is novelty with a mean of 0. 
 	\newpage
 	
 	\printbibliography % Output the bibliography

@@ -102,7 +102,7 @@
 	
 	\subsection{Group By}
 	
-	As we have a couple of columns that can be used to group by such as languages, categories, genres, etc. Due to the size of the dataset it takes too long to compute the grouped by information on the fly. In order to keep the wait times low we pre-calculate all this information in the preprocessing phase of the project.\\
+	We have a couple of columns that can be used to group by such as languages, categories, genres, etc. Due to the size of the dataset it takes too long to compute the grouped by information on the fly. In order to keep the wait times low we pre-calculate all this information in the preprocessing phase of the project.\\
 	All the numeric values will be summed over all the array-like columns such as \texttt{categories}, \texttt{full\_audio\_languages}, \texttt{genres} and \texttt{supported\_languages}. The new tables will be written to \textit{/Data/[name-column]\_grouped\_by.csv}.\\
 	\\
 	This is all handled by the \textit{/utils/data\_processing.py} file
@@ -114,9 +114,9 @@
 	\subsubsection{Gauges}
 	
 	\begin{itemize}
-		\item Goal : See the percentage of positive reviews are for games supported by the top 3 languages.
+		\item Goal : See what the percentage of positive reviews are for games supported by the top 3 languages.
 		\item Data : Aggregated data over the languages and summing the positive reviews. In order to get the percentages.
-		\item Design and choice : Choose a black-white hue in order to be always good visible.
+		\item Design and choice : Choose a black-white hue in order to always be clearly visible.
 		\item Implementation : An indicator plot with number.
 		\item Code file : \textit{gauge.py}
 	\end{itemize}
@@ -124,8 +124,8 @@
     \subsubsection{Sunburst graph}
     \begin{itemize}
         \item Goal : View the most popular game categories based on the time spent by players.
-        \item Data : Get the games, the categories and developer from the dataset .
-        \item Features/Interaction : Click on a part to zoom in to see the developer or games more clearly. You can hover over a box to see the children or parents and the player's average time.We added a button to hide the single player mode because the single player categories take up the most important part of the graph. Additionally, I added a slider to control how many games you want to see based on average playtime.
+        \item Data : Get the games, the categories and developer from the dataset.
+        \item Features/Interaction : Click on a part to zoom in to see the developer or games more clearly. You can hover over a box to see the children or parents and the total average playtime. We added a button to hide the single player mode because the single player categories take up the most important part of the graph. Additionally, I added a slider to control how many games you want to see based on average playtime.
         \item Design and choice : Choose a sunburst to see the children better and compare play times more easily.
         \item Implementation : A sunburst chart with game, developer and categories by time spent.
         \item Code file : \textit{sunburst.py}
@@ -135,16 +135,16 @@
     \begin{itemize}
         \item Goal : See the number of games depending on the languages supported.
         \item Data : Get data on supported languages and assign a country for each language.
-        \item Features/Interaction : You can zoom in and out if you want to search for a special country. By hovering over the country, you can see the name of the most played game in the country and their average playing time.
+        \item Features/Interaction : You can zoom in and out if you want to search for a specific country. By hovering over the country, you can see the name of the most played game in the country and their average playing time.
         \item Design and choice : Choose a green gradient to be clear.
-        \item Implementation : A Choropleth chart with with supported languages.
+        \item Implementation : A Choropleth chart with supported languages.
         \item Code file : \textit{map.py}
     \end{itemize}
     
     \subsubsection{Line Graph}
     \begin{itemize}
         \item Goal : Compare different data from the dataset.
-        \item Data : Get price,metacritic\_score,user\_score,average\_playtime\_forever,score of the data set.
+        \item Data : Get price, metacritic\_score, user\_score, average\_playtime\_forever, score of the data set.
         \item Features/Interaction : Using a drop-down list, you can choose the x and y axes to compare the data you want to see. On hover, you can see the game name and the x and y values.
         \item Implementation : A line chart with x and y values from the drop-down list.
         \item Improvement : Create an entry to choose the X axis scale.

@@ -152,7 +152,9 @@
 	\subsection{Profile}
     
    	\subsubsection{User Playtimes}
+   	
         \paragraph{Stacked Barchart}
+    
         \begin{itemize}
            \item Goal : Show how the user's games are distributed across different genres. Giving a quick overview of which games are played most, and what genre they belong to.
            \item Data : Playtimes from the user's game library, game name and genres acquired from matching app ids of the steam API with their respective games in the steam games dataset.
@@ -163,6 +165,7 @@
         \end{itemize}
         
         \paragraph{Horizontal barchart}
+        
         \begin{itemize}
             \item Goal : Show all playtimes of the user's games in descending order of a single genre.
             \item Data : "Clickdata" relating to the clicked game on the stacked barchart, this is only used to extract the genre. Playtimes from the user's game library, filtered by genre.
@@ -173,6 +176,7 @@
         \end{itemize}
         
     \subsubsection{Achievement timeline}
+    
     \begin{itemize}
         \item Goal : Show achievements in ascending order of date acquired, on the x-axis, with the rarity of the achievement on the y-axis.
         \item Data : "Clickdata" resulting from clicking on a game in the stacked barchart. From this we extract the app id, by way of which we can acquire the achievement data from the steam API.
@@ -184,9 +188,11 @@
 	\subsection{Recommender}
     
 	\subsubsection{User Vs Friends Panel}
+	
 	The aim of this visualisation is to compare our tastes with those of our friends. To do this, it consists of two Spider Graphs, one for yourself and one for the selected friend, as well as two graphs (one for each) that appear in the centre, listing the top 5 games for the category/genre selected in the spider graph. The code for this visualisation can be found in \textit{user\_vs\_friends\_panel.py} the file \textit{hexagon.py} and \textit{top\_games\_forUVFpanel.py}.
 
 	\paragraph{Spider Graphs}
+	
 	\begin{itemize}
 		\item Goal : Show the user's preferences in terms of categories/genres by comparing the total playtime of the games in each category/genre and the total number of games played in each category/genre.
 		\item Data : Get the games, genre and categories from the dataset and the user's playtime and number of games played from the Steam API.
